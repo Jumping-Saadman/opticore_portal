@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        :root {
+            --shadow-3d-md: 0 8px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            --shadow-3d-sm: 0 4px 12px -2px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .table-card {
+            background: linear-gradient(135deg, hsl(240, 8%, 7%) 0%, hsl(240, 8%, 5%) 100%);
+            box-shadow: var(--shadow-3d-md);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: var(--shadow-3d-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #374151;
+            color: #d1d5db;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-outline:hover {
+            background: #374151;
+            border-color: #4b5563;
+        }
+        
+        .search-input {
+            background: #1f2937;
+            border: 1px solid #374151;
+            box-shadow: var(--shadow-inset);
+        }
+        
+        .search-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .table-row:hover {
+            background-color: rgba(55, 65, 81, 0.5);
+        }
+        
+        .status-active {
+            color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-inactive {
+            color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .type-osl {
+            color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .type-jana {
+            color: #8b5cf6;
+            background-color: rgba(139, 92, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1f2937;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-3d-md);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .toast.info {
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                Client List
+            </h1>
+            <div class="flex gap-3">
+                <button id="addClientBtn" class="btn-primary px-4 py-2 rounded-lg font-medium">
+                    Add New Client
+                </button>
+                <button id="exportCsvBtn" class="btn-outline px-4 py-2 rounded-lg font-medium">
+                    Export CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="flex items-center justify-between gap-4 mb-6">
+            <div class="flex-1 max-w-sm">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search clients..." 
+                    class="search-input w-full px-3 py-2 rounded-lg text-white placeholder-gray-400 focus:outline-none"
+                />
+            </div>
+            <div class="w-[200px]">
+                <select id="filterSelect" class="w-full bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:border-blue-500">
+                    <option value="all">Filter by Type</option>
+                    <option value="osl">OSL</option>
+                    <option value="jana">Jana</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-card rounded-lg border border-gray-700 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Client ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Last Payment</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody" class="divide-y divide-gray-700">
+                        <!-- Table rows will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination Section -->
+        <div class="flex items-center justify-between mt-6">
+            <div class="text-sm text-gray-400">
+                Showing <span id="showingStart">1</span> to <span id="showingEnd">5</span> of <span id="totalClients">5</span> clients
+            </div>
+            <div class="flex gap-2">
+                <button id="prevPage" class="btn-outline px-3 py-2 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Previous
+                </button>
+                <button id="nextPage" class="btn-outline px-3 py-2 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Next
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <script>
+        // Client data
+        const clientData = [
+            { id: 'CL001', name: 'Acme Corp', email: 'contact@acme.com', type: 'OSL', status: 'Active', lastPayment: '$15,000' },
+            { id: 'CL002', name: 'Hotel Paradise', email: 'info@paradise.com', type: 'Jana', status: 'Active', lastPayment: '$3,500' },
+            { id: 'CL003', name: 'Tech Solutions', email: 'hello@techsol.com', type: 'OSL', status: 'Active', lastPayment: '$22,000' },
+            { id: 'CL004', name: 'Royal Inn', email: 'contact@royalinn.com', type: 'Jana', status: 'Inactive', lastPayment: '$2,800' },
+            { id: 'CL005', name: 'Global Systems', email: 'admin@global.com', type: 'OSL', status: 'Active', lastPayment: '$18,500' },
+            { id: 'CL006', name: 'City Hotel', email: 'info@cityhotel.com', type: 'Jana', status: 'Active', lastPayment: '$4,200' },
+            { id: 'CL007', name: 'Data Corp', email: 'contact@datacorp.com', type: 'OSL', status: 'Active', lastPayment: '$25,000' },
+            { id: 'CL008', name: 'Resort Plaza', email: 'admin@resortplaza.com', type: 'Jana', status: 'Inactive', lastPayment: '$1,500' }
+        ];
+
+        let filteredData = [...clientData];
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        // Create status badge
+        function createStatusBadge(status) {
+            const className = status === 'Active' ? 'status-active' : 'status-inactive';
+            return `<span class="${className}">${status}</span>`;
+        }
+
+        // Create type badge
+        function createTypeBadge(type) {
+            const className = type === 'OSL' ? 'type-osl' : 'type-jana';
+            return `<span class="${className}">${type}</span>`;
+        }
+
+        // Create action buttons
+        function createActionButtons(client) {
+            return `
+                <div class="flex gap-2">
+                    <button class="btn-outline px-3 py-1 rounded text-sm hover:bg-gray-700" onclick="viewClient('${client.id}', '${client.name}')">
+                        View
+                    </button>
+                    <button class="btn-outline px-3 py-1 rounded text-sm hover:bg-gray-700" onclick="editClient('${client.id}', '${client.name}')">
+                        Edit
+                    </button>
+                </div>
+            `;
+        }
+
+        // Create table row
+        function createTableRow(client) {
+            return `
+                <tr class="table-row transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${client.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${client.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${client.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${createTypeBadge(client.type)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${createStatusBadge(client.status)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${client.lastPayment}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${createActionButtons(client)}</td>
+                </tr>
+            `;
+        }
+
+        // Render table
+        function renderTable() {
+            const tableBody = $('#clientTableBody');
+            tableBody.empty();
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            pageData.forEach(client => {
+                tableBody.append(createTableRow(client));
+            });
+
+            // Update pagination info
+            updatePaginationInfo();
+        }
+
+        // Update pagination info
+        function updatePaginationInfo() {
+            const startIndex = (currentPage - 1) * itemsPerPage + 1;
+            const endIndex = Math.min(currentPage * itemsPerPage, filteredData.length);
+            const total = filteredData.length;
+
+            $('#showingStart').text(startIndex);
+            $('#showingEnd').text(endIndex);
+            $('#totalClients').text(total);
+
+            // Update pagination buttons
+            $('#prevPage').prop('disabled', currentPage === 1);
+            $('#nextPage').prop('disabled', endIndex >= total);
+        }
+
+        // Filter data
+        function filterData() {
+            const searchQuery = $('#searchInput').val().toLowerCase();
+            const filterType = $('#filterSelect').val();
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchQuery) ||
+                                   client.email.toLowerCase().includes(searchQuery) ||
+                                   client.id.toLowerCase().includes(searchQuery);
+                const matchesFilter = filterType === 'all' || client.type.toLowerCase() === filterType;
+                return matchesSearch && matchesFilter;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = $(`
+                <div class="toast ${type}">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="h-5 w-5"></i>
+                        <span>${message}</span>
+                    </div>
+                </div>
+            `);
+            
+            $('#toastContainer').append(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.addClass('show'), 100);
+            setTimeout(() => {
+                toast.removeClass('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Action handlers
+        function viewClient(id, name) {
+            showToast(`View ${name}`, 'info');
+        }
+
+        function editClient(id, name) {
+            showToast(`Edit ${name}`, 'info');
+        }
+
+        // Event handlers
+        $(document).ready(function() {
+            // Initialize table
+            renderTable();
+            
+            // Search functionality
+            $('#searchInput').on('input', filterData);
+            
+            // Filter functionality
+            $('#filterSelect').on('change', filterData);
+            
+            // Button handlers
+            $('#addClientBtn').on('click', function() {
+                showToast('Add new client clicked', 'success');
+            });
+            
+            $('#exportCsvBtn').on('click', function() {
+                showToast('Export CSV clicked', 'success');
+            });
+            
+            // Pagination handlers
+            $('#prevPage').on('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+            
+            $('#nextPage').on('click', function() {
+                const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+            
+            // Add keyboard shortcuts
+            $(document).on('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    $('#searchInput').focus();
+                }
+            });
+            
+            // Add row hover effects
+            $(document).on('mouseenter', '.table-row', function() {
+                $(this).addClass('bg-gray-800/50');
+            }).on('mouseleave', '.table-row', function() {
+                $(this).removeClass('bg-gray-800/50');
+            });
+        });
+
+        // Export functionality (basic CSV export)
+        function exportToCSV() {
+            const headers = ['Client ID', 'Name', 'Email', 'Type', 'Status', 'Last Payment'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredData.map(client => [
+                    client.id,
+                    client.name,
+                    client.email,
+                    client.type,
+                    client.status,
+                    client.lastPayment
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Override export button to use CSV export
+        $(document).ready(function() {
+            $('#exportCsvBtn').off('click').on('click', function() {
+                exportToCSV();
+                showToast('CSV file downloaded', 'success');
+            });
+        });
+    </script>
+</body>
+</html>

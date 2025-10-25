@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Now - Jana Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        :root {
+            --shadow-3d-md: 0 8px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            --shadow-3d-sm: 0 4px 12px -2px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .payment-card {
+            background: linear-gradient(135deg, hsl(240, 8%, 7%) 0%, hsl(240, 8%, 5%) 100%);
+            box-shadow: var(--shadow-3d-md);
+        }
+        
+        .form-input {
+            background: #1f2937;
+            border: 1px solid #374151;
+            box-shadow: var(--shadow-inset);
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .form-select {
+            background: #1f2937;
+            border: 1px solid #374151;
+            box-shadow: var(--shadow-inset);
+            transition: all 0.2s ease;
+        }
+        
+        .form-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: var(--shadow-3d-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            box-shadow: var(--shadow-3d-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+            transform: translateY(-1px);
+        }
+        
+        .payment-method-card {
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .payment-method-card:hover {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        
+        .payment-method-card.selected {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        .card-number-input {
+            letter-spacing: 0.1em;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .security-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: var(--shadow-3d-sm);
+        }
+        
+        .amount-display {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border: 1px solid #374151;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1f2937;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-3d-md);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+        
+        .required {
+            color: #ef4444;
+        }
+        
+        .form-error {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        
+        .loading-spinner {
+            border: 2px solid #374151;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .payment-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: var(--shadow-3d-md);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                Pay Now
+            </h1>
+            <p class="text-gray-400 mt-2">Secure payment processing for your bills</p>
+        </div>
+
+        <!-- Main Payment Form -->
+        <div class="grid gap-6 lg:grid-cols-2">
+            <!-- Payment Form -->
+            <div class="payment-card rounded-lg border border-gray-700 p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-white">Make Payment</h2>
+                </div>
+                
+                <form id="paymentForm" class="space-y-4">
+                    <!-- Bill Selection -->
+                    <div class="form-group">
+                        <label for="billSelect" class="form-label">
+                            Select Bill <span class="required">*</span>
+                        </label>
+                        <select id="billSelect" class="form-select w-full px-3 py-2 rounded-lg text-white">
+                            <option value="">Choose a bill</option>
+                            <option value="bill001" data-amount="3200">#BILL001 - $3,200 (Due: Jan 25, 2025)</option>
+                            <option value="bill002" data-amount="2800">#BILL002 - $2,800 (Due: Feb 1, 2025)</option>
+                            <option value="bill003" data-amount="1500">#BILL003 - $1,500 (Due: Feb 15, 2025)</option>
+                        </select>
+                        <div id="billError" class="form-error hidden">Please select a bill</div>
+                    </div>
+
+                    <!-- Payment Method Selection -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Payment Method <span class="required">*</span>
+                        </label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="payment-method-card rounded-lg p-4 border border-gray-600" data-method="card">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="credit-card" class="h-6 w-6 text-blue-500"></i>
+                                    <div>
+                                        <div class="font-medium text-white">Credit Card</div>
+                                        <div class="text-xs text-gray-400">Visa, Mastercard</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="payment-method-card rounded-lg p-4 border border-gray-600" data-method="bank">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="building" class="h-6 w-6 text-green-500"></i>
+                                    <div>
+                                        <div class="font-medium text-white">Bank Transfer</div>
+                                        <div class="text-xs text-gray-400">Direct transfer</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="methodError" class="form-error hidden">Please select a payment method</div>
+                    </div>
+
+                    <!-- Credit Card Details (shown when card is selected) -->
+                    <div id="cardDetails" class="space-y-4 hidden">
+                        <div class="form-group">
+                            <label for="cardNumber" class="form-label">Card Number</label>
+                            <input 
+                                type="text" 
+                                id="cardNumber" 
+                                class="form-input card-number-input w-full px-3 py-2 rounded-lg text-white placeholder-gray-400"
+                                placeholder="1234 5678 9012 3456"
+                                maxlength="19"
+                            />
+                            <div id="cardError" class="form-error hidden">Please enter a valid card number</div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label for="expiryDate" class="form-label">Expiry Date</label>
+                                <input 
+                                    type="text" 
+                                    id="expiryDate" 
+                                    class="form-input w-full px-3 py-2 rounded-lg text-white placeholder-gray-400"
+                                    placeholder="MM/YY"
+                                    maxlength="5"
+                                />
+                                <div id="expiryError" class="form-error hidden">Please enter a valid expiry date</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input 
+                                    type="text" 
+                                    id="cvv" 
+                                    class="form-input w-full px-3 py-2 rounded-lg text-white placeholder-gray-400"
+                                    placeholder="123"
+                                    maxlength="4"
+                                />
+                                <div id="cvvError" class="form-error hidden">Please enter a valid CVV</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardName" class="form-label">Cardholder Name</label>
+                            <input 
+                                type="text" 
+                                id="cardName" 
+                                class="form-input w-full px-3 py-2 rounded-lg text-white placeholder-gray-400"
+                                placeholder="John Doe"
+                            />
+                            <div id="nameError" class="form-error hidden">Please enter the cardholder name</div>
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Details (shown when bank is selected) -->
+                    <div id="bankDetails" class="space-y-4 hidden">
+                        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+                            <h3 class="font-medium text-blue-300 mb-2">Bank Transfer Information</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Account Name:</span>
+                                    <span class="text-white">OptiCore Solutions</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Account Number:</span>
+                                    <span class="text-white font-mono">1234567890</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Bank:</span>
+                                    <span class="text-white">First National Bank</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Routing:</span>
+                                    <span class="text-white font-mono">021000021</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Button -->
+                    <button 
+                        type="submit" 
+                        id="payNowBtn"
+                        class="btn-primary w-full px-4 py-3 rounded-lg font-medium text-white hover:shadow-lg transition-all duration-200"
+                    >
+                        <span id="payButtonText">
+                            <i data-lucide="credit-card" class="inline h-5 w-5 mr-2"></i>
+                            Pay Now
+                        </span>
+                        <div id="payButtonLoading" class="hidden">
+                            <div class="loading-spinner inline-block mr-2"></div>
+                            Processing...
+                        </div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Payment Summary -->
+            <div class="space-y-6">
+                <!-- Amount Display -->
+                <div class="payment-card rounded-lg border border-gray-700 p-6">
+                    <div class="mb-4">
+                        <h2 class="text-xl font-semibold text-white">Payment Summary</h2>
+                    </div>
+                    
+                    <div class="amount-display rounded-lg p-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-white mb-2" id="paymentAmount">$0.00</div>
+                            <div class="text-gray-400 text-sm" id="paymentDescription">Select a bill to see details</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Bill ID:</span>
+                            <span class="text-white font-mono" id="billId">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Due Date:</span>
+                            <span class="text-white" id="dueDate">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Payment Method:</span>
+                            <span class="text-white" id="selectedMethod">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Features -->
+                <div class="payment-card rounded-lg border border-gray-700 p-6">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-white">Security Features</h3>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="security-badge w-8 h-8 rounded-full flex items-center justify-center">
+                                <i data-lucide="shield-check" class="h-4 w-4 text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-white">SSL Encryption</div>
+                                <div class="text-xs text-gray-400">256-bit encryption</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="security-badge w-8 h-8 rounded-full flex items-center justify-center">
+                                <i data-lucide="lock" class="h-4 w-4 text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-white">PCI Compliant</div>
+                                <div class="text-xs text-gray-400">Secure processing</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="security-badge w-8 h-8 rounded-full flex items-center justify-center">
+                                <i data-lucide="eye-off" class="h-4 w-4 text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-white">Privacy Protected</div>
+                                <div class="text-xs text-gray-400">No data storage</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Payments -->
+                <div class="payment-card rounded-lg border border-gray-700 p-6">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-white">Recent Payments</h3>
+                    </div>
+                    
+                    <div class="space-y-3" id="recentPayments">
+                        <div class="flex items-center justify-between py-2 border-b border-gray-700">
+                            <div>
+                                <div class="font-medium text-white">#BILL001</div>
+                                <div class="text-xs text-gray-400">Jan 20, 2025</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-medium text-green-400">$3,200</div>
+                                <div class="text-xs text-green-400">Paid</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-gray-700">
+                            <div>
+                                <div class="font-medium text-white">#BILL002</div>
+                                <div class="text-xs text-gray-400">Jan 15, 2025</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-medium text-green-400">$2,800</div>
+                                <div class="text-xs text-green-400">Paid</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <script>
+        // Bill data
+        const billData = {
+            'bill001': { 
+                id: 'BILL001', 
+                amount: 3200, 
+                dueDate: 'Jan 25, 2025',
+                description: 'Monthly service fee'
+            },
+            'bill002': { 
+                id: 'BILL002', 
+                amount: 2800, 
+                dueDate: 'Feb 1, 2025',
+                description: 'Quarterly maintenance'
+            },
+            'bill003': { 
+                id: 'BILL003', 
+                amount: 1500, 
+                dueDate: 'Feb 15, 2025',
+                description: 'Additional services'
+            }
+        };
+
+        let selectedBill = null;
+        let selectedMethod = null;
+
+        // Format card number
+        function formatCardNumber(value) {
+            const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            const matches = v.match(/\d{4,16}/g);
+            const match = matches && matches[0] || '';
+            const parts = [];
+            for (let i = 0, len = match.length; i < len; i += 4) {
+                parts.push(match.substring(i, i + 4));
+            }
+            if (parts.length) {
+                return parts.join(' ');
+            } else {
+                return v;
+            }
+        }
+
+        // Format expiry date
+        function formatExpiryDate(value) {
+            const v = value.replace(/\D/g, '');
+            if (v.length >= 2) {
+                return v.substring(0, 2) + '/' + v.substring(2, 4);
+            }
+            return v;
+        }
+
+        // Update payment summary
+        function updatePaymentSummary() {
+            if (selectedBill && billData[selectedBill]) {
+                const bill = billData[selectedBill];
+                $('#paymentAmount').text(`$${bill.amount.toLocaleString()}`);
+                $('#paymentDescription').text(bill.description);
+                $('#billId').text(bill.id);
+                $('#dueDate').text(bill.dueDate);
+            } else {
+                $('#paymentAmount').text('$0.00');
+                $('#paymentDescription').text('Select a bill to see details');
+                $('#billId').text('-');
+                $('#dueDate').text('-');
+            }
+
+            if (selectedMethod) {
+                $('#selectedMethod').text(selectedMethod === 'card' ? 'Credit Card' : 'Bank Transfer');
+            } else {
+                $('#selectedMethod').text('-');
+            }
+        }
+
+        // Show/hide payment method details
+        function togglePaymentDetails() {
+            if (selectedMethod === 'card') {
+                $('#cardDetails').removeClass('hidden');
+                $('#bankDetails').addClass('hidden');
+            } else if (selectedMethod === 'bank') {
+                $('#cardDetails').addClass('hidden');
+                $('#bankDetails').removeClass('hidden');
+            } else {
+                $('#cardDetails').addClass('hidden');
+                $('#bankDetails').addClass('hidden');
+            }
+        }
+
+        // Validate form
+        function validateForm() {
+            let isValid = true;
+            
+            // Clear previous errors
+            $('.form-error').addClass('hidden');
+            
+            // Validate bill selection
+            if (!selectedBill) {
+                $('#billError').removeClass('hidden');
+                isValid = false;
+            }
+            
+            // Validate payment method
+            if (!selectedMethod) {
+                $('#methodError').removeClass('hidden');
+                isValid = false;
+            }
+            
+            // Validate card details if card is selected
+            if (selectedMethod === 'card') {
+                const cardNumber = $('#cardNumber').val().replace(/\s/g, '');
+                if (!cardNumber || cardNumber.length < 13) {
+                    $('#cardError').removeClass('hidden');
+                    isValid = false;
+                }
+                
+                const expiryDate = $('#expiryDate').val();
+                if (!expiryDate || expiryDate.length !== 5) {
+                    $('#expiryError').removeClass('hidden');
+                    isValid = false;
+                }
+                
+                const cvv = $('#cvv').val();
+                if (!cvv || cvv.length < 3) {
+                    $('#cvvError').removeClass('hidden');
+                    isValid = false;
+                }
+                
+                const cardName = $('#cardName').val();
+                if (!cardName.trim()) {
+                    $('#nameError').removeClass('hidden');
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = $(`
+                <div class="toast ${type}">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : 'info'}" class="h-5 w-5"></i>
+                        <span>${message}</span>
+                    </div>
+                </div>
+            `);
+            
+            $('#toastContainer').append(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.addClass('show'), 100);
+            setTimeout(() => {
+                toast.removeClass('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Simulate payment processing
+        function processPayment() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Simulate success/failure (90% success rate)
+                    const success = Math.random() > 0.1;
+                    resolve(success);
+                }, 2000);
+            });
+        }
+
+        // Event handlers
+        $(document).ready(function() {
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Bill selection
+            $('#billSelect').on('change', function() {
+                selectedBill = $(this).val();
+                updatePaymentSummary();
+            });
+            
+            // Payment method selection
+            $('.payment-method-card').on('click', function() {
+                $('.payment-method-card').removeClass('selected');
+                $(this).addClass('selected');
+                selectedMethod = $(this).data('method');
+                togglePaymentDetails();
+                updatePaymentSummary();
+            });
+            
+            // Card number formatting
+            $('#cardNumber').on('input', function() {
+                const formatted = formatCardNumber($(this).val());
+                $(this).val(formatted);
+            });
+            
+            // Expiry date formatting
+            $('#expiryDate').on('input', function() {
+                const formatted = formatExpiryDate($(this).val());
+                $(this).val(formatted);
+            });
+            
+            // CVV input (numbers only)
+            $('#cvv').on('input', function() {
+                $(this).val($(this).val().replace(/\D/g, ''));
+            });
+            
+            // Form submission
+            $('#paymentForm').on('submit', async function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    // Show loading state
+                    $('#payButtonText').addClass('hidden');
+                    $('#payButtonLoading').removeClass('hidden');
+                    $('#payNowBtn').prop('disabled', true);
+                    
+                    try {
+                        const success = await processPayment();
+                        
+                        if (success) {
+                            showToast('Payment processed successfully!', 'success');
+                            
+                            // Reset form
+                            $('#paymentForm')[0].reset();
+                            selectedBill = null;
+                            selectedMethod = null;
+                            $('.payment-method-card').removeClass('selected');
+                            $('#cardDetails, #bankDetails').addClass('hidden');
+                            updatePaymentSummary();
+                        } else {
+                            showToast('Payment failed. Please try again.', 'error');
+                        }
+                    } catch (error) {
+                        showToast('An error occurred. Please try again.', 'error');
+                    } finally {
+                        // Hide loading state
+                        $('#payButtonText').removeClass('hidden');
+                        $('#payButtonLoading').addClass('hidden');
+                        $('#payNowBtn').prop('disabled', false);
+                    }
+                }
+            });
+            
+            // Add keyboard shortcuts
+            $(document).on('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    $('#payNowBtn').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

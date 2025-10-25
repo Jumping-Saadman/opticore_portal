@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Bill</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        :root {
+            --shadow-3d-md: 0 8px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            --shadow-3d-sm: 0 4px 12px -2px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-card {
+            background: linear-gradient(135deg, hsl(240, 8%, 7%) 0%, hsl(240, 8%, 5%) 100%);
+            box-shadow: var(--shadow-3d-md);
+        }
+        
+        .form-input {
+            background: #1f2937;
+            border: 1px solid #374151;
+            box-shadow: var(--shadow-inset);
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .form-select {
+            background: #1f2937;
+            border: 1px solid #374151;
+            box-shadow: var(--shadow-inset);
+            transition: all 0.2s ease;
+        }
+        
+        .form-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .form-textarea {
+            background: #1f2937;
+            border: 1px solid #374151;
+            box-shadow: var(--shadow-inset);
+            transition: all 0.2s ease;
+            resize: vertical;
+        }
+        
+        .form-textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: var(--shadow-3d-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .preview-section {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border: 1px solid #374151;
+        }
+        
+        .preview-item {
+            border-bottom: 1px solid #374151;
+            padding: 0.75rem 0;
+        }
+        
+        .preview-item:last-child {
+            border-bottom: none;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1f2937;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-3d-md);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+        
+        .required {
+            color: #ef4444;
+        }
+        
+        .form-error {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        
+        .preview-amount {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .preview-placeholder {
+            color: #6b7280;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                Generate Bill
+            </h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid gap-6 lg:grid-cols-2">
+            <!-- Bill Details Form -->
+            <div class="form-card rounded-lg border border-gray-700 p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-white">Bill Details</h2>
+                </div>
+                
+                <form id="billForm" class="space-y-4">
+                    <!-- Client Selection -->
+                    <div class="form-group">
+                        <label for="clientSelect" class="form-label">
+                            Select Client <span class="required">*</span>
+                        </label>
+                        <select id="clientSelect" class="form-select w-full px-3 py-2 rounded-lg text-white">
+                            <option value="">Choose a client</option>
+                            <option value="acme">Acme Corp (OSL)</option>
+                            <option value="paradise">Hotel Paradise (Jana)</option>
+                            <option value="tech">Tech Solutions (OSL)</option>
+                            <option value="royal">Royal Inn (Jana)</option>
+                            <option value="global">Global Systems (OSL)</option>
+                        </select>
+                        <div id="clientError" class="form-error hidden">Please select a client</div>
+                    </div>
+
+                    <!-- Service Description -->
+                    <div class="form-group">
+                        <label for="serviceDescription" class="form-label">
+                            Service Description <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="serviceDescription" 
+                            class="form-input w-full px-3 py-2 rounded-lg text-white placeholder-gray-400"
+                            placeholder="Enter service description"
+                        />
+                        <div id="serviceError" class="form-error hidden">Please enter a service description</div>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="form-group">
+                        <label for="amount" class="form-label">
+                            Amount <span class="required">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
+                            <input 
+                                type="number" 
+                                id="amount" 
+                                step="0.01"
+                                min="0"
+                                class="form-input w-full px-8 py-2 rounded-lg text-white placeholder-gray-400"
+                                placeholder="0.00"
+                            />
+                        </div>
+                        <div id="amountError" class="form-error hidden">Please enter a valid amount</div>
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="form-group">
+                        <label for="dueDate" class="form-label">
+                            Due Date <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="date" 
+                            id="dueDate" 
+                            class="form-input w-full px-3 py-2 rounded-lg text-white"
+                        />
+                        <div id="dueDateError" class="form-error hidden">Please select a due date</div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-group">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea 
+                            id="notes" 
+                            rows="4"
+                            class="form-textarea w-full px-3 py-2 rounded-lg text-white placeholder-gray-400"
+                            placeholder="Add any additional notes..."
+                        ></textarea>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button 
+                        type="submit" 
+                        id="generateBtn"
+                        class="btn-primary w-full px-4 py-3 rounded-lg font-medium text-white hover:shadow-lg transition-all duration-200"
+                    >
+                        <i data-lucide="file-text" class="inline h-5 w-5 mr-2"></i>
+                        Generate Bill
+                    </button>
+                </form>
+            </div>
+
+            <!-- Bill Preview -->
+            <div class="form-card rounded-lg border border-gray-700 p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-white">Bill Preview</h2>
+                </div>
+                
+                <div class="preview-section rounded-lg p-4">
+                    <div class="space-y-4 text-sm">
+                        <div class="preview-item flex justify-between">
+                            <span class="text-gray-400">Client:</span>
+                            <span id="previewClient" class="font-medium preview-placeholder">Select a client</span>
+                        </div>
+                        <div class="preview-item flex justify-between">
+                            <span class="text-gray-400">Service:</span>
+                            <span id="previewService" class="font-medium preview-placeholder">-</span>
+                        </div>
+                        <div class="preview-item flex justify-between">
+                            <span class="text-gray-400">Amount:</span>
+                            <span id="previewAmount" class="font-medium preview-amount">$0.00</span>
+                        </div>
+                        <div class="preview-item flex justify-between">
+                            <span class="text-gray-400">Due Date:</span>
+                            <span id="previewDueDate" class="font-medium preview-placeholder">-</span>
+                        </div>
+                        <div class="preview-item flex justify-between">
+                            <span class="text-gray-400">Notes:</span>
+                            <span id="previewNotes" class="font-medium preview-placeholder">-</span>
+                        </div>
+                        <div class="pt-4 border-t border-gray-600">
+                            <p class="text-gray-400 text-xs">
+                                Fill in the form to see the preview
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bill Actions -->
+                <div class="mt-6 space-y-3">
+                    <button id="downloadPdfBtn" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <i data-lucide="download" class="inline h-4 w-4 mr-2"></i>
+                        Download PDF
+                    </button>
+                    <button id="sendEmailBtn" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <i data-lucide="mail" class="inline h-4 w-4 mr-2"></i>
+                        Send via Email
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bill History Section -->
+        <div class="mt-8">
+            <div class="form-card rounded-lg border border-gray-700 p-6">
+                <div class="mb-4">
+                    <h2 class="text-xl font-semibold text-white">Recent Bills</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-800">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Bill ID</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Client</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Amount</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Due Date</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billHistoryTable" class="divide-y divide-gray-700">
+                            <!-- Bill history will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <script>
+        // Bill history data
+        const billHistory = [
+            { id: 'BILL001', client: 'Acme Corp', amount: '$15,000', dueDate: '2025-02-01', status: 'Paid' },
+            { id: 'BILL002', client: 'Hotel Paradise', amount: '$3,200', dueDate: '2025-01-25', status: 'Paid' },
+            { id: 'BILL003', client: 'Tech Solutions', amount: '$22,000', dueDate: '2025-02-05', status: 'Pending' },
+            { id: 'BILL004', client: 'Royal Inn', amount: '$2,800', dueDate: '2025-01-20', status: 'Overdue' }
+        ];
+
+        // Client data for validation
+        const clientData = {
+            'acme': { name: 'Acme Corp', type: 'OSL' },
+            'paradise': { name: 'Hotel Paradise', type: 'Jana' },
+            'tech': { name: 'Tech Solutions', type: 'OSL' },
+            'royal': { name: 'Royal Inn', type: 'Jana' },
+            'global': { name: 'Global Systems', type: 'OSL' }
+        };
+
+        // Initialize form with today's date
+        function initializeForm() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            $('#dueDate').val(tomorrow.toISOString().split('T')[0]);
+        }
+
+        // Update preview
+        function updatePreview() {
+            const clientId = $('#clientSelect').val();
+            const service = $('#serviceDescription').val();
+            const amount = $('#amount').val();
+            const dueDate = $('#dueDate').val();
+            const notes = $('#notes').val();
+
+            // Update preview fields
+            if (clientId && clientData[clientId]) {
+                $('#previewClient').text(clientData[clientId].name).removeClass('preview-placeholder');
+            } else {
+                $('#previewClient').text('Select a client').addClass('preview-placeholder');
+            }
+
+            $('#previewService').text(service || '-').toggleClass('preview-placeholder', !service);
+            $('#previewAmount').text(amount ? `$${parseFloat(amount).toFixed(2)}` : '$0.00');
+            $('#previewDueDate').text(dueDate || '-').toggleClass('preview-placeholder', !dueDate);
+            $('#previewNotes').text(notes || '-').toggleClass('preview-placeholder', !notes);
+
+            // Enable/disable action buttons
+            const isFormValid = clientId && service && amount && dueDate;
+            $('#downloadPdfBtn, #sendEmailBtn').prop('disabled', !isFormValid);
+        }
+
+        // Validate form
+        function validateForm() {
+            let isValid = true;
+            
+            // Clear previous errors
+            $('.form-error').addClass('hidden');
+            
+            // Validate client
+            if (!$('#clientSelect').val()) {
+                $('#clientError').removeClass('hidden');
+                isValid = false;
+            }
+            
+            // Validate service
+            if (!$('#serviceDescription').val().trim()) {
+                $('#serviceError').removeClass('hidden');
+                isValid = false;
+            }
+            
+            // Validate amount
+            const amount = parseFloat($('#amount').val());
+            if (!amount || amount <= 0) {
+                $('#amountError').removeClass('hidden');
+                isValid = false;
+            }
+            
+            // Validate due date
+            if (!$('#dueDate').val()) {
+                $('#dueDateError').removeClass('hidden');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = $(`
+                <div class="toast ${type}">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="h-5 w-5"></i>
+                        <span>${message}</span>
+                    </div>
+                </div>
+            `);
+            
+            $('#toastContainer').append(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.addClass('show'), 100);
+            setTimeout(() => {
+                toast.removeClass('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Create bill history row
+        function createBillHistoryRow(bill) {
+            const statusClass = bill.status === 'Paid' ? 'text-green-400' : 
+                               bill.status === 'Overdue' ? 'text-red-400' : 'text-yellow-400';
+            
+            return `
+                <tr class="hover:bg-gray-800/50 transition-colors">
+                    <td class="px-4 py-3 text-sm font-medium text-white">${bill.id}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${bill.client}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${bill.amount}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${bill.dueDate}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <span class="${statusClass} font-semibold">${bill.status}</span>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Populate bill history
+        function populateBillHistory() {
+            const tableBody = $('#billHistoryTable');
+            tableBody.empty();
+            
+            billHistory.forEach(bill => {
+                tableBody.append(createBillHistoryRow(bill));
+            });
+        }
+
+        // Generate bill ID
+        function generateBillId() {
+            const timestamp = new Date().getTime();
+            const random = Math.floor(Math.random() * 1000);
+            return `BILL${timestamp.toString().slice(-6)}${random.toString().padStart(3, '0')}`;
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+
+        // Event handlers
+        $(document).ready(function() {
+            // Initialize form
+            initializeForm();
+            populateBillHistory();
+            
+            // Form input handlers
+            $('#clientSelect, #serviceDescription, #amount, #dueDate, #notes').on('input change', updatePreview);
+            
+            // Form submission
+            $('#billForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    const billId = generateBillId();
+                    const clientName = clientData[$('#clientSelect').val()].name;
+                    const amount = formatCurrency(parseFloat($('#amount').val()));
+                    
+                    showToast(`Bill ${billId} generated successfully for ${clientName}!`, 'success');
+                    
+                    // Add to bill history
+                    const newBill = {
+                        id: billId,
+                        client: clientName,
+                        amount: amount,
+                        dueDate: $('#dueDate').val(),
+                        status: 'Pending'
+                    };
+                    
+                    billHistory.unshift(newBill);
+                    populateBillHistory();
+                    
+                    // Reset form
+                    $('#billForm')[0].reset();
+                    initializeForm();
+                    updatePreview();
+                }
+            });
+            
+            // Action button handlers
+            $('#downloadPdfBtn').on('click', function() {
+                showToast('PDF download started', 'success');
+            });
+            
+            $('#sendEmailBtn').on('click', function() {
+                showToast('Email sent successfully', 'success');
+            });
+            
+            // Amount input formatting
+            $('#amount').on('input', function() {
+                let value = $(this).val();
+                if (value && !isNaN(value)) {
+                    $(this).val(parseFloat(value).toFixed(2));
+                }
+            });
+            
+            // Add keyboard shortcuts
+            $(document).on('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    $('#generateBtn').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

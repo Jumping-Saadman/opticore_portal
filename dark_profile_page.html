@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .bg-gradient {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0f0a1a 100%);
+        }
+        
+        .rotating-gradient::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease both;
+        }
+        
+        .animate-fade-in-down {
+            animation: fadeInDown 0.6s ease both;
+        }
+        
+        .animate-slide-down {
+            animation: slideDown 0.3s ease both;
+        }
+        
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+        
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gradient min-h-screen text-gray-200 p-6 md:p-10 overflow-x-hidden">
+    <div class="rotating-gradient"></div>
+    
+    <div class="max-w-4xl mx-auto relative z-10">
+        <!-- Header -->
+        <div class="mb-12 animate-fade-in-down">
+            <h1 class="text-4xl md:text-5xl font-bold text-gradient mb-2">Profile Settings</h1>
+            <p class="text-gray-400">Manage your account information and security preferences</p>
+        </div>
+
+        <!-- Full Name Section -->
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-3xl p-8 mb-6 border border-purple-500/20 shadow-2xl card-hover animate-fade-in-up">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl">
+                    👤
+                </div>
+                <h2 class="text-2xl font-semibold text-white">Full Name</h2>
+            </div>
+            <div class="mb-6">
+                <label for="fullName" class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Your Full Name</label>
+                <input type="text" id="fullName" value="Alex Johnson" 
+                    class="w-full px-4 py-3.5 bg-gray-950/80 border border-purple-500/30 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all">
+            </div>
+            <button id="updateNameBtn" class="px-7 py-3.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-semibold uppercase tracking-wide shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all">
+                Save Changes
+            </button>
+        </div>
+
+        <!-- Email Address Section -->
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-3xl p-8 mb-6 border border-purple-500/20 shadow-2xl card-hover animate-fade-in-up delay-100">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl">
+                    📧
+                </div>
+                <h2 class="text-2xl font-semibold text-white">Email Address</h2>
+            </div>
+            <div class="mb-6">
+                <label for="email" class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Your Email Address</label>
+                <input type="email" id="email" value="alex.johnson@example.com" 
+                    class="w-full px-4 py-3.5 bg-gray-950/80 border border-purple-500/30 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all">
+                <div id="emailVerificationMessage" class="hidden mt-3 px-4 py-3 bg-amber-500/15 border border-amber-500/30 rounded-lg text-amber-400 text-sm items-center gap-2 animate-slide-down">
+                    ⚠️ Your email address is unverified. Please check your mail to verify.
+                </div>
+            </div>
+            <button id="updateEmailBtn" class="px-7 py-3.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-semibold uppercase tracking-wide shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all">
+                Save Changes
+            </button>
+        </div>
+
+        <!-- Password Section -->
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-3xl p-8 mb-6 border border-purple-500/20 shadow-2xl card-hover animate-fade-in-up delay-200">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl">
+                    🔒
+                </div>
+                <h2 class="text-2xl font-semibold text-white">Password</h2>
+            </div>
+            <div class="mb-6">
+                <label for="currentPassword" class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Current Password</label>
+                <div class="relative">
+                    <input type="password" id="currentPassword" placeholder="Enter current password"
+                        class="w-full px-4 py-3.5 bg-gray-950/80 border border-purple-500/30 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all">
+                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-500 text-lg p-2 transition-colors" onclick="togglePassword('currentPassword')">
+                        👁️
+                    </button>
+                </div>
+            </div>
+            <div class="mb-6">
+                <label for="newPassword" class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">New Password</label>
+                <div class="relative">
+                    <input type="password" id="newPassword" placeholder="Enter new password"
+                        class="w-full px-4 py-3.5 bg-gray-950/80 border border-purple-500/30 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all">
+                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-500 text-lg p-2 transition-colors" onclick="togglePassword('newPassword')">
+                        👁️
+                    </button>
+                </div>
+            </div>
+            <div class="mb-6">
+                <label for="confirmPassword" class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Confirm New Password</label>
+                <div class="relative">
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password"
+                        class="w-full px-4 py-3.5 bg-gray-950/80 border border-purple-500/30 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all">
+                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-500 text-lg p-2 transition-colors" onclick="togglePassword('confirmPassword')">
+                        👁️
+                    </button>
+                </div>
+            </div>
+            <button id="updatePasswordBtn" class="px-7 py-3.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-semibold uppercase tracking-wide shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all">
+                Update Password
+            </button>
+        </div>
+
+        <!-- Browser Sessions Section -->
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-3xl p-8 border border-purple-500/20 shadow-2xl card-hover animate-fade-in-up delay-300">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl">
+                    🌐
+                </div>
+                <h2 class="text-2xl font-semibold text-white">Browser Sessions</h2>
+            </div>
+            <div class="space-y-4" id="sessionList">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-gray-950/60 rounded-2xl border border-purple-500/20 hover:bg-gray-950/80 hover:border-purple-500/40 transition-all">
+                    <div class="flex items-center gap-4 flex-1">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-500 flex items-center justify-center text-xl flex-shrink-0">
+                            💻
+                        </div>
+                        <div>
+                            <div class="font-semibold text-white mb-1">Chrome on Windows</div>
+                            <div class="text-sm text-gray-500">Dhaka, Bangladesh • Last active now</div>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1.5 bg-green-500/15 text-green-400 rounded-lg text-xs font-semibold uppercase tracking-wide">
+                        Current
+                    </span>
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-gray-950/60 rounded-2xl border border-purple-500/20 hover:bg-gray-950/80 hover:border-purple-500/40 transition-all session-item">
+                    <div class="flex items-center gap-4 flex-1">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-500 flex items-center justify-center text-xl flex-shrink-0">
+                            📱
+                        </div>
+                        <div>
+                            <div class="font-semibold text-white mb-1">Safari on iPhone</div>
+                            <div class="text-sm text-gray-500">Dhaka, Bangladesh • 2 hours ago</div>
+                        </div>
+                    </div>
+                    <button class="revoke-btn px-5 py-2.5 bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl font-semibold hover:bg-red-500/25 hover:border-red-500/50 transition-all">
+                        Revoke
+                    </button>
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-gray-950/60 rounded-2xl border border-purple-500/20 hover:bg-gray-950/80 hover:border-purple-500/40 transition-all session-item">
+                    <div class="flex items-center gap-4 flex-1">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-500 flex items-center justify-center text-xl flex-shrink-0">
+                            💻
+                        </div>
+                        <div>
+                            <div class="font-semibold text-white mb-1">Firefox on Mac</div>
+                            <div class="text-sm text-gray-500">Dhaka, Bangladesh • 1 day ago</div>
+                        </div>
+                    </div>
+                    <button class="revoke-btn px-5 py-2.5 bg-red-500/15 text-red-400 border border-red-500/30 rounded-xl font-semibold hover:bg-red-500/25 hover:border-red-500/50 transition-all">
+                        Revoke
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Update Name
+            $('#updateNameBtn').click(function() {
+                const name = $('#fullName').val().trim();
+                if (name) {
+                    showNotification('Name updated successfully!', 'success');
+                } else {
+                    showNotification('Please enter a valid name', 'error');
+                }
+            });
+
+            // Update Email
+            $('#updateEmailBtn').click(function() {
+                const email = $('#email').val().trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (!email) {
+                    showNotification('Please enter an email address', 'error');
+                    return;
+                }
+                
+                if (!emailRegex.test(email)) {
+                    showNotification('Please enter a valid email address', 'error');
+                    return;
+                }
+                
+                $('#emailVerificationMessage').removeClass('hidden').addClass('flex');
+                showNotification('Email updated successfully! Verification email sent.', 'success');
+            });
+
+            // Update Password
+            $('#updatePasswordBtn').click(function() {
+                const current = $('#currentPassword').val();
+                const newPass = $('#newPassword').val();
+                const confirm = $('#confirmPassword').val();
+
+                if (!current || !newPass || !confirm) {
+                    showNotification('Please fill in all password fields', 'error');
+                    return;
+                }
+
+                if (newPass !== confirm) {
+                    showNotification('New passwords do not match', 'error');
+                    return;
+                }
+
+                if (newPass.length < 8) {
+                    showNotification('Password must be at least 8 characters', 'error');
+                    return;
+                }
+
+                showNotification('Password updated successfully!', 'success');
+                $('#currentPassword, #newPassword, #confirmPassword').val('');
+            });
+
+            // Revoke Session
+            $(document).on('click', '.revoke-btn', function() {
+                const $sessionItem = $(this).closest('.session-item');
+                $sessionItem.css({
+                    'opacity': '0',
+                    'transform': 'translateX(100%)',
+                    'transition': 'all 0.3s ease'
+                });
+                
+                setTimeout(function() {
+                    $sessionItem.remove();
+                    showNotification('Session revoked successfully', 'success');
+                }, 300);
+            });
+        });
+
+        // Toggle Password Visibility
+        function togglePassword(inputId) {
+            const $input = $('#' + inputId);
+            const type = $input.attr('type') === 'password' ? 'text' : 'password';
+            $input.attr('type', type);
+        }
+
+        // Show Notification
+        function showNotification(message, type) {
+            const bgColor = type === 'success' 
+                ? 'linear-gradient(135deg, #22c55e, #16a34a)' 
+                : 'linear-gradient(135deg, #ef4444, #dc2626)';
+            
+            const $notification = $('<div>')
+                .text(message)
+                .css({
+                    'position': 'fixed',
+                    'top': '20px',
+                    'right': '20px',
+                    'padding': '16px 24px',
+                    'background': bgColor,
+                    'color': 'white',
+                    'border-radius': '12px',
+                    'font-weight': '600',
+                    'z-index': '1000',
+                    'animation': 'slideIn 0.3s ease',
+                    'box-shadow': '0 8px 24px rgba(0, 0, 0, 0.3)'
+                });
+            
+            $('body').append($notification);
+
+            setTimeout(function() {
+                $notification.css('animation', 'slideOut 0.3s ease');
+                setTimeout(function() {
+                    $notification.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
