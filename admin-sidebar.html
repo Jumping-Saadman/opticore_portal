@@ -126,21 +126,20 @@
     style="width: 280px;">
 
     <!-- STICKY HEADER -->
-    <div id="sidebarHeader"
-      class="sticky top-0 z-20 bg-sidebar-bg border-b border-border flex flex-col pb-2 shadow-lg">
+    <div id="sidebarHeader" class="sticky top-0 z-20 bg-sidebar-bg border-b border-border flex flex-col pb-2 shadow-lg">
 
       <!-- Hamburger Button Row -->
       <div class="flex justify-end p-2">
         <button id="sidebarToggle"
           class="bg-muted border-0 p-2 rounded-lg cursor-pointer text-foreground transition-all duration-200 hover:bg-muted/70 z-10"
           aria-label="Toggle sidebar">
-          <i data-lucide="menu" class="w-5 h-5"></i>
+          <i data-lucide="list-collapse" class="w-5 h-5"></i>
         </button>
       </div>
 
       <!-- Logo/Brand Section -->
       <div class="px-4 pt-1 relative">
-        <div class="flex items-center gap-3">
+        <div class="flex justify-between items-center gap-3">
           <div
             class="logo-container relative w-16 h-16 shadow-[0_0_20px_hsl(217_91%_60%/0.3),0_0_40px_hsl(217_91%_60%/0.1)] rounded-xl overflow-hidden shrink-0">
             <!-- Using placeholder images for demo -->
@@ -177,11 +176,12 @@
         <button
           class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
           aria-expanded="true" aria-controls="collapsible-client-management">
+          <img src="customer.png" alt="client icon" class="w-4 h-4 shrink-0 " />
           <span>Client Management</span>
           <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
         </button>
         <div id="collapsible-client-management" class="collapsible-content open">
-          <ul class="list-none space-y-1 p-2 bg-card/50 rounded-lg">
+          <ul class="list-none space-y-1 p-2 bg-card rounded-lg">
             <li>
               <a href="#/admin/client-list"
                 class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
@@ -205,11 +205,12 @@
         <button
           class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
           aria-expanded="true" aria-controls="collapsible-bill-generation">
+          <img src="banknote-arrow-down.png" alt="bill icon" class="w-4 h-4 shrink-0 " />
           <span>Bill Generation</span>
           <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
         </button>
         <div id="collapsible-bill-generation" class="collapsible-content open">
-          <ul class="list-none space-y-1 p-2 bg-card/50 rounded-lg">
+          <ul class="list-none space-y-1 p-2 bg-card rounded-lg">
             <li>
               <a href="#/admin/generate-bill"
                 class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
@@ -317,12 +318,17 @@
           </li>
         </ul>
       </div>
-      
+
       <!-- Padding for the footer -->
       <div class="h-4"></div>
 
       <!-- FOOTER: No longer sticky (removed 'sticky bottom-0') -->
-      <div id="sidebarFooter" class="z-20 bg-sidebar-bg border-t border-border p-3 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
+      <div id="sidebarFooter" class="flex gap-3 z-20 bg-sidebar-bg border-t border-border p-3 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
+        <button id="logoutButton"
+          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg bg-accent text-accent-foreground font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+          <span>Logout</span>
+        </button>
         <button id="logoutButton"
           class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg bg-accent text-accent-foreground font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
           <i data-lucide="log-out" class="w-5 h-5"></i>
@@ -344,7 +350,8 @@
       class="bg-card border border-border rounded-xl p-6 shadow-[0_4px_8px_hsl(0_0%_0%/0.4),0_8px_16px_hsl(0_0%_0%/0.3)]">
       <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
       <p class="text-muted-foreground">
-        Welcome to the Admin Panel. Use the sticky sidebar to navigate through client management, bill generation, and system settings.
+        Welcome to the Admin Panel. Use the sticky sidebar to navigate through client management, bill generation, and
+        system settings.
       </p>
     </div>
   </main>
@@ -374,9 +381,9 @@
       checkResponsive(); // Calls applyCollapsedStyles based on the current state and viewport
 
       $('#sidebarToggle').on('click', function () { toggleSidebar(); });
-      
+
       // Logout Button Handler
-      $('#logoutButton').on('click', function() {
+      $('#logoutButton').on('click', function () {
         console.log('Logout button clicked. Implement actual logout logic here.');
       });
 
@@ -435,6 +442,7 @@
       const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
       const sidebarFooter = sidebar.querySelector('#sidebarFooter');
       const footerSpan = sidebarFooter.querySelector('span');
+      const toggleContainer = document.getElementById('sidebarToggle').parentElement;
 
       const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
@@ -442,6 +450,9 @@
         // Collapsed State
         sidebar.style.width = '80px';
         mainContent.style.marginLeft = '80px';
+
+        toggleContainer.classList.remove('justify-end');
+        toggleContainer.classList.add('justify-center');
 
         logoContainer.classList.remove('w-16', 'h-16');
         logoContainer.classList.add('w-10', 'h-10');
@@ -473,6 +484,9 @@
       } else {
         // Expanded State
         sidebar.style.width = '280px';
+
+        toggleContainer.classList.remove('justify-center');
+    toggleContainer.classList.add('justify-end');
 
         if (isMobile) {
           mainContent.style.marginLeft = '80px'; // Still keep main content margin small on mobile
@@ -556,7 +570,7 @@
 
       const slideshow = () => {
         logos.removeClass('active');
-        const logoCount = logos.length; 
+        const logoCount = logos.length;
         currentLogoIndex = (currentLogoIndex + 1) % logoCount;
         const $currentLogo = $(logos[currentLogoIndex]);
 
@@ -569,7 +583,7 @@
           $(logos[currentLogoIndex]).addClass('active');
         }
       };
-      
+
       // Set initial logo active state
       logos.removeClass('active');
       $(logos[currentLogoIndex]).addClass('active');
