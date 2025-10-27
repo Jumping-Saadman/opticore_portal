@@ -323,14 +323,14 @@
       <div class="h-4"></div>
 
       <!-- FOOTER: No longer sticky (removed 'sticky bottom-0') -->
-      <div id="sidebarFooter" class="flex gap-3 z-20 bg-sidebar-bg border-t border-border p-3 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
-        <button id="logoutButton"
-          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg bg-accent text-accent-foreground font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
-          <i data-lucide="log-out" class="w-5 h-5"></i>
-          <span>Logout</span>
+      <div id="sidebarFooter" class="flex gap-3 z-20 bg-sidebar-bg border-t border-border p-2 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
+        <button id="settingsButton"
+          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg  text-sm text-primary font-semibold border-0 transition-all duration-300 hover:bg-primary/80">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+          <span>Settings</span>
         </button>
         <button id="logoutButton"
-          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg bg-accent text-accent-foreground font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
+          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg text-sm text-primary font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
           <i data-lucide="log-out" class="w-5 h-5"></i>
           <span>Logout</span>
         </button>
@@ -357,281 +357,262 @@
   </main>
 
   <script>
-    let sidebarCollapsed = true; // Start collapsed for mobile-first approach on load
-    const MOBILE_BREAKPOINT = 768;
-    let logoSlideshowInterval = null;
-    let currentLogoIndex = 0; // NEW: Global index for continuous rotation
-    // Note: logos selection is inside $(document).ready because it relies on jQuery being available
-    let logos;
+let sidebarCollapsed = true; // Start collapsed for mobile-first approach on load
+const MOBILE_BREAKPOINT = 768;
+let logoSlideshowInterval = null;
+let currentLogoIndex = 0; // NEW: Global index for continuous rotation
+let logos;
 
-    $(document).ready(function () {
-      logos = $('.logo-container img');
+$(document).ready(function () {
+  logos = $('.logo-container img');
 
-      try {
-        const savedCollapsed = localStorage.getItem('sidebarCollapsed');
-        if (savedCollapsed !== null) {
-          sidebarCollapsed = savedCollapsed === 'true';
-        }
-      } catch (e) {
-        console.warn('localStorage is unavailable:', e);
-      }
+  try {
+    const savedCollapsed = localStorage.getItem('sidebarCollapsed');
+    if (savedCollapsed !== null) {
+      sidebarCollapsed = savedCollapsed === 'true';
+    }
+  } catch (e) {
+    console.warn('localStorage is unavailable:', e);
+  }
 
-      initMenu();
-      initLogoSlideshow(); // Always start the slideshow interval here
-      checkResponsive(); // Calls applyCollapsedStyles based on the current state and viewport
+  initMenu();
+  initLogoSlideshow();
+  checkResponsive();
 
-      $('#sidebarToggle').on('click', function () { toggleSidebar(); });
+  $('#sidebarToggle').on('click', function () { toggleSidebar(); });
 
-      // Logout Button Handler
-      $('#logoutButton').on('click', function () {
-        console.log('Logout button clicked. Implement actual logout logic here.');
-      });
+  $('#logoutButton').on('click', function () {
+    console.log('Logout button clicked. Implement actual logout logic here.');
+  });
 
-      // Overlay Click Handler: Collapse sidebar when overlay is clicked on mobile
-      $('#sidebarOverlay').on('click', function () {
-        if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) {
-          toggleSidebar(true); // 'true' forces it to collapse
-        }
-      });
+  $('#sidebarOverlay').on('click', function () {
+    if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) {
+      toggleSidebar(true); 
+    }
+  });
 
-      $(document).on('keydown', function (e) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-          e.preventDefault();
-          toggleSidebar();
-        }
-      });
+  $(document).on('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+      e.preventDefault();
+      toggleSidebar();
+    }
+  });
 
-      $(window).on('resize', checkResponsive);
+  $(window).on('resize', checkResponsive);
+  lucide.createIcons();
+});
 
-      lucide.createIcons();
+function toggleSidebar(force) {
+  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+
+  if (force !== undefined) {
+    sidebarCollapsed = force;
+  } else {
+    sidebarCollapsed = !sidebarCollapsed;
+  }
+
+  if (isMobile) {
+    $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
+    $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
+  } else {
+    $('#sidebarOverlay').removeClass('show');
+    $('#sidebar').removeClass('mobile-on-top');
+  }
+
+  applyCollapsedStyles();
+  try {
+    localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+  } catch (e) {
+    console.warn('localStorage is unavailable:', e);
+  }
+}
+
+function applyCollapsedStyles() {
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
+  const logoContainer = sidebar.querySelector('.logo-container');
+  const brandText = sidebar.querySelector('.brand-text');
+  const menuLinks = sidebar.querySelectorAll('.menu-link');
+  const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
+  const sidebarFooter = sidebar.querySelector('#sidebarFooter');
+  const footerSpans = sidebarFooter.querySelectorAll('span');
+  const toggleContainer = document.getElementById('sidebarToggle').parentElement;
+
+  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+
+  if (sidebarCollapsed) {
+    // COLLAPSED STATE
+    sidebar.style.width = '80px';
+    mainContent.style.marginLeft = '80px';
+
+    toggleContainer.classList.remove('justify-end');
+    toggleContainer.classList.add('justify-center');
+
+    logoContainer.classList.remove('w-16', 'h-16');
+    logoContainer.classList.add('w-10', 'h-10');
+
+    brandText.classList.add('hidden');
+
+    menuLinks.forEach(link => {
+      link.classList.add('justify-center', 'p-2.5');
+      const span = link.querySelector('span');
+      if (span) span.classList.add('hidden');
     });
 
-    function toggleSidebar(force) {
-      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+    collapsibleTriggers.forEach(trigger => {
+      trigger.classList.add('justify-center', 'p-2.5', 'w-10', 'h-10');
+      trigger.classList.remove('justify-between');
+      const span = trigger.querySelector('span');
+      if (span) span.classList.add('hidden');
 
-      if (force !== undefined) {
-        sidebarCollapsed = force; // true to collapse, false to expand
-      } else {
-        sidebarCollapsed = !sidebarCollapsed;
-      }
+      const chevron = trigger.querySelector('.chevron-icon');
+      if (chevron) chevron.classList.remove('hidden'); 
+    });
 
-      if (isMobile) {
-        // On mobile, control the overlay and z-index
-        $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
-        $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
-      } else {
-        // On desktop, ensure mobile-specific classes are off
-        $('#sidebarOverlay').removeClass('show');
-        $('#sidebar').removeClass('mobile-on-top');
-      }
+    // --- FOOTER COLLAPSE FIX ---
+    sidebarFooter.classList.add('flex-col', 'items-center', 'gap-2'); // flex-col parent
+    sidebarFooter.classList.remove('gap-3'); 
+    $('#sidebarFooter button').each(function () {
+      $(this).addClass('justify-center p-2').removeClass('px-3 py-2.5 w-full');
+      $(this).find('span').addClass('hidden'); // hide text
+    });
 
-      applyCollapsedStyles();
-      try {
-        localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
-      } catch (e) {
-        console.warn('localStorage is unavailable:', e);
-      }
-    }
+  } else {
+    // EXPANDED STATE
+    sidebar.style.width = '280px';
 
-    function applyCollapsedStyles() {
-      const sidebar = document.getElementById('sidebar');
-      const mainContent = document.getElementById('mainContent');
-      const logoContainer = sidebar.querySelector('.logo-container');
-      const brandText = sidebar.querySelector('.brand-text');
-      const menuLinks = sidebar.querySelectorAll('.menu-link');
-      const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
-      const sidebarFooter = sidebar.querySelector('#sidebarFooter');
-      const footerSpan = sidebarFooter.querySelector('span');
-      const toggleContainer = document.getElementById('sidebarToggle').parentElement;
-
-      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-
-      if (sidebarCollapsed) {
-        // Collapsed State
-        sidebar.style.width = '80px';
-        mainContent.style.marginLeft = '80px';
-
-        toggleContainer.classList.remove('justify-end');
-        toggleContainer.classList.add('justify-center');
-
-        logoContainer.classList.remove('w-16', 'h-16');
-        logoContainer.classList.add('w-10', 'h-10');
-
-        brandText.classList.add('hidden');
-
-        menuLinks.forEach(link => {
-          link.classList.add('justify-center', 'p-2.5');
-          const span = link.querySelector('span');
-          if (span) span.classList.add('hidden');
-        });
-
-        collapsibleTriggers.forEach(trigger => {
-          trigger.classList.add('justify-center', 'p-2.5', 'w-10', 'h-10');
-          trigger.classList.remove('justify-between');
-          const span = trigger.querySelector('span');
-          if (span) span.classList.add('hidden');
-
-          const chevron = trigger.querySelector('.chevron-icon');
-          if (chevron) chevron.classList.remove('hidden'); // Keep chevron visible
-        });
-
-        // Collapse Footer
-        if (footerSpan) footerSpan.classList.add('hidden');
-        $('#logoutButton').removeClass('justify-center').addClass('justify-center');
-
-        // Note: Slideshow continues to run in the background.
-
-      } else {
-        // Expanded State
-        sidebar.style.width = '280px';
-
-        toggleContainer.classList.remove('justify-center');
+    toggleContainer.classList.remove('justify-center');
     toggleContainer.classList.add('justify-end');
 
-        if (isMobile) {
-          mainContent.style.marginLeft = '80px'; // Still keep main content margin small on mobile
-        } else {
-          mainContent.style.marginLeft = '280px';
-        }
-
-        logoContainer.classList.remove('w-10', 'h-10');
-        logoContainer.classList.add('w-16', 'h-16');
-
-        brandText.classList.remove('hidden');
-
-        menuLinks.forEach(link => {
-          link.classList.remove('justify-center', 'p-2.5');
-          const span = link.querySelector('span');
-          if (span) span.classList.remove('hidden');
-        });
-
-        collapsibleTriggers.forEach(trigger => {
-          trigger.classList.remove('justify-center', 'p-2.5', 'w-10', 'h-10');
-          trigger.classList.add('justify-between');
-          const span = trigger.querySelector('span');
-          if (span) span.classList.remove('hidden');
-          const chevron = trigger.querySelector('.chevron-icon');
-          if (chevron) chevron.classList.remove('hidden');
-        });
-
-        // Expand Footer
-        if (footerSpan) footerSpan.classList.remove('hidden');
-        $('#logoutButton').removeClass('justify-center');
-
-        // Note: Slideshow continues to run in the background.
-      }
-
-      // Update collapsible content heights
-      $('.collapsible-content').each(function () {
-        if ($(this).hasClass('open')) {
-          setTimeout(() => {
-            $(this).css('max-height', this.scrollHeight + 'px');
-          }, 0);
-        } else {
-          $(this).css('max-height', '0');
-        }
-      });
+    if (isMobile) {
+      mainContent.style.marginLeft = '80px';
+    } else {
+      mainContent.style.marginLeft = '280px';
     }
 
-    function checkResponsive() {
-      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+    logoContainer.classList.remove('w-10', 'h-10');
+    logoContainer.classList.add('w-16', 'h-16');
 
-      if (!isMobile) {
-        // Desktop View
-        const savedState = localStorage.getItem('sidebarCollapsed') === 'true';
-        if (sidebarCollapsed && !savedState) {
-          toggleSidebar(false); // Expand if it was open last time
-          return;
-        }
+    brandText.classList.remove('hidden');
 
-        // Ensure mobile-specific classes are off on desktop resize
-        $('#sidebarOverlay').removeClass('show');
-        $('#sidebar').removeClass('mobile-on-top');
+    menuLinks.forEach(link => {
+      link.classList.remove('justify-center', 'p-2.5');
+      const span = link.querySelector('span');
+      if (span) span.classList.remove('hidden');
+    });
 
-      } else {
-        // Mobile View: Force collapse if it was expanded on desktop resize
-        if (!sidebarCollapsed) {
-          toggleSidebar(true);
-          return;
-        }
-      }
+    collapsibleTriggers.forEach(trigger => {
+      trigger.classList.remove('justify-center', 'p-2.5', 'w-10', 'h-10');
+      trigger.classList.add('justify-between');
+      const span = trigger.querySelector('span');
+      if (span) span.classList.remove('hidden');
+      const chevron = trigger.querySelector('.chevron-icon');
+      if (chevron) chevron.classList.remove('hidden');
+    });
 
-      applyCollapsedStyles();
+    // --- FOOTER EXPAND FIX ---
+    sidebarFooter.classList.remove('flex-col', 'items-center', 'gap-2');
+    sidebarFooter.classList.add('flex', 'gap-3'); 
+    $('#sidebarFooter button').each(function () {
+      $(this).removeClass('justify-center p-2').addClass('px-3 py-2.5 w-full');
+      $(this).find('span').removeClass('hidden'); // show text
+    });
+  }
+
+  // Update collapsible content heights
+  $('.collapsible-content').each(function () {
+    if ($(this).hasClass('open')) {
+      setTimeout(() => {
+        $(this).css('max-height', this.scrollHeight + 'px');
+      }, 0);
+    } else {
+      $(this).css('max-height', '0');
     }
+  });
+}
 
+function checkResponsive() {
+  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-    function initLogoSlideshow() {
-      // Check if the slideshow is already running to avoid duplicate intervals
-      if (logoSlideshowInterval) {
-        return;
-      }
+  if (!isMobile) {
+    const savedState = localStorage.getItem('sidebarCollapsed') === 'true';
+    if (sidebarCollapsed && !savedState) {
+      toggleSidebar(false);
+      return;
+    }
+    $('#sidebarOverlay').removeClass('show');
+    $('#sidebar').removeClass('mobile-on-top');
+  } else {
+    if (!sidebarCollapsed) {
+      toggleSidebar(true);
+      return;
+    }
+  }
+  applyCollapsedStyles();
+}
 
-      if (logos.length === 0) return;
+function initLogoSlideshow() {
+  if (logoSlideshowInterval) {
+    return;
+  }
 
-      const slideshow = () => {
-        logos.removeClass('active');
-        const logoCount = logos.length;
-        currentLogoIndex = (currentLogoIndex + 1) % logoCount;
-        const $currentLogo = $(logos[currentLogoIndex]);
+  if (logos.length === 0) return;
 
-        // Basic check for image load status
-        if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
-          $currentLogo.addClass('active');
-        } else {
-          // If image failed to load, skip to the next one
-          currentLogoIndex = (currentLogoIndex + 1) % logoCount;
-          $(logos[currentLogoIndex]).addClass('active');
-        }
-      };
+  const slideshow = () => {
+    logos.removeClass('active');
+    const logoCount = logos.length;
+    currentLogoIndex = (currentLogoIndex + 1) % logoCount;
+    const $currentLogo = $(logos[currentLogoIndex]);
 
-      // Set initial logo active state
-      logos.removeClass('active');
+    if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
+      $currentLogo.addClass('active');
+    } else {
+      currentLogoIndex = (currentLogoIndex + 1) % logoCount;
       $(logos[currentLogoIndex]).addClass('active');
-
-      // Start the interval, it runs continuously
-      logoSlideshowInterval = setInterval(slideshow, 3000);
     }
+  };
 
+  logos.removeClass('active');
+  $(logos[currentLogoIndex]).addClass('active');
 
-    function initMenu() {
-      $('.collapsible-trigger').off('click').on('click', function () {
-        $(this).toggleClass('open');
-        const $content = $(this).next('.collapsible-content');
-        $content.toggleClass('open');
-        if ($content.hasClass('open')) {
-          $content.css('max-height', $content[0].scrollHeight + 'px');
-          $(this).attr('aria-expanded', 'true');
-        } else {
-          $content.css('max-height', '0');
-          $(this).attr('aria-expanded', 'false');
-        }
-      });
+  logoSlideshowInterval = setInterval(slideshow, 3000);
+}
 
-      // Menu Link Click Handler
-      $('.menu-link').off('click').on('click', function () {
-        // Remove active state from all
-        $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
-        // Add active state to clicked link
-        $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-      });
-
-      // Apply active class based on current URL hash (for initial load)
-      $('.menu-link').each(function () {
-        if ($(this).attr('href') === window.location.hash) {
-          $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-
-          // Open parent collapsible menus if an active link is found inside
-          const $parentContent = $(this).closest('.collapsible-content');
-          if ($parentContent.length) {
-            $parentContent.addClass('open');
-            $parentContent.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
-          }
-        }
-      });
-
-      applyCollapsedStyles();
+function initMenu() {
+  $('.collapsible-trigger').off('click').on('click', function () {
+    $(this).toggleClass('open');
+    const $content = $(this).next('.collapsible-content');
+    $content.toggleClass('open');
+    if ($content.hasClass('open')) {
+      $content.css('max-height', $content[0].scrollHeight + 'px');
+      $(this).attr('aria-expanded', 'true');
+    } else {
+      $content.css('max-height', '0');
+      $(this).attr('aria-expanded', 'false');
     }
-  </script>
+  });
+
+  $('.menu-link').off('click').on('click', function () {
+    $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
+    $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+  });
+
+  $('.menu-link').each(function () {
+    if ($(this).attr('href') === window.location.hash) {
+      $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+
+      const $parentContent = $(this).closest('.collapsible-content');
+      if ($parentContent.length) {
+        $parentContent.addClass('open');
+        $parentContent.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
+      }
+    }
+  });
+
+  applyCollapsedStyles();
+}
+</script>
+
 </body>
 
 </html>
