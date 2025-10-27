@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Home</title>
+    <title>OSL Client Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -49,12 +49,12 @@
         <!-- Dashboard Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                Dashboard Home
+                OSL Client Dashboard
             </h1>
         </div>
 
         <!-- Stats Grid -->
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4" id="statsGrid">
+        <div class="grid gap-6 md:grid-cols-2" id="statsGrid">
             <!-- Stats will be populated by JavaScript -->
         </div>
 
@@ -71,15 +71,15 @@
             <!-- Quick Actions -->
             <div class="bg-gray-800 rounded-lg p-6">
                 <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
-                <div class="flex justify-between gap-3">
-                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                        Generate Bill
+                <div class="grid gap-3">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        View Services
                     </button>
-                    <button class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
-                        View Payments
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        Payment History
                     </button>
-                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors">
-                        Client Management
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        Contact Support
                     </button>
                 </div>
             </div>
@@ -87,44 +87,18 @@
     </div>
 
     <script>
-        // Dashboard data
+        // OSL Client Dashboard data
         const dashboardData = {
-            admin: {
-                janaClients: { value: '45', change: '+5 this month', trend: 'up' },
-                oslClients: { value: '28', change: '+3 this month', trend: 'up' },
-                latestOSLPayment: { value: '$12,500', change: '2 days ago', trend: 'up' },
-                latestJanaPayment: { value: '$3,200', change: '1 day ago', trend: 'up' },
-                pendingBills: { value: '17', change: '-3 from last week', trend: 'down' },
-                monthlyOSLPayment: { value: '$45,000', change: '+15% from last month', trend: 'up' },
-                monthlyJanaPayment: { value: '$28,000', change: '+8% from last month', trend: 'up' },
-                totalMonthlyPayment: { value: '$73,000', change: '+12% from last month', trend: 'up' }
-            },
-            jana: {
-                lastPayment: { value: '$3,200', change: 'Paid on Jan 20, 2025', trend: 'up' },
-                totalPayment: { value: '$45,600', change: 'Since account creation', trend: 'up' },
-                lastInvoice: { value: '#INV-2025-0234', change: 'Generated Jan 20', trend: 'up' }
-            },
-            osl: {
-                lastPayment: { value: '$12,500', change: 'Paid on Jan 15, 2025', trend: 'up' },
-                lastService: { value: 'Cloud Hosting', change: 'Active since Jan 1', trend: 'up' }
-            }
+            lastPayment: { value: '$12,500', change: 'Paid on Jan 15, 2025', trend: 'up' },
+            lastService: { value: 'Cloud Hosting', change: 'Active since Jan 1', trend: 'up' }
         };
 
         const recentActivity = [
-            { timestamp: '2025-01-21 14:35:22', user: 'admin@opticore.com', action: 'User Login', status: 'Success' },
-            { timestamp: '2025-01-21 14:30:15', user: 'john@acme.com', action: 'Payment Made', status: 'Success' },
-            { timestamp: '2025-01-21 14:25:08', user: 'admin@opticore.com', action: 'Bill Generated', status: 'Success' },
-            { timestamp: '2025-01-21 14:20:33', user: 'system', action: 'Auto Reminder', status: 'Info' }
+            { timestamp: '2025-01-15 16:45:00', user: 'osl@client.com', action: 'Payment Made', status: 'Success' },
+            { timestamp: '2025-01-15 16:30:00', user: 'system', action: 'Invoice Generated', status: 'Info' },
+            { timestamp: '2025-01-10 09:20:00', user: 'osl@client.com', action: 'User Login', status: 'Success' },
+            { timestamp: '2025-01-05 13:15:00', user: 'system', action: 'Service Activated', status: 'Success' }
         ];
-
-        // Icon mapping
-        const icons = {
-            users: 'users',
-            dollar: 'dollar-sign',
-            file: 'file-text',
-            trending: 'trending-up',
-            activity: 'activity'
-        };
 
         // Create stat card HTML
         function createStatCard(title, value, change, trend, iconName) {
@@ -168,8 +142,7 @@
         }
 
         // Initialize dashboard
-        function initializeDashboard(dashboardType = 'admin') {
-            const stats = dashboardData[dashboardType];
+        function initializeDashboard() {
             const statsGrid = $('#statsGrid');
             const activityContainer = $('#recentActivity');
             
@@ -177,32 +150,16 @@
             statsGrid.empty();
             activityContainer.empty();
             
+            // Title mapping for osl dashboard
+            const titleMap = {
+                lastPayment: { title: 'Last Payment Amount', icon: 'dollar-sign' },
+                lastService: { title: 'Last Avail Service', icon: 'activity' }
+            };
+            
             // Populate stats cards
-            Object.entries(stats).forEach(([key, data]) => {
-                let iconName = 'dollar';
-                let title = key;
-                
-                // Map keys to appropriate titles and icons
-                const titleMap = {
-                    janaClients: { title: 'Total Jana Clients', icon: 'users' },
-                    oslClients: { title: 'Total OSL Clients', icon: 'users' },
-                    latestOSLPayment: { title: 'Latest Payment by OSL', icon: 'dollar' },
-                    latestJanaPayment: { title: 'Latest Payment by Jana', icon: 'dollar' },
-                    pendingBills: { title: 'No. of Pending Bills', icon: 'file' },
-                    monthlyOSLPayment: { title: 'Monthly OSL Payment', icon: 'trending' },
-                    monthlyJanaPayment: { title: 'Monthly Jana Payment', icon: 'trending' },
-                    totalMonthlyPayment: { title: 'Total Monthly Payment', icon: 'trending' },
-                    lastPayment: { title: 'Last Payment Amount', icon: 'dollar' },
-                    totalPayment: { title: 'Total Payment So Far', icon: 'trending' },
-                    lastInvoice: { title: 'Last Invoice Number', icon: 'file' },
-                    lastService: { title: 'Last Avail Service', icon: 'activity' }
-                };
-                
-                const mapping = titleMap[key] || { title: key, icon: 'dollar' };
-                title = mapping.title;
-                iconName = mapping.icon;
-                
-                const cardHtml = createStatCard(title, data.value, data.change, data.trend, iconName);
+            Object.entries(dashboardData).forEach(([key, data]) => {
+                const mapping = titleMap[key];
+                const cardHtml = createStatCard(mapping.title, data.value, data.change, data.trend, mapping.icon);
                 statsGrid.append(cardHtml);
             });
             
@@ -216,34 +173,10 @@
             lucide.createIcons();
         }
 
-        // Dashboard type selector
-        function createDashboardSelector() {
-            const selector = `
-                <div class="mb-6">
-                    <label class="block text-sm font-medium mb-2">Dashboard Type:</label>
-                    <select id="dashboardType" class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-                        <option value="admin">Admin Dashboard</option>
-                        <option value="jana">Jana Client Dashboard</option>
-                        <option value="osl">OSL Client Dashboard</option>
-                    </select>
-                </div>
-            `;
-            $('.container .mb-8').after(selector);
-        }
-
         // Event handlers
         $(document).ready(function() {
-            // Create dashboard selector
-            createDashboardSelector();
-            
-            // Initialize with admin dashboard
-            initializeDashboard('admin');
-            
-            // Handle dashboard type change
-            $('#dashboardType').on('change', function() {
-                const dashboardType = $(this).val();
-                initializeDashboard(dashboardType);
-            });
+            // Initialize dashboard
+            initializeDashboard();
             
             // Add hover effects and animations
             $('.stat-card').hover(
@@ -263,17 +196,6 @@
                 }, 150);
             });
         });
-
-        // Auto-refresh functionality (optional)
-        function autoRefresh() {
-            setInterval(function() {
-                // You can add logic here to refresh data from an API
-                console.log('Auto-refreshing dashboard...');
-            }, 30000); // Refresh every 30 seconds
-        }
-
-        // Uncomment to enable auto-refresh
-        // autoRefresh();
     </script>
 </body>
 </html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opticore OSL Client Sidebar</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: 'hsl(217 33% 4%)',
+            foreground: 'hsl(210 40% 98%)',
+            card: 'hsl(217 25% 8%)',
+            'card-foreground': 'hsl(210 40% 98%)',
+            primary: 'hsl(217 91% 60%)',
+            'primary-foreground': 'hsl(210 40% 98%)',
+            secondary: 'hsl(217 20% 12%)',
+            'secondary-foreground': 'hsl(210 40% 98%)',
+            muted: 'hsl(217 20% 12%)',
+            'muted-foreground': 'hsl(215 20.2% 65.1%)',
+            accent: 'hsl(25 95% 53%)',
+            'accent-foreground': 'hsl(210 40% 98%)',
+            border: 'hsl(217 20% 20%)',
+            'sidebar-bg': 'hsl(217 33% 12%)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(ellipse at top, #0747a3 0%, #1e3a5f 20%, #0a1929 50%, #000000 100%);
+      background-attachment: fixed;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: hsl(217 20% 20%);
+      border-radius: 3px;
+    }
+
+    .logo-container img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .logo-container img.active {
+      opacity: 1;
+    }
+
+    .brand-title {
+      background: linear-gradient(to right, hsl(217 91% 60%), hsl(25 95% 53%));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .collapsible-content.open {
+      max-height: 500px;
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s;
+    }
+
+    .collapsible-trigger.open .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .sidebar {
+      transition: width 0.28s ease, margin-left 0.28s ease, transform 0.28s ease;
+    }
+
+    .main-content {
+      transition: margin-left 0.28s ease;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-foreground overflow-x-hidden">
+  <aside id="sidebar"
+    class="sidebar fixed left-0 top-0 h-screen bg-sidebar-bg border-r border-border z-[100] flex flex-col overflow-y-auto overflow-x-hidden"
+    style="width: 280px;">
+    <div class="flex justify-between p-2">
+      <h1 class="invisible">1</h1>
+      <button id="sidebarToggle"
+        class="bg-muted border-0 p-2 rounded-lg cursor-pointer text-foreground transition-all duration-200 hover:bg-muted/70 z-10"
+        aria-label="Toggle sidebar">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div class="p-4 border-b border-border relative">
+      <div class="flex justify-between items-center gap-3">
+        <div
+          class="logo-container relative w-16 h-16 shadow-[0_0_20px_hsl(217_91%_60%/0.3),0_0_40px_hsl(217_91%_60%/0.1)] rounded-xl overflow-hidden">
+          <img src="/placeholder.svg" alt="Alliance Logo" class="active" />
+          <img src="/placeholder.svg" alt="Jana Logo" />
+          <img src="/placeholder.svg" alt="Opticore Logo" />
+        </div>
+        <div class="brand-text flex flex-col">
+          <div class="brand-title text-lg font-bold">Opticore</div>
+          <div class="text-xs text-muted-foreground">OSL Client</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="menuContent" class="p-4 space-y-2"></div>
+  </aside>
+
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[99] hidden"></div>
+
+  <main id="mainContent" class="main-content ml-[280px] p-10 min-h-screen">
+    <div
+      class="bg-card border border-border rounded-xl p-6 shadow-[0_4px_8px_hsl(0_0%_0%/0.4),0_8px_16px_hsl(0_0%_0%/0.3)]">
+      <h1 class="text-3xl font-bold mb-6">OSL Client Dashboard</h1>
+      <p class="text-muted-foreground">
+        Welcome to your OSL Client portal. Use the sidebar to access your dashboard, view pending bills, and check payment history.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // OSL Client Menu Data
+    const menuData = [
+      {
+        items: [
+          { title: "Dashboard", url: "#/osl/dashboard", icon: "home" },
+          { title: "Pending Bills", url: "#/osl/pending-bills", icon: "file-text" },
+          { title: "Payment History", url: "#/osl/payment-history", icon: "dollar-sign" }
+        ]
+      }
+    ];
+
+    let sidebarCollapsed = false;
+    const MOBILE_BREAKPOINT = 768;
+
+    $(document).ready(function () {
+      const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+      sidebarCollapsed = savedCollapsed;
+
+      renderMenu();
+      initLogoSlideshow();
+      checkResponsive();
+
+      $('#sidebarToggle').on('click', function () { toggleSidebar(); });
+
+      $(document).on('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+          e.preventDefault();
+          toggleSidebar();
+        }
+      });
+
+      $(window).on('resize', checkResponsive);
+
+      lucide.createIcons();
+    });
+
+    function toggleSidebar(force) {
+      if (force !== undefined) {
+        sidebarCollapsed = force;
+      } else {
+        sidebarCollapsed = !sidebarCollapsed;
+      }
+
+      applyCollapsedStyles();
+      localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+    }
+
+    function applyCollapsedStyles() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const logoContainer = sidebar.querySelector('.logo-container');
+      const brandText = sidebar.querySelector('.brand-text');
+      const menuLinks = sidebar.querySelectorAll('.menu-link');
+      const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+
+      sidebar.style.transform = 'translateX(0)';
+
+      if (sidebarCollapsed) {
+        sidebar.style.width = '80px';
+        mainContent.style.marginLeft = '80px';
+
+        logoContainer.classList.remove('w-16', 'h-16');
+        logoContainer.classList.add('w-10', 'h-10');
+
+        brandText.classList.add('hidden');
+
+        menuLinks.forEach(link => {
+          link.classList.add('justify-center', 'p-2.5');
+          const span = link.querySelector('span');
+          if (span) span.classList.add('hidden');
+        });
+
+        collapsibleTriggers.forEach(trigger => {
+          trigger.classList.add('justify-center');
+          const span = trigger.querySelector('span');
+          if (span) span.classList.add('hidden');
+
+          const chevron = trigger.querySelector('.chevron-icon');
+          if (chevron) chevron.classList.remove('hidden');
+        });
+
+      } else {
+        sidebar.style.width = '280px';
+
+        if (isMobile) {
+          mainContent.style.marginLeft = '80px';
+        } else {
+          mainContent.style.marginLeft = '280px';
+        }
+
+        logoContainer.classList.remove('w-10', 'h-10');
+        logoContainer.classList.add('w-16', 'h-16');
+
+        brandText.classList.remove('hidden');
+
+        menuLinks.forEach(link => {
+          link.classList.remove('justify-center', 'p-2.5');
+          const span = link.querySelector('span');
+          if (span) span.classList.remove('hidden');
+        });
+
+        collapsibleTriggers.forEach(trigger => {
+          trigger.classList.remove('justify-center');
+          const span = trigger.querySelector('span');
+          if (span) span.classList.remove('hidden');
+          const chevron = trigger.querySelector('.chevron-icon');
+          if (chevron) chevron.classList.remove('hidden');
+        });
+      }
+    }
+
+    function checkResponsive() {
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+
+      if (!isMobile) {
+        if (sidebarCollapsed) {
+          toggleSidebar(false);
+          return;
+        }
+      } else {
+        if (!sidebarCollapsed) {
+          toggleSidebar(true);
+          return;
+        }
+      }
+
+      applyCollapsedStyles();
+    }
+
+    function renderMenu() {
+      let html = '';
+
+      menuData.forEach(group => {
+        html += '<div>';
+
+        if (group.collapsible) {
+          const isOpen = true;
+          const openClass = isOpen ? 'open' : '';
+
+          html += `
+        <button class="collapsible-trigger ${openClass} flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2">
+          <span>${group.title}</span>
+          <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
+        </button>
+        <div class="collapsible-content ${openClass}">
+          <ul class="list-none space-y-1 p-2 bg-card/50 rounded-lg ">
+      `;
+        } else {
+          html += '<ul class="list-none space-y-1">';
+        }
+
+        (group.items || []).forEach(item => {
+          const activeClass = (window.location.hash === item.url)
+            ? 'bg-primary/20 !text-accent font-semibold'
+            : '';
+
+          html += `
+        <li>
+          <a href="${item.url}" 
+            class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground ${activeClass} ${activeClass ? 'text-accent' : ''}">
+            <i data-lucide="${item.icon}" class="w-4 h-4 shrink-0"></i>
+            <span>${item.title}</span>
+          </a>
+        </li>
+      `;
+        });
+
+        html += '</ul>';
+
+        if (group.collapsible) {
+          html += '</div>';
+        }
+
+        html += '</div>';
+      });
+
+      $('#menuContent').html(html);
+
+      lucide.createIcons();
+
+      $('.collapsible-trigger').off('click').on('click', function () {
+        $(this).toggleClass('open');
+        $(this).next('.collapsible-content').toggleClass('open');
+      });
+
+      $('.menu-link').off('click').on('click', function () {
+  // Remove active classes and explicitly reset to blue
+  $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
+  // Add active classes to clicked link
+  $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold text-accent');
+});
+      applyCollapsedStyles();
+    }
+
+    function initLogoSlideshow() {
+      let currentIndex = 0;
+      const logos = $('.logo-container img');
+
+      setInterval(function () {
+        logos.removeClass('active');
+        currentIndex = (currentIndex + 1) % logos.length;
+        $(logos[currentIndex]).addClass('active');
+      }, 3000);
+    }
+  </script>
+</body>
+
+</html>
