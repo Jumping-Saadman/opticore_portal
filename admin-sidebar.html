@@ -37,19 +37,22 @@
 
   <style>
     body {
+      /* Deep blue/black radial gradient background */
       background: radial-gradient(ellipse at top, #0747a3 0%, #1e3a5f 20%, #0a1929 50%, #000000 100%);
       background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
     }
 
-    .sidebar::-webkit-scrollbar {
+    /* Custom Scrollbar for Menu Content */
+    .scrollable-menu::-webkit-scrollbar {
       width: 6px;
     }
 
-    .sidebar::-webkit-scrollbar-track {
+    .scrollable-menu::-webkit-scrollbar-track {
       background: transparent;
     }
 
-    .sidebar::-webkit-scrollbar-thumb {
+    .scrollable-menu::-webkit-scrollbar-thumb {
       background: hsl(217 20% 20%);
       border-radius: 3px;
     }
@@ -80,10 +83,6 @@
       transition: max-height 0.3s ease;
     }
 
-    .collapsible-content.open {
-      /* Managed by jQuery */
-    }
-
     .chevron-icon {
       transition: transform 0.2s;
     }
@@ -92,6 +91,7 @@
       transform: rotate(180deg);
     }
 
+    /* Transitions for Width and Margin */
     .sidebar {
       transition: width 0.28s ease, margin-left 0.28s ease;
     }
@@ -100,6 +100,7 @@
       transition: margin-left 0.28s ease;
     }
 
+    /* Overlay Styling */
     #sidebarOverlay {
       transition: opacity 0.22s ease, visibility 0.22s ease;
       opacity: 0;
@@ -121,38 +122,49 @@
 
 <body class="min-h-screen text-foreground overflow-x-hidden">
   <aside id="sidebar"
-    class="sidebar fixed left-0 top-0 h-screen bg-sidebar-bg border-r border-border z-[100] flex flex-col overflow-y-auto overflow-x-hidden"
+    class="sidebar fixed left-0 top-0 h-screen bg-sidebar-bg border-r border-border z-[100] flex flex-col overflow-x-hidden"
     style="width: 280px;">
-    <div class="flex justify-between p-2">
-      <h1 class="invisible" aria-hidden="true">1</h1>
-      <button id="sidebarToggle"
-        class="bg-muted border-0 p-2 rounded-lg cursor-pointer text-foreground transition-all duration-200 hover:bg-muted/70 z-10"
-        aria-label="Toggle sidebar">
-        <i data-lucide="list-collapse" class="w-5 h-5"></i>
-      </button>
-    </div>
 
-    <div class="p-4 border-b border-border relative">
-      <div class="flex justify-between items-center gap-3">
-        <div
-          class="logo-container relative w-16 h-16 shadow-[0_0_20px_hsl(217_91%_60%/0.3),0_0_40px_hsl(217_91%_60%/0.1)] rounded-xl overflow-hidden">
-          <img src="/placeholder.svg" alt="Alliance Logo" class="active" />
-          <img src="/placeholder.svg" alt="Jana Logo" />
-          <img src="/placeholder.svg" alt="Opticore Logo" />
-        </div>
-        <div class="brand-text flex flex-col">
-          <div class="brand-title text-lg font-bold">Opticore</div>
-          <div class="text-xs text-muted-foreground">Admin Panel</div>
+    <!-- STICKY HEADER -->
+    <div id="sidebarHeader"
+      class="sticky top-0 z-20 bg-sidebar-bg border-b border-border flex flex-col pb-2 shadow-lg">
+
+      <!-- Hamburger Button Row -->
+      <div class="flex justify-end p-2">
+        <button id="sidebarToggle"
+          class="bg-muted border-0 p-2 rounded-lg cursor-pointer text-foreground transition-all duration-200 hover:bg-muted/70 z-10"
+          aria-label="Toggle sidebar">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Logo/Brand Section -->
+      <div class="px-4 pt-1 relative">
+        <div class="flex items-center gap-3">
+          <div
+            class="logo-container relative w-16 h-16 shadow-[0_0_20px_hsl(217_91%_60%/0.3),0_0_40px_hsl(217_91%_60%/0.1)] rounded-xl overflow-hidden shrink-0">
+            <!-- Using placeholder images for demo -->
+            <img src="https://placehold.co/64x64/252f4c/ffffff?text=O" alt="Opticore Logo" class="active" />
+            <img src="https://placehold.co/64x64/4c2533/ffffff?text=J" alt="Jana Logo" />
+            <img src="https://placehold.co/64x64/334c25/ffffff?text=A" alt="Alliance Logo" />
+          </div>
+          <div class="brand-text flex flex-col overflow-hidden">
+            <div class="brand-title text-xl font-extrabold truncate">Opticore</div>
+            <div class="text-xs text-muted-foreground truncate">Admin Panel</div>
+          </div>
         </div>
       </div>
     </div>
+    <!-- END STICKY HEADER -->
 
-    <div id="menuContent" class="p-4 space-y-2">
+    <!-- SCROLLABLE MENU CONTENT -->
+    <div id="menuContent" class="scrollable-menu flex-grow overflow-y-auto p-4 space-y-2">
       <!-- Admin Dashboard -->
       <div>
         <ul class="list-none space-y-1">
           <li>
-            <a href="#/" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+            <a href="#/dashboard"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
               <i data-lucide="home" class="w-4 h-4 shrink-0"></i>
               <span>Dashboard</span>
             </a>
@@ -162,7 +174,8 @@
 
       <!-- Client Management (Collapsible) -->
       <div>
-        <button class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
+        <button
+          class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
           aria-expanded="true" aria-controls="collapsible-client-management">
           <span>Client Management</span>
           <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
@@ -170,13 +183,15 @@
         <div id="collapsible-client-management" class="collapsible-content open">
           <ul class="list-none space-y-1 p-2 bg-card/50 rounded-lg">
             <li>
-              <a href="#/admin/client-list" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <a href="#/admin/client-list"
+                class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
                 <i data-lucide="users" class="w-4 h-4 shrink-0"></i>
                 <span>Client List</span>
               </a>
             </li>
             <li>
-              <a href="#/admin/client-payment-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <a href="#/admin/client-payment-history"
+                class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
                 <i data-lucide="dollar-sign" class="w-4 h-4 shrink-0"></i>
                 <span>Payment History</span>
               </a>
@@ -187,7 +202,8 @@
 
       <!-- Bill Generation (Collapsible) -->
       <div>
-        <button class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
+        <button
+          class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
           aria-expanded="true" aria-controls="collapsible-bill-generation">
           <span>Bill Generation</span>
           <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
@@ -195,20 +211,23 @@
         <div id="collapsible-bill-generation" class="collapsible-content open">
           <ul class="list-none space-y-1 p-2 bg-card/50 rounded-lg">
             <li>
-              <a href="#/admin/generate-bill" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <a href="#/admin/generate-bill"
+                class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
                 <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
                 <span>Generate Bill</span>
               </a>
             </li>
             <li>
-              <a href="#/admin/pending-bills" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <a href="#/admin/pending-bills"
+                class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
                 <i data-lucide="activity" class="w-4 h-4 shrink-0"></i>
                 <span>Pending Bills</span>
               </a>
             </li>
             <li>
-              <a href="#/admin/bill-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
-                <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
+              <a href="#/admin/bill-history"
+                class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+                <i data-lucide="receipt" class="w-4 h-4 shrink-0"></i>
                 <span>Bill Generation History</span>
               </a>
             </li>
@@ -220,19 +239,22 @@
       <div>
         <ul class="list-none space-y-1">
           <li>
-            <a href="#/admin/all-payment-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
-              <i data-lucide="dollar-sign" class="w-4 h-4 shrink-0"></i>
+            <a href="#/admin/all-payment-history"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="credit-card" class="w-4 h-4 shrink-0"></i>
               <span>All Payment History</span>
             </a>
           </li>
           <li>
-            <a href="#/admin/admin-management" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+            <a href="#/admin/admin-management"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
               <i data-lucide="settings" class="w-4 h-4 shrink-0"></i>
               <span>Admin Management</span>
             </a>
           </li>
           <li>
-            <a href="#/admin/system-log" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+            <a href="#/admin/system-log"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
               <i data-lucide="activity" class="w-4 h-4 shrink-0"></i>
               <span>System Log</span>
             </a>
@@ -241,23 +263,27 @@
       </div>
 
       <!-- Jana Items -->
-      <div>
+      <div class="mt-6 pt-2 border-t border-border/50">
+        <p class="px-3 py-1 text-xs font-semibold uppercase text-muted-foreground">Jana Client</p>
         <ul class="list-none space-y-1">
           <li>
-            <a href="#/jana/dashboard" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+            <a href="#/jana/dashboard"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
               <i data-lucide="home" class="w-4 h-4 shrink-0"></i>
               <span>Dashboard</span>
             </a>
           </li>
           <li>
-            <a href="#/jana/pay-now" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
-              <i data-lucide="credit-card" class="w-4 h-4 shrink-0"></i>
+            <a href="#/jana/pay-now"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="wallet" class="w-4 h-4 shrink-0"></i>
               <span>Pay Now</span>
             </a>
           </li>
           <li>
-            <a href="#/jana/payment-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
-              <i data-lucide="dollar-sign" class="w-4 h-4 shrink-0"></i>
+            <a href="#/jana/payment-history"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="history" class="w-4 h-4 shrink-0"></i>
               <span>Payment History</span>
             </a>
           </li>
@@ -265,31 +291,49 @@
       </div>
 
       <!-- OSL Items -->
-      <div>
+      <div class="mt-4 pt-2 border-t border-border/50">
+        <p class="px-3 py-1 text-xs font-semibold uppercase text-muted-foreground">OSL Client</p>
         <ul class="list-none space-y-1">
           <li>
-            <a href="#/osl/dashboard" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+            <a href="#/osl/dashboard"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
               <i data-lucide="home" class="w-4 h-4 shrink-0"></i>
               <span>Dashboard</span>
             </a>
           </li>
           <li>
-            <a href="#/osl/pending-bills" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+            <a href="#/osl/pending-bills"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
               <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
               <span>Pending Bills</span>
             </a>
           </li>
           <li>
-            <a href="#/osl/payment-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+            <a href="#/osl/payment-history"
+              class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
               <i data-lucide="dollar-sign" class="w-4 h-4 shrink-0"></i>
               <span>Payment History</span>
             </a>
           </li>
         </ul>
       </div>
+      <!-- Padding for the footer -->
+      <div class="h-4"></div>
     </div>
+    <!-- END SCROLLABLE MENU CONTENT -->
+
+    <!-- STICKY FOOTER -->
+    <div id="sidebarFooter" class="sticky bottom-0 z-20 bg-sidebar-bg border-t border-border p-3 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
+      <button id="logoutButton"
+        class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg bg-accent text-accent-foreground font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
+        <i data-lucide="log-out" class="w-5 h-5"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+    <!-- END STICKY FOOTER -->
   </aside>
 
+  <!-- IMPORTANT: Overlay is no longer 'hidden' by default in HTML -->
   <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[99]"></div>
 
   <main id="mainContent" class="main-content ml-[280px] p-10 min-h-screen">
@@ -297,7 +341,7 @@
       class="bg-card border border-border rounded-xl p-6 shadow-[0_4px_8px_hsl(0_0%_0%/0.4),0_8px_16px_hsl(0_0%_0%/0.3)]">
       <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
       <p class="text-muted-foreground">
-        Welcome to the Admin Panel. Use the sidebar to navigate through client management, bill generation, and system settings.
+        Welcome to the Admin Panel. Use the sticky sidebar to navigate through client management, bill generation, and system settings.
       </p>
     </div>
   </main>
@@ -306,267 +350,285 @@
     let sidebarCollapsed = true; // Start collapsed for mobile-first approach on load
     const MOBILE_BREAKPOINT = 768;
     let logoSlideshowInterval = null;
-    const logos = $('.logo-container img');
+    // Note: logos selection is inside $(document).ready because it relies on jQuery being available
+    let logos;
 
     $(document).ready(function () {
-        try {
-            const savedCollapsed = localStorage.getItem('sidebarCollapsed');
-            if (savedCollapsed !== null) {
-                sidebarCollapsed = savedCollapsed === 'true';
-            }
-        } catch (e) {
-            console.warn('localStorage is unavailable:', e);
+      logos = $('.logo-container img');
+
+      try {
+        const savedCollapsed = localStorage.getItem('sidebarCollapsed');
+        if (savedCollapsed !== null) {
+          sidebarCollapsed = savedCollapsed === 'true';
         }
+      } catch (e) {
+        console.warn('localStorage is unavailable:', e);
+      }
 
-        initMenu();
-        initLogoSlideshow();
-        checkResponsive(); // Calls applyCollapsedStyles based on the current state and viewport
+      initMenu();
+      initLogoSlideshow();
+      checkResponsive(); // Calls applyCollapsedStyles based on the current state and viewport
 
-        $('#sidebarToggle').on('click', function () { toggleSidebar(); });
+      $('#sidebarToggle').on('click', function () { toggleSidebar(); });
+      
+      // Logout Button Handler
+      $('#logoutButton').on('click', function() {
+        console.log('Logout button clicked. Implement actual logout logic here.');
+        // For demonstration purposes, you would replace this with actual Firebase/Auth logout
+        // toggleSidebar(true); // Optional: Collapse sidebar after logout
+      });
 
-        // FIX: Only collapse sidebar when the overlay is clicked on mobile
-        $('#sidebarOverlay').on('click', function () {
-            if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) {
-                // If it's mobile AND the sidebar is currently open (!sidebarCollapsed), collapse it.
-                toggleSidebar(true); // 'true' forces it to collapse
-            }
-        });
+      // Overlay Click Handler: Collapse sidebar when overlay is clicked on mobile
+      $('#sidebarOverlay').on('click', function () {
+        if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) {
+          toggleSidebar(true); // 'true' forces it to collapse
+        }
+      });
 
-        $(document).on('keydown', function (e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-                e.preventDefault();
-                toggleSidebar();
-            }
-        });
+      $(document).on('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+          e.preventDefault();
+          toggleSidebar();
+        }
+      });
 
-        $(window).on('resize', checkResponsive);
+      $(window).on('resize', checkResponsive);
 
-        lucide.createIcons();
+      lucide.createIcons();
     });
 
     function toggleSidebar(force) {
-        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-        if (force !== undefined) {
-            sidebarCollapsed = force; // true to collapse, false to expand
-        } else {
-            sidebarCollapsed = !sidebarCollapsed;
-        }
+      if (force !== undefined) {
+        sidebarCollapsed = force; // true to collapse, false to expand
+      } else {
+        sidebarCollapsed = !sidebarCollapsed;
+      }
 
-        if (isMobile) {
-            // On mobile, control the overlay and z-index
-            $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
-            $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
-        } else {
-            // On desktop, ensure mobile-specific classes are off
-            $('#sidebarOverlay').removeClass('show');
-            $('#sidebar').removeClass('mobile-on-top');
-        }
+      if (isMobile) {
+        // On mobile, control the overlay and z-index
+        $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
+        $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
+      } else {
+        // On desktop, ensure mobile-specific classes are off
+        $('#sidebarOverlay').removeClass('show');
+        $('#sidebar').removeClass('mobile-on-top');
+      }
 
-        applyCollapsedStyles();
-        try {
-            localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
-        } catch (e) {
-            console.warn('localStorage is unavailable:', e);
-        }
+      applyCollapsedStyles();
+      try {
+        localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+      } catch (e) {
+        console.warn('localStorage is unavailable:', e);
+      }
     }
 
     function applyCollapsedStyles() {
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        const logoContainer = sidebar.querySelector('.logo-container');
-        const brandText = sidebar.querySelector('.brand-text');
-        const menuLinks = sidebar.querySelectorAll('.menu-link');
-        const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
-        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const logoContainer = sidebar.querySelector('.logo-container');
+      const brandText = sidebar.querySelector('.brand-text');
+      const menuLinks = sidebar.querySelectorAll('.menu-link');
+      const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
+      const sidebarFooter = sidebar.querySelector('#sidebarFooter');
+      const footerSpan = sidebarFooter.querySelector('span');
 
-        if (sidebarCollapsed) {
-            // Collapsed State
-            sidebar.style.width = '80px';
-            mainContent.style.marginLeft = '80px';
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-            logoContainer.classList.remove('w-16', 'h-16');
-            logoContainer.classList.add('w-10', 'h-10');
+      if (sidebarCollapsed) {
+        // Collapsed State
+        sidebar.style.width = '80px';
+        mainContent.style.marginLeft = '80px';
 
-            brandText.classList.add('hidden');
+        logoContainer.classList.remove('w-16', 'h-16');
+        logoContainer.classList.add('w-10', 'h-10');
 
-            menuLinks.forEach(link => {
-                link.classList.add('justify-center', 'p-2.5');
-                const span = link.querySelector('span');
-                if (span) span.classList.add('hidden');
-            });
+        brandText.classList.add('hidden');
 
-            collapsibleTriggers.forEach(trigger => {
-                trigger.classList.add('justify-center');
-                const span = trigger.querySelector('span');
-                if (span) span.classList.add('hidden');
+        menuLinks.forEach(link => {
+          link.classList.add('justify-center', 'p-2.5');
+          const span = link.querySelector('span');
+          if (span) span.classList.add('hidden');
+        });
 
-                const chevron = trigger.querySelector('.chevron-icon');
-                if (chevron) chevron.classList.remove('hidden');
-            });
-            
-            // Pause logo slideshow when collapsed
-            if (logoSlideshowInterval) {
-                clearInterval(logoSlideshowInterval);
-                logoSlideshowInterval = null;
-            }
-            logos.removeClass('active');
-            $(logos[0]).addClass('active');
+        collapsibleTriggers.forEach(trigger => {
+          trigger.classList.add('justify-center', 'p-2.5', 'w-10', 'h-10');
+          trigger.classList.remove('justify-between');
+          const span = trigger.querySelector('span');
+          if (span) span.classList.add('hidden');
 
+          const chevron = trigger.querySelector('.chevron-icon');
+          if (chevron) chevron.classList.remove('hidden'); // Keep chevron visible
+        });
+
+        // Collapse Footer
+        if (footerSpan) footerSpan.classList.add('hidden');
+        $('#logoutButton').removeClass('justify-center').addClass('justify-center');
+
+
+        // Pause logo slideshow when collapsed
+        if (logoSlideshowInterval) {
+          clearInterval(logoSlideshowInterval);
+          logoSlideshowInterval = null;
+        }
+        logos.removeClass('active');
+        $(logos[0]).addClass('active');
+
+      } else {
+        // Expanded State
+        sidebar.style.width = '280px';
+
+        if (isMobile) {
+          mainContent.style.marginLeft = '80px'; // Still keep main content margin small on mobile
         } else {
-            // Expanded State
-            sidebar.style.width = '280px';
-
-            if (isMobile) {
-                // Main content is covered by the overlay on mobile when expanded.
-                mainContent.style.marginLeft = '80px';
-            } else {
-                mainContent.style.marginLeft = '280px';
-            }
-
-            logoContainer.classList.remove('w-10', 'h-10');
-            logoContainer.classList.add('w-16', 'h-16');
-
-            brandText.classList.remove('hidden');
-
-            menuLinks.forEach(link => {
-                link.classList.remove('justify-center', 'p-2.5');
-                const span = link.querySelector('span');
-                if (span) span.classList.remove('hidden');
-            });
-
-            collapsibleTriggers.forEach(trigger => {
-                trigger.classList.remove('justify-center');
-                const span = trigger.querySelector('span');
-                if (span) span.classList.remove('hidden');
-                const chevron = trigger.querySelector('.chevron-icon');
-                if (chevron) chevron.classList.remove('hidden');
-            });
-
-            // Restart logo slideshow when expanded
-            initLogoSlideshow();
+          mainContent.style.marginLeft = '280px';
         }
 
-        // Update collapsible content heights
-        $('.collapsible-content').each(function () {
-            if ($(this).hasClass('open')) {
-                // Ensure scrollHeight is calculated after any CSS changes
-                setTimeout(() => {
-                    $(this).css('max-height', this.scrollHeight + 'px');
-                }, 0);
-            } else {
-                $(this).css('max-height', '0');
-            }
+        logoContainer.classList.remove('w-10', 'h-10');
+        logoContainer.classList.add('w-16', 'h-16');
+
+        brandText.classList.remove('hidden');
+
+        menuLinks.forEach(link => {
+          link.classList.remove('justify-center', 'p-2.5');
+          const span = link.querySelector('span');
+          if (span) span.classList.remove('hidden');
         });
+
+        collapsibleTriggers.forEach(trigger => {
+          trigger.classList.remove('justify-center', 'p-2.5', 'w-10', 'h-10');
+          trigger.classList.add('justify-between');
+          const span = trigger.querySelector('span');
+          if (span) span.classList.remove('hidden');
+          const chevron = trigger.querySelector('.chevron-icon');
+          if (chevron) chevron.classList.remove('hidden');
+        });
+
+        // Expand Footer
+        if (footerSpan) footerSpan.classList.remove('hidden');
+        $('#logoutButton').removeClass('justify-center');
+
+
+        // Restart logo slideshow when expanded
+        initLogoSlideshow();
+      }
+
+      // Update collapsible content heights
+      $('.collapsible-content').each(function () {
+        if ($(this).hasClass('open')) {
+          setTimeout(() => {
+            $(this).css('max-height', this.scrollHeight + 'px');
+          }, 0);
+        } else {
+          $(this).css('max-height', '0');
+        }
+      });
     }
 
     function checkResponsive() {
-        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-        if (!isMobile) {
-            // Desktop View: Respect saved state but ensure mobile classes are off
-            const savedState = localStorage.getItem('sidebarCollapsed') === 'true';
-            if (sidebarCollapsed && !savedState) {
-                // If we were collapsed due to mobile logic, but desktop says we should be open, expand
-                toggleSidebar(false);
-                return;
-            }
-            
-            // Ensure mobile-specific classes are off on desktop resize
-            $('#sidebarOverlay').removeClass('show');
-            $('#sidebar').removeClass('mobile-on-top');
-            
-        } else {
-            // Mobile View: Always be collapsed initially for the overlay/toggle functionality
-            if (!sidebarCollapsed) {
-                // If it was expanded on desktop, force it to collapse on mobile resize
-                toggleSidebar(true); 
-                return;
-            }
+      if (!isMobile) {
+        // Desktop View
+        const savedState = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (sidebarCollapsed && !savedState) {
+          toggleSidebar(false); // Expand if it was open last time
+          return;
         }
-        
-        applyCollapsedStyles();
+
+        // Ensure mobile-specific classes are off on desktop resize
+        $('#sidebarOverlay').removeClass('show');
+        $('#sidebar').removeClass('mobile-on-top');
+
+      } else {
+        // Mobile View: Force collapse if it was expanded on desktop resize
+        if (!sidebarCollapsed) {
+          toggleSidebar(true);
+          return;
+        }
+      }
+
+      applyCollapsedStyles();
     }
 
 
     function initLogoSlideshow() {
-        if (logoSlideshowInterval) {
-            clearInterval(logoSlideshowInterval);
-            logoSlideshowInterval = null;
+      if (logoSlideshowInterval) {
+        clearInterval(logoSlideshowInterval);
+        logoSlideshowInterval = null;
+      }
+
+      if (logos.length === 0) return;
+
+      let currentIndex = 0;
+
+      const slideshow = () => {
+        if (sidebarCollapsed) {
+          return;
         }
 
-        if (logos.length === 0) return;
+        logos.removeClass('active');
+        currentIndex = (currentIndex + 1) % logos.length;
+        const $currentLogo = $(logos[currentIndex]);
 
-        let currentIndex = 0;
-
-        const slideshow = () => {
-            if (sidebarCollapsed) {
-                // Pause rotation if collapsed
-                return;
-            }
-
-            logos.removeClass('active');
-            currentIndex = (currentIndex + 1) % logos.length;
-            const $currentLogo = $(logos[currentIndex]);
-
-            if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
-                $currentLogo.addClass('active');
-            } else {
-                currentIndex = (currentIndex + 1) % logos.length;
-                $(logos[currentIndex]).addClass('active');
-            }
-        };
-
-        if (!sidebarCollapsed) {
-            logoSlideshowInterval = setInterval(slideshow, 3000);
-            slideshow(); // Run immediately to start
+        if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
+          $currentLogo.addClass('active');
         } else {
-            // Ensure only the first logo is active when collapsed
-            logos.removeClass('active');
-            $(logos[0]).addClass('active');
+          currentIndex = (currentIndex + 1) % logos.length;
+          $(logos[currentIndex]).addClass('active');
         }
+      };
+
+      if (!sidebarCollapsed) {
+        logoSlideshowInterval = setInterval(slideshow, 3000);
+        slideshow(); // Run immediately to start
+      } else {
+        logos.removeClass('active');
+        $(logos[0]).addClass('active');
+      }
     }
 
 
     function initMenu() {
-        $('.collapsible-trigger').off('click').on('click', function () {
-            $(this).toggleClass('open');
-            const $content = $(this).next('.collapsible-content');
-            $content.toggleClass('open');
-            if ($content.hasClass('open')) {
-                $content.css('max-height', $content[0].scrollHeight + 'px');
-                $(this).attr('aria-expanded', 'true');
-            } else {
-                $content.css('max-height', '0');
-                $(this).attr('aria-expanded', 'false');
-            }
-        });
+      $('.collapsible-trigger').off('click').on('click', function () {
+        $(this).toggleClass('open');
+        const $content = $(this).next('.collapsible-content');
+        $content.toggleClass('open');
+        if ($content.hasClass('open')) {
+          $content.css('max-height', $content[0].scrollHeight + 'px');
+          $(this).attr('aria-expanded', 'true');
+        } else {
+          $content.css('max-height', '0');
+          $(this).attr('aria-expanded', 'false');
+        }
+      });
 
-        // FIX: Removed the mobile collapse logic from here
-        $('.menu-link').off('click').on('click', function () {
-            // Remove active state from all
-            $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
-            // Add active state to clicked link
-            $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-        });
+      // Menu Link Click Handler
+      $('.menu-link').off('click').on('click', function () {
+        // Remove active state from all
+        $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
+        // Add active state to clicked link
+        $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+      });
 
-        // Apply active class based on current URL hash (for initial load)
-        $('.menu-link').each(function () {
-            if ($(this).attr('href') === window.location.hash) {
-                $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-                
-                // Open parent collapsible menus if an active link is found inside
-                const $parentContent = $(this).closest('.collapsible-content');
-                if ($parentContent.length) {
-                    $parentContent.addClass('open');
-                    $parentContent.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
-                }
-            }
-        });
+      // Apply active class based on current URL hash (for initial load)
+      $('.menu-link').each(function () {
+        if ($(this).attr('href') === window.location.hash) {
+          $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
 
-        applyCollapsedStyles();
+          // Open parent collapsible menus if an active link is found inside
+          const $parentContent = $(this).closest('.collapsible-content');
+          if ($parentContent.length) {
+            $parentContent.addClass('open');
+            $parentContent.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
+          }
+        }
+      });
+
+      applyCollapsedStyles();
     }
-</script>
+  </script>
 </body>
 
 </html>
