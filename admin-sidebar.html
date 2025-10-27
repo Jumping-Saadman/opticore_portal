@@ -290,7 +290,7 @@
     </div>
   </aside>
 
-  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[99] hidden"></div>
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[99]"></div>
 
   <main id="mainContent" class="main-content ml-[280px] p-10 min-h-screen">
     <div
@@ -303,206 +303,270 @@
   </main>
 
   <script>
-    let sidebarCollapsed = false;
+    let sidebarCollapsed = true; // Start collapsed for mobile-first approach on load
     const MOBILE_BREAKPOINT = 768;
+    let logoSlideshowInterval = null;
+    const logos = $('.logo-container img');
 
     $(document).ready(function () {
-      try {
-        const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-        sidebarCollapsed = savedCollapsed;
-      } catch (e) {
-        console.warn('localStorage is unavailable:', e);
-      }
-
-      initMenu();
-      initLogoSlideshow();
-      checkResponsive();
-
-      $('#sidebarToggle').on('click', function () { toggleSidebar(); });
-
-      $('#sidebarOverlay').on('click', function () {
-        if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) {
-          toggleSidebar(true);
-          $('#sidebarOverlay').removeClass('show');
+        try {
+            const savedCollapsed = localStorage.getItem('sidebarCollapsed');
+            if (savedCollapsed !== null) {
+                sidebarCollapsed = savedCollapsed === 'true';
+            }
+        } catch (e) {
+            console.warn('localStorage is unavailable:', e);
         }
-      });
 
-      $(document).on('keydown', function (e) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-          e.preventDefault();
-          toggleSidebar();
-        }
-      });
+        initMenu();
+        initLogoSlideshow();
+        checkResponsive(); // Calls applyCollapsedStyles based on the current state and viewport
 
-      $(window).on('resize', checkResponsive);
+        $('#sidebarToggle').on('click', function () { toggleSidebar(); });
 
-      lucide.createIcons();
+        // FIX: Only collapse sidebar when the overlay is clicked on mobile
+        $('#sidebarOverlay').on('click', function () {
+            if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) {
+                // If it's mobile AND the sidebar is currently open (!sidebarCollapsed), collapse it.
+                toggleSidebar(true); // 'true' forces it to collapse
+            }
+        });
+
+        $(document).on('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        });
+
+        $(window).on('resize', checkResponsive);
+
+        lucide.createIcons();
     });
 
     function toggleSidebar(force) {
-      if (force !== undefined) {
-        sidebarCollapsed = force;
-      } else {
-        sidebarCollapsed = !sidebarCollapsed;
-      }
+        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-      if (isMobile) {
-        $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
-        $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
-      } else {
-        $('#sidebarOverlay').removeClass('show');
-        $('#sidebar').removeClass('mobile-on-top');
-      }
+        if (force !== undefined) {
+            sidebarCollapsed = force; // true to collapse, false to expand
+        } else {
+            sidebarCollapsed = !sidebarCollapsed;
+        }
 
-      applyCollapsedStyles();
-      try {
-        localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
-      } catch (e) {
-        console.warn('localStorage is unavailable:', e);
-      }
+        if (isMobile) {
+            // On mobile, control the overlay and z-index
+            $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
+            $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
+        } else {
+            // On desktop, ensure mobile-specific classes are off
+            $('#sidebarOverlay').removeClass('show');
+            $('#sidebar').removeClass('mobile-on-top');
+        }
+
+        applyCollapsedStyles();
+        try {
+            localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+        } catch (e) {
+            console.warn('localStorage is unavailable:', e);
+        }
     }
 
     function applyCollapsedStyles() {
-      const sidebar = document.getElementById('sidebar');
-      const mainContent = document.getElementById('mainContent');
-      const logoContainer = sidebar.querySelector('.logo-container');
-      const brandText = sidebar.querySelector('.brand-text');
-      const menuLinks = sidebar.querySelectorAll('.menu-link');
-      const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
-      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const logoContainer = sidebar.querySelector('.logo-container');
+        const brandText = sidebar.querySelector('.brand-text');
+        const menuLinks = sidebar.querySelectorAll('.menu-link');
+        const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
+        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-      if (sidebarCollapsed) {
-        sidebar.style.width = '80px';
-        mainContent.style.marginLeft = '80px';
+        if (sidebarCollapsed) {
+            // Collapsed State
+            sidebar.style.width = '80px';
+            mainContent.style.marginLeft = '80px';
 
-        logoContainer.classList.remove('w-16', 'h-16');
-        logoContainer.classList.add('w-10', 'h-10');
+            logoContainer.classList.remove('w-16', 'h-16');
+            logoContainer.classList.add('w-10', 'h-10');
 
-        brandText.classList.add('hidden');
+            brandText.classList.add('hidden');
 
-        menuLinks.forEach(link => {
-          link.classList.add('justify-center', 'p-2.5');
-          const span = link.querySelector('span');
-          if (span) span.classList.add('hidden');
-        });
+            menuLinks.forEach(link => {
+                link.classList.add('justify-center', 'p-2.5');
+                const span = link.querySelector('span');
+                if (span) span.classList.add('hidden');
+            });
 
-        collapsibleTriggers.forEach(trigger => {
-          trigger.classList.add('justify-center');
-          const span = trigger.querySelector('span');
-          if (span) span.classList.add('hidden');
+            collapsibleTriggers.forEach(trigger => {
+                trigger.classList.add('justify-center');
+                const span = trigger.querySelector('span');
+                if (span) span.classList.add('hidden');
 
-          const chevron = trigger.querySelector('.chevron-icon');
-          if (chevron) chevron.classList.remove('hidden');
-        });
+                const chevron = trigger.querySelector('.chevron-icon');
+                if (chevron) chevron.classList.remove('hidden');
+            });
+            
+            // Pause logo slideshow when collapsed
+            if (logoSlideshowInterval) {
+                clearInterval(logoSlideshowInterval);
+                logoSlideshowInterval = null;
+            }
+            logos.removeClass('active');
+            $(logos[0]).addClass('active');
 
-      } else {
-        sidebar.style.width = '280px';
-
-        if (isMobile) {
-          mainContent.style.marginLeft = '80px';
         } else {
-          mainContent.style.marginLeft = '280px';
+            // Expanded State
+            sidebar.style.width = '280px';
+
+            if (isMobile) {
+                // Main content is covered by the overlay on mobile when expanded.
+                mainContent.style.marginLeft = '80px';
+            } else {
+                mainContent.style.marginLeft = '280px';
+            }
+
+            logoContainer.classList.remove('w-10', 'h-10');
+            logoContainer.classList.add('w-16', 'h-16');
+
+            brandText.classList.remove('hidden');
+
+            menuLinks.forEach(link => {
+                link.classList.remove('justify-center', 'p-2.5');
+                const span = link.querySelector('span');
+                if (span) span.classList.remove('hidden');
+            });
+
+            collapsibleTriggers.forEach(trigger => {
+                trigger.classList.remove('justify-center');
+                const span = trigger.querySelector('span');
+                if (span) span.classList.remove('hidden');
+                const chevron = trigger.querySelector('.chevron-icon');
+                if (chevron) chevron.classList.remove('hidden');
+            });
+
+            // Restart logo slideshow when expanded
+            initLogoSlideshow();
         }
 
-        logoContainer.classList.remove('w-10', 'h-10');
-        logoContainer.classList.add('w-16', 'h-16');
-
-        brandText.classList.remove('hidden');
-
-        menuLinks.forEach(link => {
-          link.classList.remove('justify-center', 'p-2.5');
-          const span = link.querySelector('span');
-          if (span) span.classList.remove('hidden');
+        // Update collapsible content heights
+        $('.collapsible-content').each(function () {
+            if ($(this).hasClass('open')) {
+                // Ensure scrollHeight is calculated after any CSS changes
+                setTimeout(() => {
+                    $(this).css('max-height', this.scrollHeight + 'px');
+                }, 0);
+            } else {
+                $(this).css('max-height', '0');
+            }
         });
-
-        collapsibleTriggers.forEach(trigger => {
-          trigger.classList.remove('justify-center');
-          const span = trigger.querySelector('span');
-          if (span) span.classList.remove('hidden');
-          const chevron = trigger.querySelector('.chevron-icon');
-          if (chevron) chevron.classList.remove('hidden');
-        });
-      }
-
-      // Update collapsible content heights
-      $('.collapsible-content').each(function () {
-        if ($(this).hasClass('open')) {
-          $(this).css('max-height', this.scrollHeight + 'px');
-        } else {
-          $(this).css('max-height', '0');
-        }
-      });
     }
 
     function checkResponsive() {
-      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-      if (!isMobile) {
-        if (sidebarCollapsed) {
-          toggleSidebar(false);
-          return;
-        }
-      } else {
-        if (!sidebarCollapsed) {
-          toggleSidebar(true);
-          return;
-        }
-      }
-
-      applyCollapsedStyles();
-    }
-
-    function initMenu() {
-      $('.collapsible-trigger').off('click').on('click', function () {
-        $(this).toggleClass('open');
-        const $content = $(this).next('.collapsible-content');
-        $content.toggleClass('open');
-        if ($content.hasClass('open')) {
-          $content.css('max-height', $content[0].scrollHeight + 'px');
-          $(this).attr('aria-expanded', 'true');
+        if (!isMobile) {
+            // Desktop View: Respect saved state but ensure mobile classes are off
+            const savedState = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (sidebarCollapsed && !savedState) {
+                // If we were collapsed due to mobile logic, but desktop says we should be open, expand
+                toggleSidebar(false);
+                return;
+            }
+            
+            // Ensure mobile-specific classes are off on desktop resize
+            $('#sidebarOverlay').removeClass('show');
+            $('#sidebar').removeClass('mobile-on-top');
+            
         } else {
-          $content.css('max-height', '0');
-          $(this).attr('aria-expanded', 'false');
+            // Mobile View: Always be collapsed initially for the overlay/toggle functionality
+            if (!sidebarCollapsed) {
+                // If it was expanded on desktop, force it to collapse on mobile resize
+                toggleSidebar(true); 
+                return;
+            }
         }
-      });
-
-      $('.menu-link').off('click').on('click', function () {
-        $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
-        $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-      });
-
-      // Apply active class based on current URL hash
-      $('.menu-link').each(function () {
-        if ($(this).attr('href') === window.location.hash) {
-          $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-        }
-      });
-
-      applyCollapsedStyles();
+        
+        applyCollapsedStyles();
     }
+
 
     function initLogoSlideshow() {
-      let currentIndex = 0;
-      const logos = $('.logo-container img');
-      if (logos.length === 0) return;
-
-      const slideshow = () => {
-        if (sidebarCollapsed) return; // Pause when collapsed
-        logos.removeClass('active');
-        currentIndex = (currentIndex + 1) % logos.length;
-        const $currentLogo = $(logos[currentIndex]);
-        if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
-          $currentLogo.addClass('active');
-        } else {
-          currentIndex = (currentIndex + 1) % logos.length; // Skip broken images
+        if (logoSlideshowInterval) {
+            clearInterval(logoSlideshowInterval);
+            logoSlideshowInterval = null;
         }
-      };
 
-      setInterval(slideshow, 3000);
-      slideshow();
+        if (logos.length === 0) return;
+
+        let currentIndex = 0;
+
+        const slideshow = () => {
+            if (sidebarCollapsed) {
+                // Pause rotation if collapsed
+                return;
+            }
+
+            logos.removeClass('active');
+            currentIndex = (currentIndex + 1) % logos.length;
+            const $currentLogo = $(logos[currentIndex]);
+
+            if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
+                $currentLogo.addClass('active');
+            } else {
+                currentIndex = (currentIndex + 1) % logos.length;
+                $(logos[currentIndex]).addClass('active');
+            }
+        };
+
+        if (!sidebarCollapsed) {
+            logoSlideshowInterval = setInterval(slideshow, 3000);
+            slideshow(); // Run immediately to start
+        } else {
+            // Ensure only the first logo is active when collapsed
+            logos.removeClass('active');
+            $(logos[0]).addClass('active');
+        }
     }
-  </script>
+
+
+    function initMenu() {
+        $('.collapsible-trigger').off('click').on('click', function () {
+            $(this).toggleClass('open');
+            const $content = $(this).next('.collapsible-content');
+            $content.toggleClass('open');
+            if ($content.hasClass('open')) {
+                $content.css('max-height', $content[0].scrollHeight + 'px');
+                $(this).attr('aria-expanded', 'true');
+            } else {
+                $content.css('max-height', '0');
+                $(this).attr('aria-expanded', 'false');
+            }
+        });
+
+        // FIX: Removed the mobile collapse logic from here
+        $('.menu-link').off('click').on('click', function () {
+            // Remove active state from all
+            $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
+            // Add active state to clicked link
+            $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+        });
+
+        // Apply active class based on current URL hash (for initial load)
+        $('.menu-link').each(function () {
+            if ($(this).attr('href') === window.location.hash) {
+                $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+                
+                // Open parent collapsible menus if an active link is found inside
+                const $parentContent = $(this).closest('.collapsible-content');
+                if ($parentContent.length) {
+                    $parentContent.addClass('open');
+                    $parentContent.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
+                }
+            }
+        });
+
+        applyCollapsedStyles();
+    }
+</script>
 </body>
 
 </html>
