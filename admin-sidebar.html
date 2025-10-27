@@ -317,20 +317,23 @@
           </li>
         </ul>
       </div>
+      
       <!-- Padding for the footer -->
       <div class="h-4"></div>
+
+      <!-- FOOTER: No longer sticky (removed 'sticky bottom-0') -->
+      <div id="sidebarFooter" class="z-20 bg-sidebar-bg border-t border-border p-3 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
+        <button id="logoutButton"
+          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg bg-accent text-accent-foreground font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+      <!-- END FOOTER -->
+
     </div>
     <!-- END SCROLLABLE MENU CONTENT -->
 
-    <!-- STICKY FOOTER -->
-    <div id="sidebarFooter" class="sticky bottom-0 z-20 bg-sidebar-bg border-t border-border p-3 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
-      <button id="logoutButton"
-        class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg bg-accent text-accent-foreground font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
-        <i data-lucide="log-out" class="w-5 h-5"></i>
-        <span>Logout</span>
-      </button>
-    </div>
-    <!-- END STICKY FOOTER -->
   </aside>
 
   <!-- IMPORTANT: Overlay is no longer 'hidden' by default in HTML -->
@@ -350,6 +353,7 @@
     let sidebarCollapsed = true; // Start collapsed for mobile-first approach on load
     const MOBILE_BREAKPOINT = 768;
     let logoSlideshowInterval = null;
+    let currentLogoIndex = 0; // NEW: Global index for continuous rotation
     // Note: logos selection is inside $(document).ready because it relies on jQuery being available
     let logos;
 
@@ -366,7 +370,7 @@
       }
 
       initMenu();
-      initLogoSlideshow();
+      initLogoSlideshow(); // Always start the slideshow interval here
       checkResponsive(); // Calls applyCollapsedStyles based on the current state and viewport
 
       $('#sidebarToggle').on('click', function () { toggleSidebar(); });
@@ -374,8 +378,6 @@
       // Logout Button Handler
       $('#logoutButton').on('click', function() {
         console.log('Logout button clicked. Implement actual logout logic here.');
-        // For demonstration purposes, you would replace this with actual Firebase/Auth logout
-        // toggleSidebar(true); // Optional: Collapse sidebar after logout
       });
 
       // Overlay Click Handler: Collapse sidebar when overlay is clicked on mobile
@@ -466,14 +468,7 @@
         if (footerSpan) footerSpan.classList.add('hidden');
         $('#logoutButton').removeClass('justify-center').addClass('justify-center');
 
-
-        // Pause logo slideshow when collapsed
-        if (logoSlideshowInterval) {
-          clearInterval(logoSlideshowInterval);
-          logoSlideshowInterval = null;
-        }
-        logos.removeClass('active');
-        $(logos[0]).addClass('active');
+        // Note: Slideshow continues to run in the background.
 
       } else {
         // Expanded State
@@ -509,9 +504,7 @@
         if (footerSpan) footerSpan.classList.remove('hidden');
         $('#logoutButton').removeClass('justify-center');
 
-
-        // Restart logo slideshow when expanded
-        initLogoSlideshow();
+        // Note: Slideshow continues to run in the background.
       }
 
       // Update collapsible content heights
@@ -554,39 +547,35 @@
 
 
     function initLogoSlideshow() {
+      // Check if the slideshow is already running to avoid duplicate intervals
       if (logoSlideshowInterval) {
-        clearInterval(logoSlideshowInterval);
-        logoSlideshowInterval = null;
+        return;
       }
 
       if (logos.length === 0) return;
 
-      let currentIndex = 0;
-
       const slideshow = () => {
-        if (sidebarCollapsed) {
-          return;
-        }
-
         logos.removeClass('active');
-        currentIndex = (currentIndex + 1) % logos.length;
-        const $currentLogo = $(logos[currentIndex]);
+        const logoCount = logos.length; 
+        currentLogoIndex = (currentLogoIndex + 1) % logoCount;
+        const $currentLogo = $(logos[currentLogoIndex]);
 
+        // Basic check for image load status
         if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
           $currentLogo.addClass('active');
         } else {
-          currentIndex = (currentIndex + 1) % logos.length;
-          $(logos[currentIndex]).addClass('active');
+          // If image failed to load, skip to the next one
+          currentLogoIndex = (currentLogoIndex + 1) % logoCount;
+          $(logos[currentLogoIndex]).addClass('active');
         }
       };
+      
+      // Set initial logo active state
+      logos.removeClass('active');
+      $(logos[currentLogoIndex]).addClass('active');
 
-      if (!sidebarCollapsed) {
-        logoSlideshowInterval = setInterval(slideshow, 3000);
-        slideshow(); // Run immediately to start
-      } else {
-        logos.removeClass('active');
-        $(logos[0]).addClass('active');
-      }
+      // Start the interval, it runs continuously
+      logoSlideshowInterval = setInterval(slideshow, 3000);
     }
 
 
