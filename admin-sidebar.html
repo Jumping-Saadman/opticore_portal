@@ -7,9 +7,7 @@
   <title>Opticore Admin Sidebar</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <script>
@@ -83,7 +81,7 @@
     }
 
     .collapsible-content.open {
-      max-height: 500px;
+      /* Managed by jQuery */
     }
 
     .chevron-icon {
@@ -95,11 +93,28 @@
     }
 
     .sidebar {
-      transition: width 0.28s ease, margin-left 0.28s ease, transform 0.28s ease;
+      transition: width 0.28s ease, margin-left 0.28s ease;
     }
 
     .main-content {
       transition: margin-left 0.28s ease;
+    }
+
+    #sidebarOverlay {
+      transition: opacity 0.22s ease, visibility 0.22s ease;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #sidebarOverlay.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .sidebar.mobile-on-top {
+      z-index: 101;
     }
   </style>
 </head>
@@ -109,11 +124,11 @@
     class="sidebar fixed left-0 top-0 h-screen bg-sidebar-bg border-r border-border z-[100] flex flex-col overflow-y-auto overflow-x-hidden"
     style="width: 280px;">
     <div class="flex justify-between p-2">
-      <h1 class="invisible">1</h1>
+      <h1 class="invisible" aria-hidden="true">1</h1>
       <button id="sidebarToggle"
         class="bg-muted border-0 p-2 rounded-lg cursor-pointer text-foreground transition-all duration-200 hover:bg-muted/70 z-10"
         aria-label="Toggle sidebar">
-        <i data-lucide="menu" class="w-5 h-5"></i>
+        <i data-lucide="list-collapse" class="w-5 h-5"></i>
       </button>
     </div>
 
@@ -132,7 +147,147 @@
       </div>
     </div>
 
-    <div id="menuContent" class="p-4 space-y-2"></div>
+    <div id="menuContent" class="p-4 space-y-2">
+      <!-- Admin Dashboard -->
+      <div>
+        <ul class="list-none space-y-1">
+          <li>
+            <a href="#/" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="home" class="w-4 h-4 shrink-0"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Client Management (Collapsible) -->
+      <div>
+        <button class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
+          aria-expanded="true" aria-controls="collapsible-client-management">
+          <span>Client Management</span>
+          <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
+        </button>
+        <div id="collapsible-client-management" class="collapsible-content open">
+          <ul class="list-none space-y-1 p-2 bg-card/50 rounded-lg">
+            <li>
+              <a href="#/admin/client-list" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+                <i data-lucide="users" class="w-4 h-4 shrink-0"></i>
+                <span>Client List</span>
+              </a>
+            </li>
+            <li>
+              <a href="#/admin/client-payment-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+                <i data-lucide="dollar-sign" class="w-4 h-4 shrink-0"></i>
+                <span>Payment History</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bill Generation (Collapsible) -->
+      <div>
+        <button class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
+          aria-expanded="true" aria-controls="collapsible-bill-generation">
+          <span>Bill Generation</span>
+          <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
+        </button>
+        <div id="collapsible-bill-generation" class="collapsible-content open">
+          <ul class="list-none space-y-1 p-2 bg-card/50 rounded-lg">
+            <li>
+              <a href="#/admin/generate-bill" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+                <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
+                <span>Generate Bill</span>
+              </a>
+            </li>
+            <li>
+              <a href="#/admin/pending-bills" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+                <i data-lucide="activity" class="w-4 h-4 shrink-0"></i>
+                <span>Pending Bills</span>
+              </a>
+            </li>
+            <li>
+              <a href="#/admin/bill-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+                <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
+                <span>Bill Generation History</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Admin Other Items -->
+      <div>
+        <ul class="list-none space-y-1">
+          <li>
+            <a href="#/admin/all-payment-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="dollar-sign" class="w-4 h-4 shrink-0"></i>
+              <span>All Payment History</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/admin/admin-management" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="settings" class="w-4 h-4 shrink-0"></i>
+              <span>Admin Management</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/admin/system-log" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="activity" class="w-4 h-4 shrink-0"></i>
+              <span>System Log</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Jana Items -->
+      <div>
+        <ul class="list-none space-y-1">
+          <li>
+            <a href="#/jana/dashboard" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="home" class="w-4 h-4 shrink-0"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/jana/pay-now" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="credit-card" class="w-4 h-4 shrink-0"></i>
+              <span>Pay Now</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/jana/payment-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="dollar-sign" class="w-4 h-4 shrink-0"></i>
+              <span>Payment History</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- OSL Items -->
+      <div>
+        <ul class="list-none space-y-1">
+          <li>
+            <a href="#/osl/dashboard" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="home" class="w-4 h-4 shrink-0"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/osl/pending-bills" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
+              <span>Pending Bills</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/osl/payment-history" class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground">
+              <i data-lucide="dollar-sign" class="w-4 h-4 shrink-0"></i>
+              <span>Payment History</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </aside>
 
   <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[99] hidden"></div>
@@ -148,47 +303,29 @@
   </main>
 
   <script>
-    // Admin Menu Data
-    const menuData = [
-      { items: [{ title: "Dashboard", url: "#/", icon: "home" }] },
-      {
-        title: "Client Management",
-        collapsible: true,
-        items: [
-          { title: "Client List", url: "#/admin/client-list", icon: "users" },
-          { title: "Payment History", url: "#/admin/client-payment-history", icon: "dollar-sign" }
-        ]
-      },
-      {
-        title: "Bill Generation",
-        collapsible: true,
-        items: [
-          { title: "Generate Bill", url: "#/admin/generate-bill", icon: "file-text" },
-          { title: "Pending Bills", url: "#/admin/pending-bills", icon: "activity" },
-          { title: "Bill Generation History", url: "#/admin/bill-history", icon: "file-text" }
-        ]
-      },
-      {
-        items: [
-          { title: "All Payment History", url: "#/admin/all-payment-history", icon: "dollar-sign" },
-          { title: "Admin Management", url: "#/admin/admin-management", icon: "settings" },
-          { title: "System Log", url: "#/admin/system-log", icon: "activity" }
-        ]
-      }
-    ];
-
     let sidebarCollapsed = false;
     const MOBILE_BREAKPOINT = 768;
 
     $(document).ready(function () {
-      const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-      sidebarCollapsed = savedCollapsed;
+      try {
+        const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        sidebarCollapsed = savedCollapsed;
+      } catch (e) {
+        console.warn('localStorage is unavailable:', e);
+      }
 
-      renderMenu();
+      initMenu();
       initLogoSlideshow();
       checkResponsive();
 
       $('#sidebarToggle').on('click', function () { toggleSidebar(); });
+
+      $('#sidebarOverlay').on('click', function () {
+        if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) {
+          toggleSidebar(true);
+          $('#sidebarOverlay').removeClass('show');
+        }
+      });
 
       $(document).on('keydown', function (e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
@@ -209,8 +346,21 @@
         sidebarCollapsed = !sidebarCollapsed;
       }
 
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      if (isMobile) {
+        $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
+        $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
+      } else {
+        $('#sidebarOverlay').removeClass('show');
+        $('#sidebar').removeClass('mobile-on-top');
+      }
+
       applyCollapsedStyles();
-      localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+      try {
+        localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+      } catch (e) {
+        console.warn('localStorage is unavailable:', e);
+      }
     }
 
     function applyCollapsedStyles() {
@@ -221,8 +371,6 @@
       const menuLinks = sidebar.querySelectorAll('.menu-link');
       const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
       const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-
-      sidebar.style.transform = 'translateX(0)';
 
       if (sidebarCollapsed) {
         sidebar.style.width = '80px';
@@ -276,6 +424,15 @@
           if (chevron) chevron.classList.remove('hidden');
         });
       }
+
+      // Update collapsible content heights
+      $('.collapsible-content').each(function () {
+        if ($(this).hasClass('open')) {
+          $(this).css('max-height', this.scrollHeight + 'px');
+        } else {
+          $(this).css('max-height', '0');
+        }
+      });
     }
 
     function checkResponsive() {
@@ -296,68 +453,31 @@
       applyCollapsedStyles();
     }
 
-    function renderMenu() {
-      let html = '';
-
-      menuData.forEach(group => {
-        html += '<div>';
-
-        if (group.collapsible) {
-          const isOpen = true;
-          const openClass = isOpen ? 'open' : '';
-
-          html += `
-        <button class="collapsible-trigger ${openClass} flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2">
-          <span>${group.title}</span>
-          <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
-        </button>
-        <div class="collapsible-content ${openClass}">
-          <ul class="list-none space-y-1 p-2 bg-card/50 rounded-lg ">
-      `;
-        } else {
-          html += '<ul class="list-none space-y-1">';
-        }
-
-        (group.items || []).forEach(item => {
-          const activeClass = (window.location.hash === item.url)
-            ? 'bg-primary/20 !text-accent font-semibold'
-            : '';
-
-          html += `
-        <li>
-          <a href="${item.url}" 
-            class="menu-link flex items-center text-sm gap-3 px-3 py-2.5 rounded-lg no-underline text-primary transition-all duration-300 ease-in-out cursor-pointer hover:bg-primary/25 hover:text-foreground ${activeClass} ${activeClass ? 'text-accent' : ''}">
-            <i data-lucide="${item.icon}" class="w-4 h-4 shrink-0"></i>
-            <span>${item.title}</span>
-          </a>
-        </li>
-      `;
-        });
-
-        html += '</ul>';
-
-        if (group.collapsible) {
-          html += '</div>';
-        }
-
-        html += '</div>';
-      });
-
-      $('#menuContent').html(html);
-
-      lucide.createIcons();
-
+    function initMenu() {
       $('.collapsible-trigger').off('click').on('click', function () {
         $(this).toggleClass('open');
-        $(this).next('.collapsible-content').toggleClass('open');
+        const $content = $(this).next('.collapsible-content');
+        $content.toggleClass('open');
+        if ($content.hasClass('open')) {
+          $content.css('max-height', $content[0].scrollHeight + 'px');
+          $(this).attr('aria-expanded', 'true');
+        } else {
+          $content.css('max-height', '0');
+          $(this).attr('aria-expanded', 'false');
+        }
       });
 
       $('.menu-link').off('click').on('click', function () {
-  // Remove active classes and explicitly reset to blue
-  $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
-  // Add active classes to clicked link
-  $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold text-accent');
-});
+        $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
+        $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+      });
+
+      // Apply active class based on current URL hash
+      $('.menu-link').each(function () {
+        if ($(this).attr('href') === window.location.hash) {
+          $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+        }
+      });
 
       applyCollapsedStyles();
     }
@@ -365,12 +485,22 @@
     function initLogoSlideshow() {
       let currentIndex = 0;
       const logos = $('.logo-container img');
+      if (logos.length === 0) return;
 
-      setInterval(function () {
+      const slideshow = () => {
+        if (sidebarCollapsed) return; // Pause when collapsed
         logos.removeClass('active');
         currentIndex = (currentIndex + 1) % logos.length;
-        $(logos[currentIndex]).addClass('active');
-      }, 3000);
+        const $currentLogo = $(logos[currentIndex]);
+        if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
+          $currentLogo.addClass('active');
+        } else {
+          currentIndex = (currentIndex + 1) % logos.length; // Skip broken images
+        }
+      };
+
+      setInterval(slideshow, 3000);
+      slideshow();
     }
   </script>
 </body>
