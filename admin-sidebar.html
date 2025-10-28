@@ -37,25 +37,14 @@
 
   <style>
     body {
-      /* Deep blue/black radial gradient background */
       background: radial-gradient(ellipse at top, #0747a3 0%, #1e3a5f 20%, #0a1929 50%, #000000 100%);
       background-attachment: fixed;
       font-family: 'Inter', sans-serif;
     }
 
-    /* Custom Scrollbar for Menu Content */
-    .scrollable-menu::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .scrollable-menu::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .scrollable-menu::-webkit-scrollbar-thumb {
-      background: hsl(217 20% 20%);
-      border-radius: 3px;
-    }
+    .scrollable-menu::-webkit-scrollbar { width: 6px; }
+    .scrollable-menu::-webkit-scrollbar-track { background: transparent; }
+    .scrollable-menu::-webkit-scrollbar-thumb { background: hsl(217 20% 20%); border-radius: 3px; }
 
     .logo-container img {
       position: absolute;
@@ -65,10 +54,7 @@
       opacity: 0;
       transition: opacity 0.5s ease;
     }
-
-    .logo-container img.active {
-      opacity: 1;
-    }
+    .logo-container img.active { opacity: 1; }
 
     .brand-title {
       background: linear-gradient(to right, hsl(217 91% 60%), hsl(25 95% 53%));
@@ -82,41 +68,24 @@
       overflow: hidden;
       transition: max-height 0.3s ease;
     }
+    .chevron-icon { transition: transform 0.2s; }
+    .collapsible-trigger.open .chevron-icon { transform: rotate(180deg); }
 
-    .chevron-icon {
-      transition: transform 0.2s;
-    }
+    .sidebar { transition: width 0.28s ease, margin-left 0.28s ease; }
+    .main-content { transition: margin-left 0.28s ease; }
 
-    .collapsible-trigger.open .chevron-icon {
-      transform: rotate(180deg);
-    }
-
-    /* Transitions for Width and Margin */
-    .sidebar {
-      transition: width 0.28s ease, margin-left 0.28s ease;
-    }
-
-    .main-content {
-      transition: margin-left 0.28s ease;
-    }
-
-    /* Overlay Styling */
     #sidebarOverlay {
       transition: opacity 0.22s ease, visibility 0.22s ease;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
     }
-
     #sidebarOverlay.show {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
     }
-
-    .sidebar.mobile-on-top {
-      z-index: 101;
-    }
+    .sidebar.mobile-on-top { z-index: 101; }
   </style>
 </head>
 
@@ -140,9 +109,7 @@
       <!-- Logo/Brand Section -->
       <div class="px-4 pt-1 relative">
         <div class="flex justify-between items-center gap-3">
-          <div
-            class="logo-container relative w-16 h-16 shadow-[0_0_20px_hsl(217_91%_60%/0.3),0_0_40px_hsl(217_91%_60%/0.1)] rounded-xl overflow-hidden shrink-0">
-            <!-- Using placeholder images for demo -->
+          <div class="logo-container relative w-16 h-16 shadow-[0_0_20px_hsl(217_91%_60%/0.3),0_0_40px_hsl(217_91%_60%/0.1)] rounded-xl overflow-hidden shrink-0">
             <img src="https://placehold.co/64x64/252f4c/ffffff?text=O" alt="Opticore Logo" class="active" />
             <img src="https://placehold.co/64x64/4c2533/ffffff?text=J" alt="Jana Logo" />
             <img src="https://placehold.co/64x64/334c25/ffffff?text=A" alt="Alliance Logo" />
@@ -158,6 +125,7 @@
 
     <!-- SCROLLABLE MENU CONTENT -->
     <div id="menuContent" class="scrollable-menu flex-grow overflow-y-auto p-4 space-y-2">
+
       <!-- Admin Dashboard -->
       <div>
         <ul class="list-none space-y-1">
@@ -174,11 +142,11 @@
       <!-- Client Management (Collapsible) -->
       <div>
         <button
-          class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
+          class="collapsible-trigger open flex w-full items-center justify-start gap-3 px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
           aria-expanded="true" aria-controls="collapsible-client-management">
-          <img src="customer.png" alt="client icon" class="w-4 h-4 shrink-0 " />
+          <img src="customer.png" alt="client icon" class="w-4 h-4 shrink-0" />
           <span>Client Management</span>
-          <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
+          <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 ml-auto"></i>
         </button>
         <div id="collapsible-client-management" class="collapsible-content open">
           <ul class="list-none space-y-1 p-2 bg-card rounded-lg">
@@ -203,11 +171,11 @@
       <!-- Bill Generation (Collapsible) -->
       <div>
         <button
-          class="collapsible-trigger open flex w-full items-center justify-between px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
+          class="collapsible-trigger open flex w-full items-center justify-start gap-3 px-3 py-2.5 rounded-lg bg-transparent border-0 text-muted-foreground text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-primary/30 mb-2"
           aria-expanded="true" aria-controls="collapsible-bill-generation">
-          <img src="banknote-arrow-down.png" alt="bill icon" class="w-4 h-4 shrink-0 " />
+          <img src="banknote-arrow-down.png" alt="bill icon" class="w-4 h-4 shrink-0" />
           <span>Bill Generation</span>
-          <i data-lucide="chevron-down" class="chevron-icon w-4 h-4"></i>
+          <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 ml-auto"></i>
         </button>
         <div id="collapsible-bill-generation" class="collapsible-content open">
           <ul class="list-none space-y-1 p-2 bg-card rounded-lg">
@@ -322,297 +290,241 @@
       <!-- Padding for the footer -->
       <div class="h-4"></div>
 
-      <!-- FOOTER: No longer sticky (removed 'sticky bottom-0') -->
-      <div id="sidebarFooter" class="flex gap-3 z-20 bg-sidebar-bg border-t border-border p-2 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
+      <!-- FOOTER -->
+      <div id="sidebarFooter"
+        class="flex gap-3 z-20 bg-sidebar-bg border-t border-border p-2 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]">
         <button id="settingsButton"
-          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg  text-sm text-primary font-semibold border-0 transition-all duration-300 hover:bg-primary/80">
+          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg text-sm text-primary font-semibold border-0 transition-all duration-300 hover:bg-primary/25 hover:text-foreground">
           <i data-lucide="settings" class="w-5 h-5"></i>
           <span>Settings</span>
         </button>
         <button id="logoutButton"
-          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg text-sm text-primary font-semibold border-0 transition-all duration-300 hover:bg-accent/80">
+          class="flex w-full items-center justify-center gap-3 px-3 py-2.5 rounded-lg text-sm text-primary font-semibold border-0 transition-all duration-300 hover:bg-primary/25 hover:text-foreground">
           <i data-lucide="log-out" class="w-5 h-5"></i>
           <span>Logout</span>
         </button>
       </div>
-      <!-- END FOOTER -->
-
     </div>
-    <!-- END SCROLLABLE MENU CONTENT -->
-
   </aside>
 
-  <!-- IMPORTANT: Overlay is no longer 'hidden' by default in HTML -->
   <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[99]"></div>
 
   <main id="mainContent" class="main-content ml-[280px] p-10 min-h-screen">
-    <div
-      class="bg-card border border-border rounded-xl p-6 shadow-[0_4px_8px_hsl(0_0%_0%/0.4),0_8px_16px_hsl(0_0%_0%/0.3)]">
+    <div class="bg-card border border-border rounded-xl p-6 shadow-[0_4px_8px_hsl(0_0%_0%/0.4),0_8px_16px_hsl(0_0%_0%/0.3)]">
       <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
       <p class="text-muted-foreground">
-        Welcome to the Admin Panel. Use the sticky sidebar to navigate through client management, bill generation, and
-        system settings.
+        Welcome to the Admin Panel. Use the sticky sidebar to navigate through client management, bill generation, and system settings.
       </p>
     </div>
   </main>
 
   <script>
-let sidebarCollapsed = true; // Start collapsed for mobile-first approach on load
-const MOBILE_BREAKPOINT = 768;
-let logoSlideshowInterval = null;
-let currentLogoIndex = 0; // NEW: Global index for continuous rotation
-let logos;
+    let sidebarCollapsed = true;
+    const MOBILE_BREAKPOINT = 768;
+    let logoSlideshowInterval = null;
+    let currentLogoIndex = 0;
+    let logos;
 
-$(document).ready(function () {
-  logos = $('.logo-container img');
+    $(document).ready(function () {
+      logos = $('.logo-container img');
 
-  try {
-    const savedCollapsed = localStorage.getItem('sidebarCollapsed');
-    if (savedCollapsed !== null) {
-      sidebarCollapsed = savedCollapsed === 'true';
-    }
-  } catch (e) {
-    console.warn('localStorage is unavailable:', e);
-  }
+      try {
+        const saved = localStorage.getItem('sidebarCollapsed');
+        if (saved !== null) sidebarCollapsed = saved === 'true';
+      } catch (e) { console.warn('localStorage unavailable', e); }
 
-  initMenu();
-  initLogoSlideshow();
-  checkResponsive();
+      initMenu();
+      initLogoSlideshow();
+      checkResponsive();
 
-  $('#sidebarToggle').on('click', function () { toggleSidebar(); });
-
-  $('#logoutButton').on('click', function () {
-    console.log('Logout button clicked. Implement actual logout logic here.');
-  });
-
-  $('#sidebarOverlay').on('click', function () {
-    if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) {
-      toggleSidebar(true); 
-    }
-  });
-
-  $(document).on('keydown', function (e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-      e.preventDefault();
-      toggleSidebar();
-    }
-  });
-
-  $(window).on('resize', checkResponsive);
-  lucide.createIcons();
-});
-
-function toggleSidebar(force) {
-  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-
-  if (force !== undefined) {
-    sidebarCollapsed = force;
-  } else {
-    sidebarCollapsed = !sidebarCollapsed;
-  }
-
-  if (isMobile) {
-    $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
-    $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
-  } else {
-    $('#sidebarOverlay').removeClass('show');
-    $('#sidebar').removeClass('mobile-on-top');
-  }
-
-  applyCollapsedStyles();
-  try {
-    localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
-  } catch (e) {
-    console.warn('localStorage is unavailable:', e);
-  }
-}
-
-function applyCollapsedStyles() {
-  const sidebar = document.getElementById('sidebar');
-  const mainContent = document.getElementById('mainContent');
-  const logoContainer = sidebar.querySelector('.logo-container');
-  const brandText = sidebar.querySelector('.brand-text');
-  const menuLinks = sidebar.querySelectorAll('.menu-link');
-  const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
-  const sidebarFooter = sidebar.querySelector('#sidebarFooter');
-  const footerSpans = sidebarFooter.querySelectorAll('span');
-  const toggleContainer = document.getElementById('sidebarToggle').parentElement;
-
-  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-
-  if (sidebarCollapsed) {
-    // COLLAPSED STATE
-    sidebar.style.width = '80px';
-    mainContent.style.marginLeft = '80px';
-
-    toggleContainer.classList.remove('justify-end');
-    toggleContainer.classList.add('justify-center');
-
-    logoContainer.classList.remove('w-16', 'h-16');
-    logoContainer.classList.add('w-10', 'h-10');
-
-    brandText.classList.add('hidden');
-
-    menuLinks.forEach(link => {
-      link.classList.add('justify-center', 'p-2.5');
-      const span = link.querySelector('span');
-      if (span) span.classList.add('hidden');
+      $('#sidebarToggle').on('click', () => toggleSidebar());
+      $('#logoutButton').on('click', () => console.log('Logout – implement your logic'));
+      $('#sidebarOverlay').on('click', () => {
+        if (window.innerWidth < MOBILE_BREAKPOINT && !sidebarCollapsed) toggleSidebar(true);
+      });
+      $(document).on('keydown', e => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
+      });
+      $(window).on('resize', checkResponsive);
+      lucide.createIcons();
     });
 
-    collapsibleTriggers.forEach(trigger => {
-      trigger.classList.add('justify-center', 'p-2.5', 'w-10', 'h-10');
-      trigger.classList.remove('justify-between');
-      const span = trigger.querySelector('span');
-      if (span) span.classList.add('hidden');
+    function toggleSidebar(force) {
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      sidebarCollapsed = force !== undefined ? force : !sidebarCollapsed;
 
-      const chevron = trigger.querySelector('.chevron-icon');
-      if (chevron) chevron.classList.remove('hidden'); 
-    });
-
-    // --- FOOTER COLLAPSE FIX ---
-    sidebarFooter.classList.add('flex-col', 'items-center', 'gap-2'); // flex-col parent
-    sidebarFooter.classList.remove('gap-3'); 
-    $('#sidebarFooter button').each(function () {
-      $(this).addClass('justify-center p-2').removeClass('px-3 py-2.5 w-full');
-      $(this).find('span').addClass('hidden'); // hide text
-    });
-
-  } else {
-    // EXPANDED STATE
-    sidebar.style.width = '280px';
-
-    toggleContainer.classList.remove('justify-center');
-    toggleContainer.classList.add('justify-end');
-
-    if (isMobile) {
-      mainContent.style.marginLeft = '80px';
-    } else {
-      mainContent.style.marginLeft = '280px';
-    }
-
-    logoContainer.classList.remove('w-10', 'h-10');
-    logoContainer.classList.add('w-16', 'h-16');
-
-    brandText.classList.remove('hidden');
-
-    menuLinks.forEach(link => {
-      link.classList.remove('justify-center', 'p-2.5');
-      const span = link.querySelector('span');
-      if (span) span.classList.remove('hidden');
-    });
-
-    collapsibleTriggers.forEach(trigger => {
-      trigger.classList.remove('justify-center', 'p-2.5', 'w-10', 'h-10');
-      trigger.classList.add('justify-between');
-      const span = trigger.querySelector('span');
-      if (span) span.classList.remove('hidden');
-      const chevron = trigger.querySelector('.chevron-icon');
-      if (chevron) chevron.classList.remove('hidden');
-    });
-
-    // --- FOOTER EXPAND FIX ---
-    sidebarFooter.classList.remove('flex-col', 'items-center', 'gap-2');
-    sidebarFooter.classList.add('flex', 'gap-3'); 
-    $('#sidebarFooter button').each(function () {
-      $(this).removeClass('justify-center p-2').addClass('px-3 py-2.5 w-full');
-      $(this).find('span').removeClass('hidden'); // show text
-    });
-  }
-
-  // Update collapsible content heights
-  $('.collapsible-content').each(function () {
-    if ($(this).hasClass('open')) {
-      setTimeout(() => {
-        $(this).css('max-height', this.scrollHeight + 'px');
-      }, 0);
-    } else {
-      $(this).css('max-height', '0');
-    }
-  });
-}
-
-function checkResponsive() {
-  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-
-  if (!isMobile) {
-    const savedState = localStorage.getItem('sidebarCollapsed') === 'true';
-    if (sidebarCollapsed && !savedState) {
-      toggleSidebar(false);
-      return;
-    }
-    $('#sidebarOverlay').removeClass('show');
-    $('#sidebar').removeClass('mobile-on-top');
-  } else {
-    if (!sidebarCollapsed) {
-      toggleSidebar(true);
-      return;
-    }
-  }
-  applyCollapsedStyles();
-}
-
-function initLogoSlideshow() {
-  if (logoSlideshowInterval) {
-    return;
-  }
-
-  if (logos.length === 0) return;
-
-  const slideshow = () => {
-    logos.removeClass('active');
-    const logoCount = logos.length;
-    currentLogoIndex = (currentLogoIndex + 1) % logoCount;
-    const $currentLogo = $(logos[currentLogoIndex]);
-
-    if ($currentLogo[0].complete && $currentLogo[0].naturalWidth !== 0) {
-      $currentLogo.addClass('active');
-    } else {
-      currentLogoIndex = (currentLogoIndex + 1) % logoCount;
-      $(logos[currentLogoIndex]).addClass('active');
-    }
-  };
-
-  logos.removeClass('active');
-  $(logos[currentLogoIndex]).addClass('active');
-
-  logoSlideshowInterval = setInterval(slideshow, 3000);
-}
-
-function initMenu() {
-  $('.collapsible-trigger').off('click').on('click', function () {
-    $(this).toggleClass('open');
-    const $content = $(this).next('.collapsible-content');
-    $content.toggleClass('open');
-    if ($content.hasClass('open')) {
-      $content.css('max-height', $content[0].scrollHeight + 'px');
-      $(this).attr('aria-expanded', 'true');
-    } else {
-      $content.css('max-height', '0');
-      $(this).attr('aria-expanded', 'false');
-    }
-  });
-
-  $('.menu-link').off('click').on('click', function () {
-    $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold text-accent').addClass('text-primary');
-    $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-  });
-
-  $('.menu-link').each(function () {
-    if ($(this).attr('href') === window.location.hash) {
-      $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-
-      const $parentContent = $(this).closest('.collapsible-content');
-      if ($parentContent.length) {
-        $parentContent.addClass('open');
-        $parentContent.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
+      if (isMobile) {
+        $('#sidebarOverlay').toggleClass('show', !sidebarCollapsed);
+        $('#sidebar').toggleClass('mobile-on-top', !sidebarCollapsed);
+      } else {
+        $('#sidebarOverlay').removeClass('show');
+        $('#sidebar').removeClass('mobile-on-top');
       }
+
+      applyCollapsedStyles();
+      try { localStorage.setItem('sidebarCollapsed', sidebarCollapsed); } catch (e) {}
     }
-  });
 
-  applyCollapsedStyles();
-}
-</script>
+    function applyCollapsedStyles() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const logoContainer = sidebar.querySelector('.logo-container');
+      const brandText = sidebar.querySelector('.brand-text');
+      const menuLinks = sidebar.querySelectorAll('.menu-link');
+      const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
+      const sidebarFooter = sidebar.querySelector('#sidebarFooter');
+      const footerSpans = sidebarFooter.querySelectorAll('span');
+      const toggleContainer = document.getElementById('sidebarToggle').parentElement;
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
+      if (sidebarCollapsed) {
+        // COLLAPSED
+        sidebar.style.width = '80px';
+        mainContent.style.marginLeft = '80px';
+
+        toggleContainer.classList.remove('justify-end');
+        toggleContainer.classList.add('justify-center');
+
+        logoContainer.classList.remove('w-16', 'h-16');
+        logoContainer.classList.add('w-10', 'h-10');
+
+        brandText.classList.add('hidden');
+
+        menuLinks.forEach(l => {
+          l.classList.add('justify-center', 'p-2.5');
+          const s = l.querySelector('span');
+          if (s) s.classList.add('hidden');
+        });
+
+        collapsibleTriggers.forEach(t => {
+          t.classList.add('justify-center');
+          const s = t.querySelector('span');
+          if (s) s.classList.add('hidden');
+          const c = t.querySelector('.chevron-icon');
+          if (c) c.classList.add('hidden');
+        });
+
+        sidebarFooter.classList.add('flex-col', 'items-center', 'gap-2');
+        sidebarFooter.classList.remove('gap-3');
+        $('#sidebarFooter button').each(function () {
+          $(this).addClass('justify-center p-2').removeClass('px-3 py-2.5 w-full');
+          $(this).find('span').addClass('hidden');
+        });
+
+      } else {
+        // EXPANDED
+        sidebar.style.width = '280px';
+        mainContent.style.marginLeft = isMobile ? '80px' : '280px';
+
+        toggleContainer.classList.remove('justify-center');
+        toggleContainer.classList.add('justify-end');
+
+        logoContainer.classList.remove('w-10', 'h-10');
+        logoContainer.classList.add('w-16', 'h-16');
+
+        brandText.classList.remove('hidden');
+
+        menuLinks.forEach(l => {
+          l.classList.remove('justify-center', 'p-2.5');
+          const s = l.querySelector('span');
+          if (s) s.classList.remove('hidden');
+        });
+
+        // *** FIXED PART ***
+        collapsibleTriggers.forEach(t => {
+          t.classList.remove('justify-center', 'p-2.5', 'w-10', 'h-10');
+          t.classList.add('justify-start');          // <-- always start-aligned
+          const s = t.querySelector('span');
+          if (s) s.classList.remove('hidden');
+          const c = t.querySelector('.chevron-icon');
+          if (c) c.classList.remove('hidden');
+        });
+
+        sidebarFooter.classList.remove('flex-col', 'items-center', 'gap-2');
+        sidebarFooter.classList.add('flex', 'gap-3');
+        $('#sidebarFooter button').each(function () {
+          $(this).removeClass('justify-center p-2').addClass('px-3 py-2.5 w-full');
+          $(this).find('span').removeClass('hidden');
+        });
+      }
+
+      // Update collapsible heights
+      $('.collapsible-content').each(function () {
+        if ($(this).hasClass('open')) {
+          setTimeout(() => $(this).css('max-height', this.scrollHeight + 'px'), 0);
+        } else {
+          $(this).css('max-height', '0');
+        }
+      });
+    }
+
+    function checkResponsive() {
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      if (!isMobile) {
+        const saved = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (sidebarCollapsed && !saved) { toggleSidebar(false); return; }
+        $('#sidebarOverlay').removeClass('show');
+        $('#sidebar').removeClass('mobile-on-top');
+      } else {
+        if (!sidebarCollapsed) { toggleSidebar(true); return; }
+      }
+      applyCollapsedStyles();
+    }
+
+    function initLogoSlideshow() {
+      if (logoSlideshowInterval) return;
+      if (logos.length === 0) return;
+
+      const next = () => {
+        logos.removeClass('active');
+        currentLogoIndex = (currentLogoIndex + 1) % logos.length;
+        const $cur = $(logos[currentLogoIndex]);
+        if ($cur[0].complete && $cur[0].naturalWidth !== 0) {
+          $cur.addClass('active');
+        } else {
+          currentLogoIndex = (currentLogoIndex + 1) % logos.length;
+          $(logos[currentLogoIndex]).addClass('active');
+        }
+      };
+
+      logos.removeClass('active');
+      $(logos[currentLogoIndex]).addClass('active');
+      logoSlideshowInterval = setInterval(next, 3000);
+    }
+
+    function initMenu() {
+      $('.collapsible-trigger').off('click').on('click', function () {
+        $(this).toggleClass('open');
+        const $content = $(this).next('.collapsible-content');
+        $content.toggleClass('open');
+        if ($content.hasClass('open')) {
+          $content.css('max-height', $content[0].scrollHeight + 'px');
+          $(this).attr('aria-expanded', 'true');
+        } else {
+          $content.css('max-height', '0');
+          $(this).attr('aria-expanded', 'false');
+        }
+      });
+
+      $('.menu-link').off('click').on('click', function () {
+        $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold').addClass('text-primary');
+        $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+      });
+
+      $('.menu-link').each(function () {
+        if ($(this).attr('href') === window.location.hash) {
+          $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+          const $p = $(this).closest('.collapsible-content');
+          if ($p.length) {
+            $p.addClass('open');
+            $p.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
+          }
+        }
+      });
+
+      applyCollapsedStyles();
+    }
+  </script>
 </body>
 
 </html>
