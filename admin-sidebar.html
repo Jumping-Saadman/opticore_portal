@@ -71,8 +71,8 @@
     .chevron-icon { transition: transform 0.2s; }
     .collapsible-trigger.open .chevron-icon { transform: rotate(180deg); }
 
-    .sidebar { transition: width 0.28s ease, margin-left 0.28s ease; }
-    .main-content { transition: margin-left 0.28s ease; }
+    .sidebar { transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+    .main-content { transition: margin-left 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
 
     #sidebarOverlay {
       transition: opacity 0.22s ease, visibility 0.22s ease;
@@ -88,22 +88,44 @@
     .sidebar.mobile-on-top { z-index: 101; }
 
     /* Smooth text/icon transitions during sidebar toggle */
-.sidebar span,
-.sidebar .brand-text,
-.sidebar .chevron-icon {
-  transition: opacity 0.25s ease, margin 0.25s ease, transform 0.25s ease;
-}
+    .sidebar span,
+    .sidebar .brand-text,
+    .sidebar .chevron-icon {
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.sidebar.collapsing {
-  pointer-events: none;
-}
+    .sidebar.collapsing {
+      pointer-events: none;
+    }
 
-.sidebar.collapsing span,
-.sidebar.collapsing .brand-text {
-  opacity: 0;
-}
+    /* Hide elements immediately when collapsing, show with delay when expanding */
+    .sidebar.collapsing.to-compact span,
+    .sidebar.collapsing.to-compact .brand-text,
+    .sidebar.collapsing.to-compact .chevron-icon {
+      opacity: 0 !important;
+    }
 
+    .sidebar .logo-container {
+      transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
+                  height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
+    .sidebar .collapsible-trigger,
+    .sidebar .menu-link {
+      transition: padding 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  justify-content 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar #sidebarFooter {
+      transition: flex-direction 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  gap 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar #sidebarFooter button {
+      transition: padding 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  width 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  justify-content 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
   </style>
 </head>
 
@@ -384,118 +406,147 @@
     }
 
     function applyCollapsedStyles() {
-  const sidebar = document.getElementById('sidebar');
-  const mainContent = document.getElementById('mainContent');
-  const logoContainer = sidebar.querySelector('.logo-container');
-  const brandText = sidebar.querySelector('.brand-text');
-  const menuLinks = sidebar.querySelectorAll('.menu-link');
-  const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
-  const sidebarFooter = sidebar.querySelector('#sidebarFooter');
-  const toggleContainer = document.getElementById('sidebarToggle').parentElement;
-  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const logoContainer = sidebar.querySelector('.logo-container');
+      const brandText = sidebar.querySelector('.brand-text');
+      const menuLinks = sidebar.querySelectorAll('.menu-link');
+      const collapsibleTriggers = sidebar.querySelectorAll('.collapsible-trigger');
+      const sidebarFooter = sidebar.querySelector('#sidebarFooter');
+      const toggleContainer = document.getElementById('sidebarToggle').parentElement;
+      const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-  sidebar.classList.add('collapsing');
+      sidebar.classList.add('collapsing');
 
-  if (sidebarCollapsed) {
-    // COLLAPSING (to compact)
-    sidebar.style.width = '80px';
-    mainContent.style.marginLeft = '80px';
+      if (sidebarCollapsed) {
+        // COLLAPSING (to compact)
+        sidebar.classList.add('to-compact');
+        
+        // Immediately hide text with opacity
+        brandText.style.opacity = '0';
+        
+        menuLinks.forEach(l => {
+          const s = l.querySelector('span');
+          if (s) s.style.opacity = '0';
+        });
 
-    toggleContainer.classList.remove('justify-end');
-    toggleContainer.classList.add('justify-center');
+        collapsibleTriggers.forEach(t => {
+          const s = t.querySelector('span');
+          const c = t.querySelector('.chevron-icon');
+          if (s) s.style.opacity = '0';
+          if (c) c.style.opacity = '0';
+        });
 
-    logoContainer.classList.replace('w-16', 'w-10');
-    logoContainer.classList.replace('h-16', 'h-10');
+        $('#sidebarFooter button').each(function () {
+          $(this).find('span').css('opacity', '0');
+        });
 
-    brandText.style.opacity = '0';
-    setTimeout(() => brandText.classList.add('hidden'), 250);
+        // After text fades, start the layout changes
+        setTimeout(() => {
+          sidebar.style.width = '80px';
+          mainContent.style.marginLeft = '80px';
 
-    menuLinks.forEach(l => {
-      l.classList.add('justify-center', 'p-2.5');
-      const s = l.querySelector('span');
-      if (s) s.style.opacity = '0';
-      setTimeout(() => s && s.classList.add('hidden'), 250);
-    });
+          toggleContainer.classList.remove('justify-end');
+          toggleContainer.classList.add('justify-center');
 
-    collapsibleTriggers.forEach(t => {
-      t.classList.add('justify-center');
-      const s = t.querySelector('span');
-      const c = t.querySelector('.chevron-icon');
-      if (s) s.style.opacity = '0';
-      if (c) c.style.opacity = '0';
+          logoContainer.classList.replace('w-16', 'w-10');
+          logoContainer.classList.replace('h-16', 'h-10');
+
+          brandText.classList.add('hidden');
+
+          menuLinks.forEach(l => {
+            l.classList.add('justify-center', 'p-2.5');
+            const s = l.querySelector('span');
+            if (s) s.classList.add('hidden');
+          });
+
+          collapsibleTriggers.forEach(t => {
+            t.classList.add('justify-center');
+            const s = t.querySelector('span');
+            const c = t.querySelector('.chevron-icon');
+            if (s) s.classList.add('hidden');
+            if (c) c.classList.add('hidden');
+          });
+
+          sidebarFooter.classList.add('flex-col', 'items-center', 'gap-2');
+          sidebarFooter.classList.remove('gap-3');
+          $('#sidebarFooter button').each(function () {
+            $(this).addClass('justify-center p-2').removeClass('px-3 py-2.5 w-full');
+            $(this).find('span').addClass('hidden');
+          });
+        }, 100);
+
+      } else {
+        // EXPANDING (to full)
+        sidebar.classList.remove('to-compact');
+        sidebar.style.width = '280px';
+        mainContent.style.marginLeft = isMobile ? '80px' : '280px';
+
+        toggleContainer.classList.remove('justify-center');
+        toggleContainer.classList.add('justify-end');
+
+        logoContainer.classList.replace('w-10', 'w-16');
+        logoContainer.classList.replace('h-10', 'h-16');
+
+        brandText.classList.remove('hidden');
+
+        menuLinks.forEach(l => {
+          l.classList.remove('justify-center', 'p-2.5');
+          const s = l.querySelector('span');
+          if (s) s.classList.remove('hidden');
+        });
+
+        collapsibleTriggers.forEach(t => {
+          t.classList.remove('justify-center', 'p-2.5', 'w-10', 'h-10');
+          t.classList.add('justify-start');
+          const s = t.querySelector('span');
+          const c = t.querySelector('.chevron-icon');
+          if (s) s.classList.remove('hidden');
+          if (c) c.classList.remove('hidden');
+        });
+
+        sidebarFooter.classList.remove('flex-col', 'items-center', 'gap-2');
+        sidebarFooter.classList.add('flex', 'gap-3');
+        $('#sidebarFooter button').each(function () {
+          $(this).removeClass('justify-center p-2').addClass('px-3 py-2.5 w-full');
+          $(this).find('span').removeClass('hidden');
+        });
+
+        // Show elements with delay after layout is set
+        setTimeout(() => {
+          brandText.style.opacity = '1';
+
+          menuLinks.forEach(l => {
+            const s = l.querySelector('span');
+            if (s) s.style.opacity = '1';
+          });
+
+          collapsibleTriggers.forEach(t => {
+            const s = t.querySelector('span');
+            const c = t.querySelector('.chevron-icon');
+            if (s) s.style.opacity = '1';
+            if (c) c.style.opacity = '1';
+          });
+
+          $('#sidebarFooter button').each(function () {
+            $(this).find('span').css('opacity', '1');
+          });
+        }, 200);
+      }
+
+      // Update dropdown heights
+      $('.collapsible-content').each(function () {
+        if ($(this).hasClass('open')) {
+          setTimeout(() => $(this).css('max-height', this.scrollHeight + 'px'), 0);
+        } else {
+          $(this).css('max-height', '0');
+        }
+      });
+
       setTimeout(() => {
-        if (s) s.classList.add('hidden');
-        if (c) c.classList.add('hidden');
-      }, 250);
-    });
-
-    sidebarFooter.classList.add('flex-col', 'items-center', 'gap-2');
-    sidebarFooter.classList.remove('gap-3');
-    $('#sidebarFooter button').each(function () {
-      $(this).addClass('justify-center p-2').removeClass('px-3 py-2.5 w-full');
-      $(this).find('span').css('opacity', '0');
-      setTimeout(() => $(this).find('span').addClass('hidden'), 250);
-    });
-
-  } else {
-    // EXPANDING (to full)
-    sidebar.style.width = '280px';
-    mainContent.style.marginLeft = isMobile ? '80px' : '280px';
-
-    toggleContainer.classList.remove('justify-center');
-    toggleContainer.classList.add('justify-end');
-
-    logoContainer.classList.replace('w-10', 'w-16');
-    logoContainer.classList.replace('h-10', 'h-16');
-
-    brandText.classList.remove('hidden');
-    setTimeout(() => (brandText.style.opacity = '1'), 50);
-
-    menuLinks.forEach(l => {
-      l.classList.remove('justify-center', 'p-2.5');
-      const s = l.querySelector('span');
-      if (s) {
-        s.classList.remove('hidden');
-        setTimeout(() => (s.style.opacity = '1'), 50);
-      }
-    });
-
-    collapsibleTriggers.forEach(t => {
-      t.classList.remove('justify-center', 'p-2.5', 'w-10', 'h-10');
-      t.classList.add('justify-start');
-      const s = t.querySelector('span');
-      const c = t.querySelector('.chevron-icon');
-      if (s) {
-        s.classList.remove('hidden');
-        setTimeout(() => (s.style.opacity = '1'), 50);
-      }
-      if (c) {
-        c.classList.remove('hidden');
-        setTimeout(() => (c.style.opacity = '1'), 50);
-      }
-    });
-
-    sidebarFooter.classList.remove('flex-col', 'items-center', 'gap-2');
-    sidebarFooter.classList.add('flex', 'gap-3');
-    $('#sidebarFooter button').each(function () {
-      $(this).removeClass('justify-center p-2').addClass('px-3 py-2.5 w-full');
-      $(this).find('span').removeClass('hidden');
-      setTimeout(() => $(this).find('span').css('opacity', '1'), 50);
-    });
-  }
-
-  // Update dropdown heights
-  $('.collapsible-content').each(function () {
-    if ($(this).hasClass('open')) {
-      setTimeout(() => $(this).css('max-height', this.scrollHeight + 'px'), 0);
-    } else {
-      $(this).css('max-height', '0');
+        sidebar.classList.remove('collapsing', 'to-compact');
+      }, 700);
     }
-  });
-
-  setTimeout(() => sidebar.classList.remove('collapsing'), 300);
-}
-
 
     function checkResponsive() {
       const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
@@ -532,45 +583,43 @@
     }
 
     function initMenu() {
-  $('.collapsible-trigger').off('click').on('click', function () {
-    $(this).toggleClass('open');
-    const $content = $(this).next('.collapsible-content');
-    $content.toggleClass('open');
-    if ($content.hasClass('open')) {
-      $content.css('max-height', $content[0].scrollHeight + 'px');
-      $(this).attr('aria-expanded', 'true');
-    } else {
-      $content.css('max-height', '0');
-      $(this).attr('aria-expanded', 'false');
+      $('.collapsible-trigger').off('click').on('click', function () {
+        $(this).toggleClass('open');
+        const $content = $(this).next('.collapsible-content');
+        $content.toggleClass('open');
+        if ($content.hasClass('open')) {
+          $content.css('max-height', $content[0].scrollHeight + 'px');
+          $(this).attr('aria-expanded', 'true');
+        } else {
+          $content.css('max-height', '0');
+          $(this).attr('aria-expanded', 'false');
+        }
+      });
+
+      $('.menu-link').off('click').on('click', function () {
+        $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold').addClass('text-primary');
+        $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+      });
+
+      $('.menu-link').each(function () {
+        if ($(this).attr('href') === window.location.hash) {
+          $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
+          const $p = $(this).closest('.collapsible-content');
+          if ($p.length) {
+            $p.addClass('open');
+            $p.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
+          }
+        }
+      });
+
+      applyCollapsedStyles();
+
+      // Ensure all dropdowns start closed
+      $('.collapsible-content').each(function () {
+        if (!$(this).hasClass('open')) $(this).css('max-height', '0');
+      });
     }
-  });
-
-  $('.menu-link').off('click').on('click', function () {
-    $('.menu-link').removeClass('bg-primary/20 !text-accent font-semibold').addClass('text-primary');
-    $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-  });
-
-  $('.menu-link').each(function () {
-    if ($(this).attr('href') === window.location.hash) {
-      $(this).removeClass('text-primary').addClass('bg-primary/20 !text-accent font-semibold');
-      const $p = $(this).closest('.collapsible-content');
-      if ($p.length) {
-        $p.addClass('open');
-        $p.prev('.collapsible-trigger').addClass('open').attr('aria-expanded', 'true');
-      }
-    }
-  });
-
-  applyCollapsedStyles();
-
-  // Ensure all dropdowns start closed
-  $('.collapsible-content').each(function () {
-    if (!$(this).hasClass('open')) $(this).css('max-height', '0');
-  });
-}
-
-    
-    </script>
+  </script>
 </body>
 
 </html>
