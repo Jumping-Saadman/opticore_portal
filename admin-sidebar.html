@@ -87,24 +87,6 @@
     }
     .sidebar.mobile-on-top { z-index: 101; }
 
-    /* Smooth text/icon transitions during sidebar toggle */
-    .sidebar span,
-    .sidebar .brand-text,
-    .sidebar .chevron-icon {
-      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .sidebar.collapsing {
-      pointer-events: none;
-    }
-
-    /* Hide elements immediately when collapsing, show with delay when expanding */
-    .sidebar.collapsing.to-compact span,
-    .sidebar.collapsing.to-compact .brand-text,
-    .sidebar.collapsing.to-compact .chevron-icon {
-      opacity: 0 !important;
-    }
-
     .sidebar .logo-container {
       transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
                   height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
@@ -127,10 +109,33 @@
                   justify-content 0.7s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* NEW: Center logo when collapsed */
+    /* CENTER LOGO WHEN COLLAPSED */
     .logo-row.centered {
       justify-content: center;
     }
+
+    /* STAGGERED TEXT REVEAL */
+    .sidebar .menu-link span,
+    .sidebar .collapsible-trigger span,
+    .sidebar .brand-text,
+    .sidebar #sidebarFooter button span {
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    .sidebar.expanded .menu-link span,
+    .sidebar.expanded .collapsible-trigger span,
+    .sidebar.expanded .brand-text,
+    .sidebar.expanded #sidebarFooter button span {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .sidebar.expanded .menu-link span { transition-delay: calc(0.06s * var(--i)); }
+    .sidebar.expanded .collapsible-trigger span { transition-delay: calc(0.06s * var(--i)); }
+    .sidebar.expanded #sidebarFooter button span { transition-delay: calc(0.12s * var(--i)); }
+    .sidebar.expanded .brand-text { transition-delay: 0s; }
   </style>
 </head>
 
@@ -424,10 +429,10 @@
       sidebar.classList.add('collapsing');
 
       if (sidebarCollapsed) {
-        // COLLAPSING (to compact)
+        // COLLAPSING
         sidebar.classList.add('to-compact');
-        
-        // Immediately hide text with opacity
+        sidebar.classList.remove('expanded'); // NEW
+
         brandText.style.opacity = '0';
         
         menuLinks.forEach(l => {
@@ -446,7 +451,6 @@
           $(this).find('span').css('opacity', '0');
         });
 
-        // After text fades, start the layout changes
         setTimeout(() => {
           sidebar.style.width = '80px';
           mainContent.style.marginLeft = '80px';
@@ -457,7 +461,6 @@
           logoContainer.classList.replace('w-16', 'w-10');
           logoContainer.classList.replace('h-16', 'h-10');
 
-          // CENTER LOGO ROW
           const logoRow = logoContainer.closest('.flex');
           if (logoRow) logoRow.classList.add('centered');
 
@@ -486,8 +489,10 @@
         }, 100);
 
       } else {
-        // EXPANDING (to full)
+        // EXPANDING
         sidebar.classList.remove('to-compact');
+        sidebar.classList.add('expanded'); // NEW
+
         sidebar.style.width = '280px';
         mainContent.style.marginLeft = isMobile ? '80px' : '280px';
 
@@ -497,7 +502,6 @@
         logoContainer.classList.replace('w-10', 'w-16');
         logoContainer.classList.replace('h-10', 'h-16');
 
-        // RESTORE JUSTIFY-BETWEEN
         const logoRow = logoContainer.closest('.flex');
         if (logoRow) logoRow.classList.remove('centered');
 
@@ -510,7 +514,7 @@
         });
 
         collapsibleTriggers.forEach(t => {
-          t.classList.remove('justify-center', 'p-2.5', 'w-10', 'h-10');
+          t.classList.remove('justify-center');
           t.classList.add('justify-start');
           const s = t.querySelector('span');
           const c = t.querySelector('.chevron-icon');
@@ -525,29 +529,39 @@
           $(this).find('span').removeClass('hidden');
         });
 
-        // Show elements with delay after layout is set
+        // TEXT REVEAL AFTER EXPANSION
         setTimeout(() => {
           brandText.style.opacity = '1';
-
-          menuLinks.forEach(l => {
-            const s = l.querySelector('span');
-            if (s) s.style.opacity = '1';
-          });
-
+          menuLinks.forEach(l => { const s = l.querySelector('span'); if (s) s.style.opacity = '1'; });
           collapsibleTriggers.forEach(t => {
             const s = t.querySelector('span');
             const c = t.querySelector('.chevron-icon');
             if (s) s.style.opacity = '1';
             if (c) c.style.opacity = '1';
           });
-
           $('#sidebarFooter button').each(function () {
             $(this).find('span').css('opacity', '1');
           });
         }, 200);
       }
 
-      // Update dropdown heights
+      // STAGGERED INDEX
+      setTimeout(() => {
+        sidebar.classList.remove('collapsing', 'to-compact');
+        if (!sidebarCollapsed) {
+          const items = [
+            ...sidebar.querySelectorAll('.menu-link'),
+            ...sidebar.querySelectorAll('.collapsible-trigger'),
+            ...sidebar.querySelectorAll('#sidebarFooter button')
+          ];
+          items.forEach((el, i) => {
+            const span = el.querySelector('span');
+            if (span) span.style.setProperty('--i', i);
+          });
+        }
+      }, 700);
+
+      // Update dropdowns
       $('.collapsible-content').each(function () {
         if ($(this).hasClass('open')) {
           setTimeout(() => $(this).css('max-height', this.scrollHeight + 'px'), 0);
@@ -555,10 +569,6 @@
           $(this).css('max-height', '0');
         }
       });
-
-      setTimeout(() => {
-        sidebar.classList.remove('collapsing', 'to-compact');
-      }, 700);
     }
 
     function checkResponsive() {
@@ -626,8 +636,6 @@
       });
 
       applyCollapsedStyles();
-
-      // Ensure all dropdowns start closed
       $('.collapsible-content').each(function () {
         if (!$(this).hasClass('open')) $(this).css('max-height', '0');
       });
