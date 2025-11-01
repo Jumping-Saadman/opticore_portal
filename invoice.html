@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* Image Watermark */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) ;
+            width: 100%;
+            max-width: 600px;
+            opacity: 0.05;
+            /* Adjust: 0.05 = very faint, 0.15 = stronger */
+            pointer-events: none;
+            user-select: none;
+            z-index: 11;
+        }
+
+        /* Ensure content stays above watermark */
+        .invoice-container {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-6 md:p-8 font-sans relative min-h-screen">
+
+    <!-- Watermark Logo (Background) -->
+    <!-- <div class="watermark">JANA</div> -->
+
+    <!-- Watermark Image -->
+    <img src="jana-back.png" alt="Watermark" class="watermark">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden relative z-10">
+
+        <!-- Header: Logo + Company Info + Invoice Title -->
+        <div class="p-8 border-b border-gray-300 bg-gradient-to-br from-gray-50 to-white">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+
+                <!-- Logo + Company Name + Slogan -->
+                <div class="flex items-start gap-4">
+                    <!-- Logo Placeholder -->
+                    <img src="jana-back.png" class="w-16 h-16 rounded-lg">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">[Your Company Name]</h1>
+                        <p class="text-sm text-gray-600 italic">Your Company Slogan – Excellence in Every Detail</p>
+                        <div class="mt-2 text-xs text-gray-500 space-y-0.5">
+                            <p>123 Your Street, City, State 12345</p>
+                            <p>Phone: (123) 456-7890</p>
+                            <p>Email: info@yourcompany.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Title & Details -->
+                <div class="text-right">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-3">INVOICE</h2>
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <p><strong>Invoice No:</strong> INV-2025-001</p>
+                        <p><strong>Date:</strong> November 01, 2025</p>
+                        <p><strong>Due Date:</strong> November 15, 2025</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bill To / Ship To -->
+        <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-b border-gray-200">
+            <div>
+                <h3 class="font-semibold text-gray-700 mb-2">Bill To:</h3>
+                <p class="text-sm text-gray-600">Customer Name</p>
+                <p class="text-sm text-gray-600">456 Customer Street</p>
+                <p class="text-sm text-gray-600">City, State 67890</p>
+                <p class="text-sm text-gray-600">Phone: (098) 765-4321</p>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-700 mb-2">Ship To:</h3>
+                <p class="text-sm text-gray-600">Customer Name</p>
+                <p class="text-sm text-gray-600">456 Customer Street</p>
+                <p class="text-sm text-gray-600">City, State 67890</p>
+                <p class="text-sm text-gray-600">Phone: (098) 765-4321</p>
+            </div>
+        </div>
+
+        <!-- Pricing Table with Borders -->
+        <div class="p-8">
+            <table class="w-full border border-gray-300 rounded-lg overflow-hidden">
+                <thead class="bg-gray-100 border-b border-gray-300">
+                    <tr>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700 border-r border-gray-300">
+                            Quantity</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700 border-r border-gray-300">
+                            Description</th>
+                        <th class="text-right py-3 px-4 text-sm font-semibold text-gray-700 border-r border-gray-300">
+                            Unit Price</th>
+                        <th class="text-right py-3 px-4 text-sm font-semibold text-gray-700">Amount</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-300">
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="py-3 px-4 text-sm text-gray-600 border-r border-gray-300">1</td>
+                        <td class="py-3 px-4 text-sm text-gray-700 border-r border-gray-300">Premium Web Design Package
+                        </td>
+                        <td class="py-3 px-4 text-sm text-gray-600 text-right border-r border-gray-300">$1,200.00</td>
+                        <td class="py-3 px-4 text-sm text-gray-700 text-right">$1,200.00</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="py-3 px-4 text-sm text-gray-600 border-r border-gray-300">3</td>
+                        <td class="py-3 px-4 text-sm text-gray-700 border-r border-gray-300">Hosting & Maintenance
+                            (Annual)</td>
+                        <td class="py-3 px-4 text-sm text-gray-600 text-right border-r border-gray-300">$400.00</td>
+                        <td class="py-3 px-4 text-sm text-gray-700 text-right">$1,200.00</td>
+                    </tr>
+                    <!-- Subtotal -->
+                    <tr class="bg-gray-50 font-medium">
+                        <td colspan="3" class="py-3 px-4 text-right text-gray-700 border-r border-gray-300">Subtotal
+                        </td>
+                        <td class="py-3 px-4 text-sm text-gray-800 text-right">$2,400.00</td>
+                    </tr>
+                    <!-- Tax -->
+                    <tr>
+                        <td colspan="3" class="py-3 px-4 text-right text-gray-700 border-r border-gray-300">Sales Tax
+                            (10%)</td>
+                        <td class="py-3 px-4 text-sm text-gray-700 text-right">$240.00</td>
+                    </tr>
+                    <!-- Total -->
+                    <tr class="bg-blue-50 font-bold text-lg border-t-2 border-gray-400">
+                        <td colspan="3" class="py-4 px-4 text-right text-gray-800">TOTAL DUE</td>
+                        <td class="py-4 px-4 text-blue-600 text-right">$2,640.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-8 bg-gray-50 border-t border-gray-200 text-center">
+            <p class="text-sm text-gray-600 mb-2">
+                Make all cheques payable to <span class="font-semibold">[Your Company Name]</span>
+            </p>
+            <p class="text-sm text-gray-600 mb-1">
+                If you have any questions concerning this invoice, please contact:
+                <br>John Doe • (123) 456-7890 • john@yourcompany.com
+            </p>
+            <p class="mt-6 text-lg font-bold text-gray-800">
+                Thank you for your business!
+            </p>
+        </div>
+    </div>
+
+</body>
+
+</html>

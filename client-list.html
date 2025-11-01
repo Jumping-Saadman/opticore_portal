@@ -207,72 +207,123 @@
             { id: 'CL005', name: 'Global Systems', email: 'admin@global.com', type: 'OSL', status: 'Active', lastPayment: '$18,500' },
             { id: 'CL006', name: 'City Hotel', email: 'info@cityhotel.com', type: 'Jana', status: 'Active', lastPayment: '$4,200' },
             { id: 'CL007', name: 'Data Corp', email: 'contact@datacorp.com', type: 'OSL', status: 'Active', lastPayment: '$25,000' },
-            { id: 'CL008', name: 'Resort Plaza', email: 'admin@resortplaza.com', type: 'Jana', status: 'Inactive', lastPayment: '$1,500' }
+            { id: 'CL008', name: 'Resort Plaza', email: 'admin@resortplaza.com', type: 'Jana', status: 'Inactive', lastPayment: '$1,500' },
+            { id: 'CL009', name: 'Summit Hotels', email: 'info@summithotels.com', type: 'Jana', status: 'Active', lastPayment: '$5,800' },
+            { id: 'CL010', name: 'NextGen Tech', email: 'contact@nextgen.com', type: 'OSL', status: 'Active', lastPayment: '$31,200' },
+            { id: 'CL011', name: 'Coastal Resorts', email: 'admin@coastal.com', type: 'Jana', status: 'Active', lastPayment: '$4,900' },
+            { id: 'CL012', name: 'Innovate Systems', email: 'hello@innovate.com', type: 'OSL', status: 'Active', lastPayment: '$19,800' },
+            { id: 'CL013', name: 'Grand Palace', email: 'info@grandpalace.com', type: 'Jana', status: 'Inactive', lastPayment: '$2,100' },
+            { id: 'CL014', name: 'Cloud Networks', email: 'support@cloudnet.com', type: 'OSL', status: 'Active', lastPayment: '$28,500' },
+            { id: 'CL015', name: 'Luxury Suites', email: 'contact@luxurysuites.com', type: 'Jana', status: 'Active', lastPayment: '$6,200' },
+            { id: 'CL016', name: 'Digital Solutions', email: 'info@digitalsol.com', type: 'OSL', status: 'Active', lastPayment: '$21,000' },
+            { id: 'CL017', name: 'Sunset Inn', email: 'admin@sunsetinn.com', type: 'Jana', status: 'Active', lastPayment: '$3,800' },
+            { id: 'CL018', name: 'Prime Technologies', email: 'contact@primetech.com', type: 'OSL', status: 'Inactive', lastPayment: '$12,400' },
+            { id: 'CL019', name: 'Mountain View Resort', email: 'info@mountainview.com', type: 'Jana', status: 'Active', lastPayment: '$7,500' },
+            { id: 'CL020', name: 'Apex Systems', email: 'hello@apexsys.com', type: 'OSL', status: 'Active', lastPayment: '$33,000' },
+            { id: 'CL021', name: 'Harbor Hotel', email: 'contact@harborhotel.com', type: 'Jana', status: 'Active', lastPayment: '$4,600' },
+            { id: 'CL022', name: 'Fusion Corp', email: 'admin@fusioncorp.com', type: 'OSL', status: 'Active', lastPayment: '$26,700' },
+            { id: 'CL023', name: 'Riverside Lodge', email: 'info@riverside.com', type: 'Jana', status: 'Inactive', lastPayment: '$1,900' },
+            { id: 'CL024', name: 'Quantum Systems', email: 'support@quantum.com', type: 'OSL', status: 'Active', lastPayment: '$29,400' },
+            { id: 'CL025', name: 'Skyline Hotels', email: 'contact@skyline.com', type: 'Jana', status: 'Active', lastPayment: '$5,300' },
+            { id: 'CL026', name: 'Vertex Solutions', email: 'info@vertexsol.com', type: 'OSL', status: 'Active', lastPayment: '$24,800' },
+            { id: 'CL027', name: 'Ocean View Resort', email: 'admin@oceanview.com', type: 'Jana', status: 'Active', lastPayment: '$6,800' },
+            { id: 'CL028', name: 'Zenith Technologies', email: 'hello@zenithtech.com', type: 'OSL', status: 'Active', lastPayment: '$35,200' },
+            { id: 'CL029', name: 'Garden Inn', email: 'contact@gardeninn.com', type: 'Jana', status: 'Inactive', lastPayment: '$2,300' },
+            { id: 'CL030', name: 'Matrix Systems', email: 'info@matrixsys.com', type: 'OSL', status: 'Active', lastPayment: '$27,900' }
         ];
 
         let filteredData = [...clientData];
         let currentPage = 1;
         const itemsPerPage = 5;
 
-        // Create status badge
         function createStatusBadge(status) {
             const className = status === 'Active' ? 'status-active' : 'status-inactive';
             return `<span class="${className}">${status}</span>`;
         }
 
-        // Create type badge
         function createTypeBadge(type) {
             const className = type === 'OSL' ? 'type-osl' : 'type-jana';
             return `<span class="${className}">${type}</span>`;
         }
 
-        // Create action buttons
         function createActionButtons(client) {
-            return `
-                <div class="flex gap-2">
-                    <button class="btn-outline px-3 py-1 rounded text-sm hover:bg-gray-700" onclick="viewClient('${client.id}', '${client.name}')">
-                        View
-                    </button>
-                    <button class="btn-outline px-3 py-1 rounded text-sm hover:bg-gray-700" onclick="editClient('${client.id}', '${client.name}')">
-                        Edit
-                    </button>
-                </div>
-            `;
+            const div = document.createElement('div');
+            div.className = 'flex gap-2';
+            
+            const viewBtn = document.createElement('button');
+            viewBtn.className = 'btn-outline px-3 py-1 rounded text-sm hover:bg-gray-700';
+            viewBtn.textContent = 'View';
+            viewBtn.onclick = () => viewClient(client.id, client.name);
+            
+            const editBtn = document.createElement('button');
+            editBtn.className = 'btn-outline px-3 py-1 rounded text-sm hover:bg-gray-700';
+            editBtn.textContent = 'Edit';
+            editBtn.onclick = () => editClient(client.id, client.name);
+            
+            div.appendChild(viewBtn);
+            div.appendChild(editBtn);
+            
+            return div;
         }
 
-        // Create table row
         function createTableRow(client) {
-            return `
-                <tr class="table-row transition-colors">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${client.id}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${client.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${client.email}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">${createTypeBadge(client.type)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">${createStatusBadge(client.status)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${client.lastPayment}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">${createActionButtons(client)}</td>
-                </tr>
-            `;
+            const tr = document.createElement('tr');
+            tr.className = 'table-row transition-colors';
+            
+            const tdId = document.createElement('td');
+            tdId.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-white';
+            tdId.textContent = client.id;
+            
+            const tdName = document.createElement('td');
+            tdName.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-300';
+            tdName.textContent = client.name;
+            
+            const tdEmail = document.createElement('td');
+            tdEmail.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-300';
+            tdEmail.textContent = client.email;
+            
+            const tdType = document.createElement('td');
+            tdType.className = 'px-6 py-4 whitespace-nowrap text-sm';
+            tdType.innerHTML = createTypeBadge(client.type);
+            
+            const tdStatus = document.createElement('td');
+            tdStatus.className = 'px-6 py-4 whitespace-nowrap text-sm';
+            tdStatus.innerHTML = createStatusBadge(client.status);
+            
+            const tdPayment = document.createElement('td');
+            tdPayment.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-300';
+            tdPayment.textContent = client.lastPayment;
+            
+            const tdActions = document.createElement('td');
+            tdActions.className = 'px-6 py-4 whitespace-nowrap text-sm';
+            tdActions.appendChild(createActionButtons(client));
+            
+            tr.appendChild(tdId);
+            tr.appendChild(tdName);
+            tr.appendChild(tdEmail);
+            tr.appendChild(tdType);
+            tr.appendChild(tdStatus);
+            tr.appendChild(tdPayment);
+            tr.appendChild(tdActions);
+            
+            return tr;
         }
 
-        // Render table
         function renderTable() {
-            const tableBody = $('#clientTableBody');
-            tableBody.empty();
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
 
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             const pageData = filteredData.slice(startIndex, endIndex);
 
             pageData.forEach(client => {
-                tableBody.append(createTableRow(client));
+                tableBody.appendChild(createTableRow(client));
             });
 
-            // Update pagination info
             updatePaginationInfo();
         }
 
-        // Update pagination info
         function updatePaginationInfo() {
             const startIndex = (currentPage - 1) * itemsPerPage + 1;
             const endIndex = Math.min(currentPage * itemsPerPage, filteredData.length);
@@ -282,20 +333,18 @@
             $('#showingEnd').text(endIndex);
             $('#totalClients').text(total);
 
-            // Update pagination buttons
             $('#prevPage').prop('disabled', currentPage === 1);
             $('#nextPage').prop('disabled', endIndex >= total);
         }
 
-        // Filter data
         function filterData() {
             const searchQuery = $('#searchInput').val().toLowerCase();
             const filterType = $('#filterSelect').val();
 
             filteredData = clientData.filter(client => {
                 const matchesSearch = client.name.toLowerCase().includes(searchQuery) ||
-                                   client.email.toLowerCase().includes(searchQuery) ||
-                                   client.id.toLowerCase().includes(searchQuery);
+                               client.email.toLowerCase().includes(searchQuery) ||
+                               client.id.toLowerCase().includes(searchQuery);
                 const matchesFilter = filterType === 'all' || client.type.toLowerCase() === filterType;
                 return matchesSearch && matchesFilter;
             });
@@ -304,28 +353,34 @@
             renderTable();
         }
 
-        // Show toast notification
         function showToast(message, type = 'info') {
-            const toast = $(`
-                <div class="toast ${type}">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="h-5 w-5"></i>
-                        <span>${message}</span>
-                    </div>
-                </div>
-            `);
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
             
-            $('#toastContainer').append(toast);
+            const content = document.createElement('div');
+            content.className = 'flex items-center gap-2';
+            
+            const icon = document.createElement('i');
+            icon.setAttribute('data-lucide', type === 'success' ? 'check-circle' : 'info');
+            icon.className = 'h-5 w-5';
+            
+            const span = document.createElement('span');
+            span.textContent = message;
+            
+            content.appendChild(icon);
+            content.appendChild(span);
+            toast.appendChild(content);
+            
+            document.getElementById('toastContainer').appendChild(toast);
             lucide.createIcons();
             
-            setTimeout(() => toast.addClass('show'), 100);
+            setTimeout(() => toast.classList.add('show'), 100);
             setTimeout(() => {
-                toast.removeClass('show');
+                toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
 
-        // Action handlers
         function viewClient(id, name) {
             showToast(`View ${name}`, 'info');
         }
@@ -334,59 +389,6 @@
             showToast(`Edit ${name}`, 'info');
         }
 
-        // Event handlers
-        $(document).ready(function() {
-            // Initialize table
-            renderTable();
-            
-            // Search functionality
-            $('#searchInput').on('input', filterData);
-            
-            // Filter functionality
-            $('#filterSelect').on('change', filterData);
-            
-            // Button handlers
-            $('#addClientBtn').on('click', function() {
-                showToast('Add new client clicked', 'success');
-            });
-            
-            $('#exportCsvBtn').on('click', function() {
-                showToast('Export CSV clicked', 'success');
-            });
-            
-            // Pagination handlers
-            $('#prevPage').on('click', function() {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderTable();
-                }
-            });
-            
-            $('#nextPage').on('click', function() {
-                const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderTable();
-                }
-            });
-            
-            // Add keyboard shortcuts
-            $(document).on('keydown', function(e) {
-                if (e.ctrlKey && e.key === 'f') {
-                    e.preventDefault();
-                    $('#searchInput').focus();
-                }
-            });
-            
-            // Add row hover effects
-            $(document).on('mouseenter', '.table-row', function() {
-                $(this).addClass('bg-gray-800/50');
-            }).on('mouseleave', '.table-row', function() {
-                $(this).removeClass('bg-gray-800/50');
-            });
-        });
-
-        // Export functionality (basic CSV export)
         function exportToCSV() {
             const headers = ['Client ID', 'Name', 'Email', 'Type', 'Status', 'Last Payment'];
             const csvContent = [
@@ -410,11 +412,47 @@
             window.URL.revokeObjectURL(url);
         }
 
-        // Override export button to use CSV export
         $(document).ready(function() {
-            $('#exportCsvBtn').off('click').on('click', function() {
+            renderTable();
+            
+            $('#searchInput').on('input', filterData);
+            $('#filterSelect').on('change', filterData);
+            
+            $('#addClientBtn').on('click', function() {
+                showToast('Add new client clicked', 'success');
+            });
+            
+            $('#exportCsvBtn').on('click', function() {
                 exportToCSV();
                 showToast('CSV file downloaded', 'success');
+            });
+            
+            $('#prevPage').on('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+            
+            $('#nextPage').on('click', function() {
+                const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+            
+            $(document).on('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    $('#searchInput').focus();
+                }
+            });
+            
+            $(document).on('mouseenter', '.table-row', function() {
+                $(this).addClass('bg-gray-800/50');
+            }).on('mouseleave', '.table-row', function() {
+                $(this).removeClass('bg-gray-800/50');
             });
         });
     </script>
