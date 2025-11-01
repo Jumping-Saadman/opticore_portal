@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Blue Theme Modal</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.2/Inter.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400&family=Archivo:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            min-width: 320px !important;
+        }
+
+        body {
+            width: 100%;
+        }
+
+        main {
+            height: 100vh;
+            overflow-y: auto;
+            min-width: 320px;
+            width: 100%;
+        }
+
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1625;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4a4458;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5a5468;
+        }
+    </style>
+
+</head>
+
+<body class="bg-[#2C2638] font-['Inter'] flex flex-col items-center justify-center overflow-x-auto">
+    
+    <!-- Dark Blue Themed Modal -->
+    <div wire:ignore.self id="{{$name}}" tabindex="-1" aria-hidden="true"
+        class="fixed inset-0 z-50 overflow-y-auto bg-opacity-70 backdrop-blur-sm">
+        <div class="relative p-4 w-full max-w-3xl mx-auto mt-10">
+            <!-- Modal Content with Dark Blue Theme -->
+            <div class="relative bg-gradient-to-br from-[#1e3a5f] to-[#2d4a6e] rounded-2xl shadow-2xl border border-blue-400/20">
+                
+                <!-- Header -->
+                <div class="flex items-center justify-between p-6 border-b border-blue-400/20">
+                    <h3 class="text-2xl font-semibold text-white" id="modal-title">{{$title}}</h3>
+                    <button type="button"
+                        class="text-gray-300 hover:text-white hover:bg-blue-500/20 rounded-lg text-sm p-2 ml-auto inline-flex items-center transition-all duration-200"
+                        data-modal-hide="{{$name}}">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Form Content -->
+                <form wire:submit.prevent="{{$wireSubmit}}" id="{{$name}}" class="p-6 space-y-5"
+                    enctype="multipart/form-data">
+                    <input type="hidden" id="employee-id">
+                    
+                    @error('connection')
+                    <div class="text-center">
+                        <x-validation.error :message="$errors->first('connection')" />
+                    </div>
+                    @enderror
+                    
+                    <!-- Grid of Input Fields -->
+                    <div class="grid grid-cols-2 gap-5">
+                        <!-- Name -->
+                        <div>
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-200">Name</label>
+                            <input wire:model="name" type="text" id="name" name="name"
+                                class="bg-[#162e4d] border border-blue-400/30 text-white placeholder-gray-400 text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 block w-full p-3 transition-all duration-200"
+                                placeholder="Enter full name"
+                                required>
+                            @error('name')
+                            <x-validation.error :message="$errors->first('name')" />
+                            @enderror
+                        </div>
+
+                        <!-- Designation -->
+                        <div>
+                            <label for="designation" class="block mb-2 text-sm font-medium text-gray-200">Designation</label>
+                            <input wire:model="designation" type="text" id="designation" name="designation"
+                                class="bg-[#162e4d] border border-blue-400/30 text-white placeholder-gray-400 text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 block w-full p-3 transition-all duration-200"
+                                placeholder="Job title"
+                                required>
+                            @error('designation')
+                            <x-validation.error :message="$errors->first('designation')" />
+                            @enderror
+                        </div>
+
+                        <!-- Address -->
+                        <div>
+                            <label for="address" class="block mb-2 text-sm font-medium text-gray-200">Address</label>
+                            <textarea wire:model="address" id="address" name="address" rows="3"
+                                class="bg-[#162e4d] border border-blue-400/30 text-white placeholder-gray-400 text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 block w-full p-3 transition-all duration-200 resize-none"
+                                placeholder="Enter full address"
+                                required></textarea>
+                            @error('address')
+                            <x-validation.error :message="$errors->first('address')" />
+                            @enderror
+                        </div>
+
+                        <!-- Phone -->
+                        <div>
+                            <label for="phone" class="block mb-2 text-sm font-medium text-gray-200">Phone</label>
+                            <input wire:model="phone" type="text" id="phone" name="phone"
+                                class="bg-[#162e4d] border border-blue-400/30 text-white placeholder-gray-400 text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 block w-full p-3 transition-all duration-200"
+                                placeholder="+880 1XXX-XXXXXX"
+                                required>
+                            @error('phone')
+                            <x-validation.error :message="$errors->first('phone')" />
+                            @enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-200">Email</label>
+                            <input wire:model="email" type="email" id="email" name="email"
+                                class="bg-[#162e4d] border border-blue-400/30 text-white placeholder-gray-400 text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 block w-full p-3 transition-all duration-200"
+                                placeholder="example@email.com"
+                                required>
+                            @error('email')
+                            <x-validation.error :message="$errors->first('email')" />
+                            @enderror
+                        </div>
+
+                        <!-- NID -->
+                        <div>
+                            <label for="nid" class="block mb-2 text-sm font-medium text-gray-200">NID</label>
+                            <input wire:model="nid" type="text" id="nid" name="nid"
+                                class="bg-[#162e4d] border border-blue-400/30 text-white placeholder-gray-400 text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 block w-full p-3 transition-all duration-200"
+                                placeholder="National ID number"
+                                required>
+                            @error('nid')
+                            <x-validation.error :message="$errors->first('nid')" />
+                            @enderror
+                        </div>
+
+                        <!-- Joining Date -->
+                        <div>
+                            <label for="joining_date" class="block mb-2 text-sm font-medium text-gray-200">Joining Date</label>
+                            <input wire:model="joining_date" type="date" id="joining_date" name="joining_date"
+                                class="bg-[#162e4d] border border-blue-400/30 text-white placeholder-gray-400 text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 block w-full p-3 transition-all duration-200"
+                                required>
+                            @error('joining_date')
+                            <x-validation.error :message="$errors->first('joining_date')" />
+                            @enderror
+                        </div>
+
+                        <!-- Profile Picture -->
+                        <div>
+                            <label for="profile_picture" class="block mb-2 text-sm font-medium text-gray-200">Profile Picture</label>
+                            <input wire:model="profile_picture" type="file" id="profile_picture" name="profile_picture"
+                                class="block w-full text-sm text-gray-300 border border-blue-400/30 rounded-lg cursor-pointer bg-[#162e4d] focus:outline-none focus:ring-2 focus:ring-blue-400 file:mr-4 file:py-2 file:px-4 file:rounded-l-lg file:border-0 file:text-sm file:font-medium file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer transition-all duration-200">
+                            @error('profile_picture')
+                            <x-validation.error :message="$errors->first('profile_picture')" />
+                            @enderror
+                        </div>
+
+                        <!-- Documents -->
+                        <div>
+                            <label for="documents" class="block mb-2 text-sm font-medium text-gray-200">Upload Documents</label>
+                            <input wire:model="documents" type="file" id="documents" name="documents[]"
+                                class="block w-full text-sm text-gray-300 border border-blue-400/30 rounded-lg cursor-pointer bg-[#162e4d] focus:outline-none focus:ring-2 focus:ring-blue-400 file:mr-4 file:py-2 file:px-4 file:rounded-l-lg file:border-0 file:text-sm file:font-medium file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer transition-all duration-200"
+                                multiple>
+                            @error('documents')
+                            <x-validation.error :message="$errors->first('documents')" />
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end space-x-3 pt-4 border-t border-blue-400/20">
+                        <button type="button" data-modal-hide="{{$name}}"
+                            class="text-gray-200 bg-transparent hover:bg-blue-500/20 focus:ring-4 focus:ring-blue-500/20 rounded-lg border border-blue-400/40 text-sm font-medium px-6 py-2.5 transition-all duration-200 hover:border-blue-400/60 hover:text-white">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-500/50 font-medium rounded-lg text-sm px-6 py-2.5 shadow-lg shadow-blue-500/30 transition-all duration-200">
+                            {{$actionName}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+</body>
+
+</html>
