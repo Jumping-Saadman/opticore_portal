@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,23 +10,39 @@
     /* ---------- PRINT PAGE SETUP ---------- */
     @page {
       size: A4;
-      margin: 0;               /* we control margins ourselves */
+      margin: 0;
+      /* we control margins ourselves */
     }
 
     @media print {
-      html, body { height: 296mm; }   /* force one page height */
-      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .no-print { display: none; }
+
+      html,
+      body {
+        height: 296mm;
+      }
+
+      /* force one page height */
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .no-print {
+        display: none;
+      }
     }
 
     /* ---------- ONE A4 PAGE ---------- */
     .page {
       width: 210mm;
-      height: 296mm;           /* exact A4 height */
+      height: 296mm;
+      /* exact A4 height */
       margin: 0 auto;
-      position: relative;     /* establishes positioning context */
+      position: relative;
+      /* establishes positioning context */
       box-sizing: border-box;
-      padding-bottom: 15mm;   /* bottom padding = footer height */
+      padding-bottom: 15mm;
+      /* bottom padding = footer height */
       font-family: Arial, sans-serif;
       background: white;
     }
@@ -41,7 +58,8 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      right: 0;         /* adjust to your needs */
+      right: 0;
+      /* adjust to your needs */
       padding: 5mm;
       text-align: center;
       font-size: 0.85rem;
@@ -51,7 +69,8 @@
     /* ---------- WATERMARK ---------- */
     .watermark {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
       max-width: 80%;
       opacity: 0.07;
@@ -66,7 +85,7 @@
   <div class="page">
 
     <!-- Watermark -->
-    <img src="jana-back.png" alt="Watermark" class="watermark">
+    <img src="jana.png" alt="Watermark" class="watermark">
 
     <!-- ==== MAIN INVOICE ==== -->
     <div class="invoice-container max-w-full">
@@ -124,8 +143,10 @@
           <thead class="bg-gray-100 border-b border-gray-300">
             <tr>
               <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700 border-r border-gray-300">Quantity</th>
-              <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700 border-r border-gray-300">Description</th>
-              <th class="text-right py-3 px-4 text-sm font-semibold text-gray-700 border-r border-gray-300">Unit Price</th>
+              <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700 border-r border-gray-300">Description
+              </th>
+              <th class="text-right py-3 px-4 text-sm font-semibold text-gray-700 border-r border-gray-300">Unit Price
+              </th>
               <th class="text-right py-3 px-4 text-sm font-semibold text-gray-700">Amount</th>
             </tr>
           </thead>
@@ -164,11 +185,11 @@
 
     <!-- ==== PAGE FOOTER ==== -->
     <div class="page-footer bg-gradient-to-b from-white to-blue-300">
-        <div class="flex justify-center items-center space-x-6 mb-3">
-        <img src="alliance.webp" alt="Partner Logo 1" class="h-12 opacity-75">
-        <img src="opticore.png" alt="Certification Logo 2" class="h-12 opacity-75">
-        <img src="jana.png" alt="Payment Logo 3" class="h-12 opacity-75">
-      </div>
+      <div class="flex justify-center items-center space-x-6 mb-3">
+        <img src="alliance.webp" alt="Partner Logo 1" class="h-12 opacity-75">
+        <img src="opticore.png" alt="Certification Logo 2" class="h-12 opacity-75">
+        <img src="jana.png" alt="Payment Logo 3" class="h-12 opacity-75">
+      </div>
       <p class="mb-2">
         This invoice was generated on a computer and is valid without a signature or seal.
       </p>
@@ -184,4 +205,5 @@
   </div>
   <!-- END .page -->
 </body>
+
 </html>
