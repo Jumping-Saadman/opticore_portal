@@ -136,6 +136,9 @@
     .sidebar.expanded .collapsible-trigger span { transition-delay: calc(0.06s * var(--i)); }
     .sidebar.expanded #sidebarFooter button span { transition-delay: calc(0.06s * var(--i)); }
     .sidebar.expanded .brand-text { transition-delay: 0s; }
+
+    #sidebarDragHandle:hover { background: hsl(217 91% 60% / 0.3); }
+
   </style>
 </head>
 
@@ -355,6 +358,13 @@
         </button>
       </div>
     </div>
+
+    <div id="sidebarDragHandle"
+  class="absolute top-0 right-0 h-full w-[8px] flex justify-center items-center cursor-ew-resize bg-transparent z-[150] group">
+  <!-- visible bar -->
+  <div class="w-[2px] h-1/2 rounded-full bg-gray-400 group-hover:bg-gray-300 transition-all"></div>
+</div>
+
   </aside>
 
   <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[99]"></div>
@@ -640,6 +650,76 @@
         if (!$(this).hasClass('open')) $(this).css('max-height', '0');
       });
     }
+
+    let isDragging = false;
+let startX = 0;
+let startWidth = 0;
+let dragThreshold = 160; // point where it decides collapse vs expand
+
+function initSidebarDrag() {
+  const sidebar = document.getElementById('sidebar');
+  const handle = document.getElementById('sidebarDragHandle');
+  const mainContent = document.getElementById('mainContent');
+
+  const startDrag = (clientX) => {
+    isDragging = true;
+    startX = clientX;
+    startWidth = sidebar.offsetWidth;
+    document.body.classList.add('select-none'); // prevent text highlight
+    sidebar.style.transition = 'none';
+    mainContent.style.transition = 'none';
+  };
+
+  const duringDrag = (clientX) => {
+    if (!isDragging) return;
+    const delta = clientX - startX;
+    const newWidth = Math.min(Math.max(80, startWidth + delta), 400);
+    sidebar.style.width = newWidth + 'px';
+    mainContent.style.marginLeft = newWidth + 'px';
+  };
+
+  const endDrag = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    document.body.classList.remove('select-none');
+
+    const currentWidth = sidebar.offsetWidth;
+    sidebar.style.transition = 'width 0.3s ease';
+    mainContent.style.transition = 'margin-left 0.3s ease';
+
+    // Snap logic
+    if (currentWidth < dragThreshold) {
+      sidebarCollapsed = true;
+      sidebar.style.width = '80px';
+      mainContent.style.marginLeft = '80px';
+    } else {
+      sidebarCollapsed = false;
+      sidebar.style.width = '280px';
+      mainContent.style.marginLeft = '280px';
+    }
+
+    localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+    applyCollapsedStyles();
+  };
+
+  // Mouse events
+  handle.addEventListener('mousedown', e => startDrag(e.clientX));
+  document.addEventListener('mousemove', e => duringDrag(e.clientX));
+  document.addEventListener('mouseup', endDrag);
+
+  // Touch events
+  handle.addEventListener('touchstart', e => startDrag(e.touches[0].clientX));
+  document.addEventListener('touchmove', e => duringDrag(e.touches[0].clientX));
+  document.addEventListener('touchend', endDrag);
+}
+
+// Initialize after DOM ready
+$(document).ready(function () {
+  initSidebarDrag();
+});
+
+
+
   </script>
 </body>
 

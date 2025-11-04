@@ -95,41 +95,101 @@
         .page { display: none; }
         .page.active { display: table-row-group; }
         .filter-hidden { display: none; }
+
+        /* Mobile Card Styles */
+        @media (max-width: 768px) {
+            .table-wrapper {
+                display: none;
+            }
+            
+            .mobile-cards {
+                display: block;
+            }
+            
+            .log-card {
+                background: linear-gradient(135deg, hsl(240, 8%, 9%) 0%, hsl(240, 8%, 7%) 100%);
+                border: 1px solid #374151;
+                border-radius: 0.75rem;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                box-shadow: var(--shadow-3d-sm);
+            }
+            
+            .log-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: start;
+                margin-bottom: 0.75rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px solid #374151;
+            }
+            
+            .log-card-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid rgba(55, 65, 81, 0.3);
+            }
+            
+            .log-card-row:last-child {
+                border-bottom: none;
+            }
+            
+            .log-card-label {
+                font-size: 0.75rem;
+                color: #9ca3af;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.025em;
+            }
+            
+            .log-card-value {
+                font-size: 0.875rem;
+                color: #e5e7eb;
+                text-align: right;
+                max-width: 60%;
+                word-break: break-word;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-cards {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
-            <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+        <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                 System Logs (Static)
             </h1>
             <div class="flex gap-3">
-                <button id="refreshBtn" class="btn-primary px-4 py-2 rounded-lg font-medium flex items-center gap-2">
+                <button id="refreshBtn" class="btn-primary px-3 md:px-4 py-2 rounded-lg font-medium flex items-center gap-2 text-sm md:text-base">
                     <i data-lucide="refresh-cw" class="h-4 w-4"></i>
-                    Refresh
+                    <span class="hidden sm:inline">Refresh</span>
                 </button>
-                <button id="exportCsvBtn" class="btn-outline px-4 py-2 rounded-lg font-medium">
-                    Export CSV
+                <button id="exportCsvBtn" class="btn-outline px-3 md:px-4 py-2 rounded-lg font-medium text-sm md:text-base">
+                    Export
                 </button>
             </div>
         </div>
 
-        <!-- Filter & Search (Swapped) -->
-        <div class="flex items-center justify-between gap-4 mb-6">
-            <!-- Filter Section (Left) -->
-            <div class="flex-1 max-w-md flex gap-3 items-center">
-                <select id="filterType1" class="w-40 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:border-emerald-500">
+        <!-- Filter & Search -->
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
+            <!-- Filter Section -->
+            <div class="flex-1 flex flex-col sm:flex-row gap-3 items-stretch">
+                <select id="filterType1" class="w-full sm:w-40 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:border-emerald-500 text-sm">
                     <option value="all">All Filters</option>
                     <option value="user">User</option>
                     <option value="level">Level</option>
                     <option value="date">Date</option>
                 </select>
 
-                <!-- Conditional Filter 2 -->
-                <div id="filterContainer2" class="flex gap-2 items-center">
-                    <!-- User Filter -->
-                    <select id="filterUser" class="filter-option w-48 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg hidden">
+                <div id="filterContainer2" class="flex flex-wrap gap-2 items-center">
+                    <select id="filterUser" class="filter-option w-full sm:w-48 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg hidden text-sm">
                         <option value="">All Users</option>
                         <option value="admin">admin</option>
                         <option value="user123">user123</option>
@@ -140,8 +200,7 @@
                         <option value="system">system</option>
                     </select>
 
-                    <!-- Level Filter -->
-                    <select id="filterLevel" class="filter-option w-48 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg hidden">
+                    <select id="filterLevel" class="filter-option w-full sm:w-48 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg hidden text-sm">
                         <option value="">All Levels</option>
                         <option value="INFO">INFO</option>
                         <option value="WARN">WARN</option>
@@ -149,27 +208,26 @@
                         <option value="DEBUG">DEBUG</option>
                     </select>
 
-                    <!-- Date Filter -->
-                    <input id="filterDate" type="date" class="filter-option w-40 bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg hidden" value="2025-10-30">
-                    <input id="filterTimeStart" type="time" class="filter-option w-24 bg-gray-800 border border-gray-700 text-white px-2 py-2 rounded-lg hidden" value="00:00">
-                    <span class="text-gray-400 hidden" id="toText">to</span>
-                    <input id="filterTimeEnd" type="time" class="filter-option w-24 bg-gray-800 border border-gray-700 text-white px-2 py-2 rounded-lg hidden" value="23:59">
+                    <input id="filterDate" type="date" class="filter-option w-full sm:w-auto bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg hidden text-sm" value="2025-10-30">
+                    <input id="filterTimeStart" type="time" class="filter-option w-24 bg-gray-800 border border-gray-700 text-white px-2 py-2 rounded-lg hidden text-sm" value="00:00">
+                    <span class="text-gray-400 hidden text-sm" id="toText">to</span>
+                    <input id="filterTimeEnd" type="time" class="filter-option w-24 bg-gray-800 border border-gray-700 text-white px-2 py-2 rounded-lg hidden text-sm" value="23:59">
                 </div>
             </div>
 
-            <!-- Search (Right) -->
-            <div class="flex-1 max-w-sm">
+            <!-- Search -->
+            <div class="flex-1 md:max-w-sm">
                 <input 
                     type="text" 
                     id="searchInput" 
                     placeholder="Search logs..." 
-                    class="search-input w-full px-3 py-2 rounded-lg text-white placeholder-gray-400 focus:outline-none"
+                    class="search-input w-full px-3 py-2 rounded-lg text-white placeholder-gray-400 focus:outline-none text-sm"
                 />
             </div>
         </div>
 
-        <!-- Table -->
-        <div class="table-card rounded-lg border border-gray-700 overflow-hidden">
+        <!-- Desktop Table View -->
+        <div class="table-card rounded-lg border border-gray-700 overflow-hidden table-wrapper">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-gray-800">
@@ -186,8 +244,6 @@
                         </tr>
                     </thead>
                     <tbody id="logTableBody" class="divide-y divide-gray-700">
-
-                        <!-- PAGE 1 -->
                         <tbody class="page active" data-page="1">
                             <tr class="table-row" data-user="admin" data-level="INFO" data-date="2025-10-30">
                                 <td class="px-6 py-4 text-sm font-mono text-gray-300">LOG001</td>
@@ -246,7 +302,6 @@
                             </tr>
                         </tbody>
 
-                        <!-- PAGE 2 -->
                         <tbody class="page" data-page="2">
                             <tr class="table-row" data-user="osl_client" data-level="INFO" data-date="2025-10-29">
                                 <td class="px-6 py-4 text-sm font-mono text-gray-300">LOG006</td>
@@ -259,8 +314,6 @@
                                 <td class="px-6 py-4 text-sm text-gray-300">38ms</td>
                                 <td class="px-6 py-4 text-sm text-gray-200 max-w-md truncate" title="OSL client authenticated">OSL client authenticated</td>
                             </tr>
-                            <!-- Add more rows here for page 2, 3, etc. -->
-                            <!-- Example row -->
                             <tr class="table-row" data-user="jana_client" data-level="WARN" data-date="2025-10-29">
                                 <td class="px-6 py-4 text-sm font-mono text-gray-300">LOG007</td>
                                 <td class="px-6 py-4 text-sm font-mono text-gray-400">2025-10-29 15:45:22</td>
@@ -272,33 +325,31 @@
                                 <td class="px-6 py-4 text-sm text-gray-300">67ms</td>
                                 <td class="px-6 py-4 text-sm text-gray-200 max-w-md truncate" title="Rate limit exceeded for Jana client">Rate limit exceeded for Jana client</td>
                             </tr>
-                            <!-- Repeat for 3 more rows to make 5 per page -->
                         </tbody>
-
-                        <!-- Add more <tbody class="page" data-page="3"> etc. as needed -->
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Mobile Card View -->
+        <div id="mobileCardsContainer" class="mobile-cards"></div>
+
         <!-- Pagination -->
-        <div class="flex items-center justify-between mt-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4">
             <div class="text-sm text-gray-400">
-                Showing <span id="showingStart">1</span> to <span id="showingEnd">5</span> of <span id="totalLogs">30</span> logs
+                Showing <span id="showingStart">1</span> to <span id="showingEnd">5</span> of <span id="totalLogs">7</span> logs
             </div>
             <div class="flex items-center gap-2">
                 <button id="prevPage" class="btn-outline px-3 py-2 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
                 <select id="pageSelect" class="bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-emerald-500">
                     <option value="1">Page 1</option>
                     <option value="2">Page 2</option>
-                    <!-- Add more as needed -->
                 </select>
                 <button id="nextPage" class="btn-outline px-3 py-2 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast -->
     <div id="toastContainer"></div>
 
     <script>
@@ -306,10 +357,71 @@
         let currentPage = 1;
         const totalPages = Math.ceil($('.table-row').length / itemsPerPage);
 
-        // Initialize page select
         $('#pageSelect').empty();
         for (let i = 1; i <= totalPages; i++) {
             $('#pageSelect').append(`<option value="${i}">Page ${i}</option>`);
+        }
+
+        function renderMobileCards() {
+            const container = $('#mobileCardsContainer');
+            container.empty();
+            
+            $('.table-row:visible').each(function() {
+                const row = $(this);
+                const tds = row.find('td');
+                
+                const id = tds.eq(0).text();
+                const timestamp = tds.eq(1).text();
+                const levelHtml = tds.eq(2).html();
+                const source = tds.eq(3).text();
+                const user = tds.eq(4).text();
+                const severityHtml = tds.eq(5).html();
+                const ip = tds.eq(6).text();
+                const duration = tds.eq(7).text();
+                const message = tds.eq(8).attr('title') || tds.eq(8).text();
+                
+                const card = $(`
+                    <div class="log-card">
+                        <div class="log-card-header">
+                            <div>
+                                <div class="text-xs text-gray-400 mb-1">Log ID</div>
+                                <div class="font-mono text-sm text-white">${id}</div>
+                            </div>
+                            <div>${levelHtml}</div>
+                        </div>
+                        <div class="log-card-row">
+                            <span class="log-card-label">Timestamp</span>
+                            <span class="log-card-value font-mono text-xs">${timestamp}</span>
+                        </div>
+                        <div class="log-card-row">
+                            <span class="log-card-label">Source</span>
+                            <span class="log-card-value font-medium">${source}</span>
+                        </div>
+                        <div class="log-card-row">
+                            <span class="log-card-label">User</span>
+                            <span class="log-card-value">${user}</span>
+                        </div>
+                        <div class="log-card-row">
+                            <span class="log-card-label">Severity</span>
+                            <span class="log-card-value">${severityHtml}</span>
+                        </div>
+                        <div class="log-card-row">
+                            <span class="log-card-label">IP Address</span>
+                            <span class="log-card-value"><code class="text-xs">${ip}</code></span>
+                        </div>
+                        <div class="log-card-row">
+                            <span class="log-card-label">Duration</span>
+                            <span class="log-card-value">${duration}</span>
+                        </div>
+                        <div class="log-card-row">
+                            <span class="log-card-label">Message</span>
+                            <span class="log-card-value">${message}</span>
+                        </div>
+                    </div>
+                `);
+                
+                container.append(card);
+            });
         }
 
         function updatePagination() {
@@ -317,11 +429,16 @@
             $('#prevPage').prop('disabled', currentPage === 1);
             $('#nextPage').prop('disabled', currentPage === totalPages);
             $('#pageSelect').val(currentPage);
-            const start = (currentPage - 1) * itemsPerPage + 1;
-            const end = Math.min(currentPage * itemsPerPage, $('.table-row').length);
+            
+            const visibleRows = $('.table-row:visible').length;
+            const start = visibleRows > 0 ? ((currentPage - 1) * itemsPerPage + 1) : 0;
+            const end = Math.min(currentPage * itemsPerPage, visibleRows);
+            
             $('#showingStart').text(start);
             $('#showingEnd').text(end);
-            $('#totalLogs').text($('.table-row').length);
+            $('#totalLogs').text(visibleRows);
+            
+            renderMobileCards();
         }
 
         function applyFilters() {
@@ -356,7 +473,6 @@
             updatePagination();
         }
 
-        // Filter 2 visibility
         $('#filterType1').on('change', function() {
             const val = $(this).val();
             $('.filter-option, #toText').addClass('hidden');
@@ -368,7 +484,6 @@
             applyFilters();
         });
 
-        // Event Listeners
         $('#searchInput').on('input', applyFilters);
         $('#filterUser, #filterLevel, #filterDate, #filterTimeStart, #filterTimeEnd').on('change', applyFilters);
         $('#prevPage').on('click', () => { if (currentPage > 1) { currentPage--; updatePagination(); } });
@@ -411,9 +526,7 @@
         }
 
         $(document).ready(function() {
+            lucide.createIcons();
             updatePagination();
             applyFilters();
         });
-    </script>
-</body>
-</html>
