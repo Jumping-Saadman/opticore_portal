@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Elegant Essentials – Modern Lifestyle Store</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- GSAP + ScrollTrigger + ScrollToPlugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+  
+  <!-- Lottie for lightweight animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  
+  <!-- Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .cursor-trail { pointer-events: none; position: fixed; width: 12px; height: 12px; background: rgba(212, 175, 55, 0.4); border-radius: 50%; transform: translate(-50%, -50%); z-index: 9999; transition: transform 0.1s; }
+    .parallax-bg { background-attachment: fixed; background-position: center; background-size: cover; }
+    @media (max-width: 768px) { .parallax-bg { background-attachment: scroll; } }
+  </style>
+</head>
+<body class="bg-[#faf9f6] text-[#1a3a32] overflow-x-hidden">
+
+  <!-- Cursor Trail -->
+  <div class="cursor-trail" id="cursor"></div>
+
+  <!-- Sticky Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="header">
+    <nav class="container mx-auto px-6 py-5 flex justify-between items-center bg-white/80 backdrop-blur-lg shadow-lg rounded-b-3xl">
+      <a href="#" class="text-2xl font-bold text-[#228B22]">Elegant<span class="text-[#D4AF37]">Essentials</span></a>
+      <div class="hidden md:flex space-x-10 text-lg font-medium">
+        <a href="#home" class="hover:text-[#D4AF37] transition">Home</a>
+        <a href="#products" class="hover:text-[#D4AF37] transition">Products</a>
+        <a href="#shipping" class="hover:text-[#D4AF37] transition">Shipping</a>
+        <a href="#contact" class="hover:text-[#D4AF37] transition">Contact</a>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button id="cartBtn" class="relative">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span class="absolute -top-2 -right-2 bg-[#D4AF37] text-white text-xs rounded-full w-6 h-6 flex items-center justify-center" id="cartCount">0</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="relative h-screen flex items-center justify-center parallax-bg" style="background-image: url('https://images.unsplash.com/photo-1551489186-cf8726f514f8?ixlib=rb-4.0.3&auto=format&fit=crop&q=80')">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30"></div>
+    <div class="relative text-center text-white px-6">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight" data-aos="fade-up">
+        Timeless Elegance,<br>Redefined Daily
+      </h1>
+      <p class="text-xl md:text-2xl mb-10 opacity-90" data-aos="fade-up" data-aos-delay="200">
+        Curated essentials for the modern soul
+      </p>
+      <a href="#products" class="inline-block bg-[#D4AF37] hover:bg-[#228B22] text-white font-bold py-5 px-12 rounded-full text-lg transition transform hover:scale-105 shadow-2xl">
+        Shop Now
+      </a>
+      <div class="mt-16" id="lottie-hero"></div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section id="products" class="py-24 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-5xl font-bold text-center mb-16 text-[#1a3a32]">Featured Collection</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Product Card -->
+        <div class="group bg-[#faf9f6] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3" data-product="Linen Shirt">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1622447272973-39e4451c3d87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Linen Shirt" class="w-full h-96 object-cover group-hover:scale-110 transition duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+            <button class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-[#228B22] font-bold py-3 px-8 rounded-full opacity-0 group-hover:opacity-100 transition add-to-cart">
+              Add to Cart
+            </button>
+          </div>
+          <div class="p-6 text-center">
+            <h3 class="text-2xl font-semibold">Minimal Linen Shirt</h3>
+            <p class="text-[#D4AF37] text-2xl font-bold mt-2">৳2,990</p>
+          </div>
+        </div>
+        <!-- Repeat similar cards -->
+        <div class="group bg-[#faf9f6] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3" data-product="Leather Tote">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1584911845744-2613b5c34850?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Leather Tote" class="w-full h-96 object-cover group-hover:scale-110 transition duration-700">
+            <button class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-[#228B22] font-bold py-3 px-8 rounded-full opacity-0 group-hover:opacity-100 transition add-to-cart">
+              Add to Cart
+            </button>
+          </div>
+          <div class="p-6 text-center">
+            <h3 class="text-2xl font-semibold">Italian Leather Tote</h3>
+            <p class="text-[#D4AF37] text-2xl font-bold mt-2">৳8,500</p>
+          </div>
+        </div>
+        <div class="group bg-[#faf9f6] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3" data-product="Ceramic Vase">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1578500494075-68b3f2f4d1c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ceramic Vase" class="w-full h-96 object-cover group-hover:scale-110 transition duration-700">
+            <button class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-[#228B22] font-bold py-3 px-8 rounded-full opacity-0 group-hover:opacity-100 transition add-to-cart">
+              Add to Cart
+            </button>
+          </div>
+          <div class="p-6 text-center">
+            <h3 class="text-2xl font-semibold">Handcrafted Ceramic Vase</h3>
+            <p class="text-[#D4AF37] text-2xl font-bold mt-2">৳3,200</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="py-20 bg-[#f0ede5]">
+    <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10 text-center">
+      <div class="transform hover:scale-110 transition">
+        <div class="w-20 h-20 mx-auto mb-4 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
+          <svg class="w-12 h-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 7L9.5 17.5L4 12"/></svg>
+        </div>
+        <h3 class="font-bold text-xl">Free Shipping</h3>
+        <p>On orders over ৳5,000</p>
+      </div>
+      <div class="transform hover:scale-110 transition">
+        <div class="w-20 h-20 mx-auto mb-4 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
+          <svg class="w-12 h-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <h3 class="font-bold text-xl">30-Day Returns</h3>
+        <p>Hassle-free policy</p>
+      </div>
+      <div class="transform hover:scale-110 transition">
+        <div class="w-20 h-20 mx-auto mb-4 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
+          <svg class="w-12 h-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-xl">Sustainable</h3>
+        <p>Eco-friendly materials</p>
+      </div>
+      <div class="transform hover:scale-110 transition">
+        <div class="w-20 h-20 mx-auto mb-4 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
+          <svg class="w-12 h-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+        </div>
+        <h3 class="font-bold text-xl">24/7 Support</h3>
+        <p>We're here for you</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shipping Methods -->
+  <section id="shipping" class="py-20 bg-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-5xl font-bold mb-16">Shipping & Delivery</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="bg-[#faf9f6] p-10 rounded-3xl shadow-lg">
+          <h3 class="text-2xl font-bold mb-4">Standard Delivery</h3>
+          <p class="text-5xl font-bold text-[#D4AF37]">Free</p>
+          <p class="mt-4">3–5 business days (Orders over ৳5,000)</p>
+        </div>
+        <div class="bg-[#D4AF37] text-white p-10 rounded-3xl shadow-lg transform scale-110">
+          <h3 class="text-2xl font-bold mb-4">Express Delivery</h3>
+          <p class="text-5xl font-bold">৳300</p>
+          <p class="mt-4">1–2 business days</p>
+        </div>
+        <div class="bg-[#faf9f6] p-10 rounded-3xl shadow-lg">
+          <h3 class="text-2xl font-bold mb-4">International</h3>
+          <p class="text-5xl font-bold text-[#D4AF37]">৳2,000+</p>
+          <p class="mt-4">7–14 days worldwide</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Payment Methods -->
+  <section class="py-20 bg-[#1a3a32] text-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-5xl font-bold mb-16">Secure Payment Methods</h2>
+      <div class="flex flex-wrap justify-center gap-12 text-6xl">
+        <img src="https://cdn-icons-png.flaticon.com/512/349/349221.png" alt="Visa" class="h-12">
+        <img src="https://cdn-icons-png.flaticon.com/512/349/349228.png" alt="Mastercard" class="h-12">
+        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968349.png" alt="bKash" class="h-16">
+        <img src="https://cdn.worldvectorlogo.com/logos/nagad-1.svg" alt="Nagad" class="h-12">
+        <img src="https://cdn.worldvectorlogo.com/logos/google-pay-1.svg" alt="GPay" class="h-12">
+        <img src="https://cdn.worldvectorlogo.com/logos/apple-pay-2.svg" alt="Apple Pay" class="h-12">
+        <img src="https://cdn.worldvectorlogo.com/logos/paypal-2.svg" alt="PayPal" class="h-12">
+        <img src="https://cdn.worldvectorlogo.com/logos/stripe-2.svg" alt="Stripe" class="h-12">
+      </div>
+      <p class="mt-10 text-lg opacity-80">All transactions are encrypted and secure</p>
+    </div>
+  </section>
+
+  <!-- Contact & Newsletter -->
+  <section id="contact" class="py-20 bg-[#f0ede5]">
+    <div class="container mx-auto px-6 grid md:grid-cols-2 gap-16">
+      <div>
+        <h2 class="text-5xl font-bold mb-8">Stay Connected</h2>
+        <p class="text-xl mb-8">Get 15% off your first order + exclusive updates</p>
+        <form id="newsletter" class="flex flex-col md:flex-row gap-4">
+          <input type="email" placeholder="Your email" class="px-6 py-4 rounded-full text-lg flex-1 focus:outline-none focus:ring-4 focus:ring-[#D4AF37]" required>
+          <button type="submit" class="bg-[#228B22] hover:bg-[#D4AF37] text-white font-bold px-10 py-4 rounded-full transition">Subscribe</button>
+        </form>
+        <div class="mt-10 space-y-4 text-lg">
+          <p>📍 Dhaka, Bangladesh</p>
+          <p>📞 +880 1234 567890</p>
+          <p>✉️ hello@elegantessentials.com</p>
+        </div>
+      </div>
+      <div class="flex justify-center items-center">
+        <div class="w-80 h-80" id="lottie-contact"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#1a3a32] text-white py-12 text-center">
+    <p class="text-lg">&copy; 2025 Elegant Essentials. Made with ❤️ in Bangladesh</p>
+    <div class="flex justify-center space-x-6 mt-6">
+      <a href="#" class="hover:text-[#D4AF37] transition">Privacy</a>
+      <a href="#" class="hover:text-[#D4AF37] transition">Terms</a>
+      <a href="#" class="hover:text-[#D4AF37] transition">Refund Policy</a>
+    </div>
+  </footer>
+
+  <!-- Cart Toast -->
+  <div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-[#228B22] text-white px-8 py-4 rounded-full shadow-2xl opacity-0 transition-opacity duration-500 z-50">
+    Added to cart! 🎉
+  </div>
+
+  <script>
+    // Cart System
+    let cartCount = 0;
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+      btn.addEventListener('click', () => {
+        cartCount++;
+        document.getElementById('cartCount').textContent = cartCount;
+        const toast = document.getElementById('toast');
+        toast.classList.remove('opacity-0');
+        setTimeout(() => toast.classList.add('opacity-0'), 2000);
+      });
+    });
+
+    // Cursor Trail
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    // Header shrink
+    gsap.to("#header", {
+      backgroundColor: "rgba(255,255,255,0.95)",
+      paddingTop: "0.75rem",
+      paddingBottom: "0.75rem",
+      scrollTrigger: { trigger: "#home", start: "top top", end: "bottom top", scrub: true }
+    });
+
+    // Hero text
+    gsap.from("h1", { y: 100, opacity: 0, duration: 1.2, ease: "power4.out" });
+    gsap.from("p", { y: 60, opacity: 0, duration: 1, delay: 0.5 });
+    gsap.from("a[href='#products']", { scale: 0.8, opacity: 0, duration: 1, delay: 1 });
+
+    // Product cards
+    gsap.utils.toArray('.group').forEach(card => {
+      gsap.from(card, {
+        y: 100, opacity: 0, duration: 1,
+        scrollTrigger: { trigger: card, start: "top 80%" }
+      });
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        gsap.to(window, {duration: 1.5, scrollTo: this.getAttribute('href'), ease: "power4.inOut"});
+      });
+    });
+
+    // Lottie Animations
+    lottie.loadAnimation({
+      container: document.getElementById('lottie-hero'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'https://assets5.lottiefiles.com/packages/lf20_7fvq7mcu.json' // floating leaves
+    });
+    lottie.loadAnimation({
+      container: document.getElementById('lottie-contact'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'https://assets9.lottiefiles.com/packages/lf20_kkflmtur.json' // email animation
+    });
+  </script>
+</body>
+</html>

@@ -654,7 +654,11 @@
     let isDragging = false;
 let startX = 0;
 let startWidth = 0;
-let dragThreshold = 160; // point where it decides collapse vs expand
+let dragThreshold = 160; // snap cutoff
+
+function isMobileView() {
+  return window.innerWidth < 768; // Tailwind 'md' breakpoint
+}
 
 function initSidebarDrag() {
   const sidebar = document.getElementById('sidebar');
@@ -665,9 +669,9 @@ function initSidebarDrag() {
     isDragging = true;
     startX = clientX;
     startWidth = sidebar.offsetWidth;
-    document.body.classList.add('select-none'); // prevent text highlight
+    document.body.classList.add('select-none');
     sidebar.style.transition = 'none';
-    mainContent.style.transition = 'none';
+    if (!isMobileView()) mainContent.style.transition = 'none';
   };
 
   const duringDrag = (clientX) => {
@@ -675,7 +679,9 @@ function initSidebarDrag() {
     const delta = clientX - startX;
     const newWidth = Math.min(Math.max(80, startWidth + delta), 400);
     sidebar.style.width = newWidth + 'px';
-    mainContent.style.marginLeft = newWidth + 'px';
+    if (!isMobileView()) {
+      mainContent.style.marginLeft = newWidth + 'px';
+    }
   };
 
   const endDrag = () => {
@@ -685,39 +691,36 @@ function initSidebarDrag() {
 
     const currentWidth = sidebar.offsetWidth;
     sidebar.style.transition = 'width 0.3s ease';
-    mainContent.style.transition = 'margin-left 0.3s ease';
+    if (!isMobileView()) mainContent.style.transition = 'margin-left 0.3s ease';
 
-    // Snap logic
+    // SNAP logic
     if (currentWidth < dragThreshold) {
       sidebarCollapsed = true;
       sidebar.style.width = '80px';
-      mainContent.style.marginLeft = '80px';
+      if (!isMobileView()) mainContent.style.marginLeft = '80px';
     } else {
       sidebarCollapsed = false;
       sidebar.style.width = '280px';
-      mainContent.style.marginLeft = '280px';
+      if (!isMobileView()) mainContent.style.marginLeft = '280px';
     }
 
     localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
     applyCollapsedStyles();
   };
 
-  // Mouse events
+  // Mouse + touch listeners
   handle.addEventListener('mousedown', e => startDrag(e.clientX));
   document.addEventListener('mousemove', e => duringDrag(e.clientX));
   document.addEventListener('mouseup', endDrag);
 
-  // Touch events
   handle.addEventListener('touchstart', e => startDrag(e.touches[0].clientX));
   document.addEventListener('touchmove', e => duringDrag(e.touches[0].clientX));
   document.addEventListener('touchend', endDrag);
 }
 
-// Initialize after DOM ready
 $(document).ready(function () {
   initSidebarDrag();
 });
-
 
 
   </script>

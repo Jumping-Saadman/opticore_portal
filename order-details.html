@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Heroicons CDN for chevron -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <style>
+        body {
+            background: radial-gradient(circle at top left, #0f172a, #020617);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom glowing gradient border */
+        .glow-border {
+            position: relative;
+        }
+
+        .glow-border::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            padding: 2px;
+            background: linear-gradient(90deg, #14b8a6, #3b82f6, #8b5cf6);
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .chevron {
+            transition: transform 0.4s ease;
+        }
+
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+
+        /* Responsive table styling */
+        @media (max-width: 640px) {
+            .responsive-table thead {
+                display: none;
+            }
+
+            .responsive-table tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                border-radius: 0.75rem;
+            }
+
+            .responsive-table tbody tr.h-2 {
+                display: none;
+            }
+
+            .responsive-table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                border-radius: 0;
+            }
+
+            .responsive-table tbody td:first-child {
+                border-radius: 0.75rem 0.75rem 0 0;
+                font-weight: 600;
+                font-size: 0.95rem;
+            }
+
+            .responsive-table tbody td:last-child {
+                border-radius: 0 0 0.75rem 0.75rem;
+                border-top: 1px solid rgba(55, 65, 81, 0.5);
+            }
+
+            .responsive-table tbody td:not(:first-child):not(:last-child) {
+                border-top: 1px solid rgba(55, 65, 81, 0.5);
+            }
+
+            .responsive-table tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #22d3ee;
+                font-size: 0.8rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            .responsive-table tbody td:first-child::before {
+                content: none;
+            }
+        }
+
+        /* Responsive invoice cards */
+        @media (max-width: 640px) {
+            .invoice-card {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start !important;
+            }
+
+            .invoice-actions {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Responsive amount cards */
+        @media (max-width: 640px) {
+            .amount-container {
+                gap: 1rem;
+            }
+
+            .amount-card {
+                text-align: left !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center py-6 sm:py-12 px-3 sm:px-4">
+    <div
+        class="max-w-3xl w-full bg-gray-900/70 backdrop-blur-xl border border-gray-800 rounded-xl sm:rounded-2xl shadow-2xl text-gray-100 glow-border p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
+
+        <!-- HEADER -->
+        <div
+            class="flex flex-col justify-between items-start border-b border-gray-700 pb-4 fade-in space-y-3 sm:space-y-0">
+            <div class="w-full">
+                <h1
+                    class="text-2xl sm:text-3xl font-bold text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text">
+                    Order Details</h1>
+                <p class="text-xs sm:text-sm text-gray-400 mt-1">A summary of your service order</p>
+            </div>
+            <div class="w-full sm:text-right">
+                <p class="text-sm sm:text-base text-gray-300 font-semibold">Order # <span
+                        class="text-blue-400">#INV-2025-00123</span></p>
+                <p class="text-gray-400 text-xs sm:text-sm mt-1">Created at: Nov 10, 2025 | 10:45 AM</p>
+            </div>
+        </div>
+
+        <!-- COMPANY INFO -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 fade-in">
+            <div>
+                <h2 class="text-base sm:text-lg font-semibold text-cyan-400 mb-1">Company</h2>
+                <p class="font-medium text-sm sm:text-base">Skyline Tech Solutions Ltd.</p>
+                <p class="text-gray-400 text-xs sm:text-sm mt-1">House 24, Road 12, Banani, Dhaka</p>
+            </div>
+            <div>
+                <h2 class="text-base sm:text-lg font-semibold text-cyan-400 mb-1">Contact</h2>
+                <p class="font-medium text-sm sm:text-base">Md. Rahat Khan</p>
+                <p class="text-gray-400 text-xs sm:text-sm mt-1">📞 +880 1711-223344</p>
+                <p class="text-gray-400 text-xs sm:text-sm">✉️ rahat@skyline-tech.com</p>
+            </div>
+        </div>
+
+        <!-- SERVICES -->
+        <div class="fade-in">
+            <h2 class="text-base sm:text-lg font-semibold text-cyan-400 mb-2 border-b border-gray-700 pb-1">Service List
+            </h2>
+
+            <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+                <table class="w-full responsive-table">
+                    <thead>
+                        <tr class="bg-gray-800/30 text-gray-400 text-xs sm:text-sm">
+                            <th class="px-3 sm:px-4 py-2 sm:py-3 text-left rounded-tl-lg">Service Description</th>
+                            <th class="px-3 sm:px-4 py-2 sm:py-3 text-center">Unit Price</th>
+                            <th class="px-3 sm:px-4 py-2 sm:py-3 text-right rounded-tr-lg">Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="h-2"></tr>
+                        <tr class="bg-gray-800/50 hover:bg-gray-800 transition-all duration-300">
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 rounded-l-lg text-sm sm:text-base">Website Design &
+                                Development</td>
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 text-center text-gray-400 text-xs sm:text-sm"
+                                data-label="Unit Price">৳ 45,000</td>
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 text-right text-gray-400 text-xs sm:text-sm rounded-r-lg"
+                                data-label="Total">৳ 45,000</td>
+                        </tr>
+                        <tr class="h-2"></tr>
+                        <tr class="bg-gray-800/50 hover:bg-gray-800 transition-all duration-300">
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 rounded-l-lg text-sm sm:text-base">SEO Optimization (3
+                                months)</td>
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 text-center text-gray-400 text-xs sm:text-sm"
+                                data-label="Unit Price">৳ 15,000</td>
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 text-right text-gray-400 text-xs sm:text-sm rounded-r-lg"
+                                data-label="Total">৳ 15,000</td>
+                        </tr>
+                        <tr class="h-2"></tr>
+                        <tr class="bg-gray-800/50 hover:bg-gray-800 transition-all duration-300">
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 rounded-l-lg text-sm sm:text-base">Maintenance &
+                                Support</td>
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 text-center text-gray-400 text-xs sm:text-sm"
+                                data-label="Unit Price">৳ 10,000</td>
+                            <td class="px-3 sm:px-4 py-2 sm:py-3 text-right text-gray-400 text-xs sm:text-sm rounded-r-lg"
+                                data-label="Total">৳ 10,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- INVOICE RECORDS (COLLAPSIBLE DROPDOWN) -->
+        <div class="fade-in border border-gray-800 rounded-xl overflow-hidden">
+            <button id="toggleInvoices"
+                class="w-full flex justify-between items-center px-3 sm:px-4 py-3 bg-gray-800/40 hover:bg-gray-800/70 transition-all duration-300">
+                <h2 class="text-base sm:text-lg font-semibold text-cyan-400">Invoice Records</h2>
+                <i data-feather="chevron-down" class="chevron text-cyan-400 w-5 h-5"></i>
+            </button>
+
+            <div id="invoiceSection" class="hidden border-t border-gray-700 bg-gray-900/50">
+                <div class="p-3 sm:p-4 space-y-3">
+                    <div
+                        class="invoice-card bg-gray-800/40 border border-gray-700 rounded-xl p-3 sm:p-4 flex justify-between items-center hover:bg-gray-800/70 transition-all duration-300">
+                        <div>
+                            <p class="font-medium text-gray-200 text-sm sm:text-base">Invoice #INV-00145</p>
+                            <p class="text-xs sm:text-sm text-gray-400 mt-1">Issued on: Nov 5, 2025</p>
+                        </div>
+                        <div class="invoice-actions flex items-center gap-2 sm:gap-4">
+                            <span
+                                class="text-xs sm:text-sm bg-emerald-500/20 text-emerald-400 px-2 sm:px-3 py-1 rounded-full font-medium">Paid</span>
+                            <span class="text-gray-300 font-semibold text-sm sm:text-base">৳ 25,000</span>
+                            <button class="text-xs sm:text-sm text-cyan-400 hover:text-cyan-300 underline">View</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="invoice-card bg-gray-800/40 border border-gray-700 rounded-xl p-3 sm:p-4 flex justify-between items-center hover:bg-gray-800/70 transition-all duration-300">
+                        <div>
+                            <p class="font-medium text-gray-200 text-sm sm:text-base">Invoice #INV-00172</p>
+                            <p class="text-xs sm:text-sm text-gray-400 mt-1">Issued on: Nov 8, 2025</p>
+                        </div>
+                        <div class="invoice-actions flex items-center gap-2 sm:gap-4">
+                            <span
+                                class="text-xs sm:text-sm bg-rose-500/20 text-rose-400 px-2 sm:px-3 py-1 rounded-full font-medium">Pending</span>
+                            <span class="text-gray-300 font-semibold text-sm sm:text-base">৳ 25,000</span>
+                            <button class="text-xs sm:text-sm text-cyan-400 hover:text-cyan-300 underline">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AMOUNTS -->
+        <div class="amount-container flex flex-wrap justify-center sm:justify-between bg-gray-800/40 border border-gray-700 rounded-xl p-4 sm:p-5 mt-4 fade-in gap-4">
+            
+            <div class="amount-card flex-1 min-w-[100px] text-center space-y-1">
+                <p class="font-medium text-gray-300 text-xs sm:text-sm">Contract Amount</p>
+                <p class="text-lg sm:text-xl font-bold text-blue-400">৳ 70,000</p>
+            </div>
+
+            <div class="amount-card flex-1 min-w-[100px] text-center space-y-1">
+                <p class="font-medium text-gray-300 text-xs sm:text-sm">Paid Amount</p>
+                <p class="text-lg sm:text-xl font-bold text-emerald-400">৳ 50,000</p>
+            </div>
+
+            <div class="amount-card flex-1 min-w-[100px] text-center space-y-1">
+                <p class="font-medium text-gray-300 text-xs sm:text-sm">Due Amount</p>
+                <p class="text-lg sm:text-xl font-bold text-rose-400">৳ 20,000</p>
+            </div>
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+        <div class="text-center text-gray-500 text-xs sm:text-sm pt-4 sm:pt-6 fade-in">
+            <p>Thank you for choosing <span class="text-cyan-400 font-medium">Skyline Tech Solutions</span></p>
+            <p class="mt-1">This order summary was generated automatically on the portal.</p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize feather icons
+            feather.replace();
+
+            // Animate fade-ins as they appear in viewport
+            function fadeInElements() {
+                $('.fade-in').each(function () {
+                    const top_of_element = $(this).offset().top;
+                    const bottom_of_screen = $(window).scrollTop() + $(window).height();
+                    if (bottom_of_screen > top_of_element + 50) {
+                        $(this).addClass('visible');
+                    }
+                });
+            }
+
+            fadeInElements(); // on load
+            $(window).on('scroll', fadeInElements);
+
+            // Collapse dropdown for invoices
+            $('#toggleInvoices').on('click', function () {
+                $('#invoiceSection').slideToggle(400);
+                const chevron = $(this).find('.chevron');
+                chevron.toggleClass('rotate-180');
+            });
+        });
+    </script>
+</body>
+
+</html>

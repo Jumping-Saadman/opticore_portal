@@ -7,9 +7,15 @@
   <title>Smart Floating Labels</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Modern date picker: flatpickr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -18,7 +24,8 @@
       transition: all 0.22s ease;
     }
 
-    html, body {
+    html,
+    body {
       height: 100%;
       font-family: 'Space Grotesk', sans-serif;
       background: #0a0e17;
@@ -40,15 +47,25 @@
     .shimmer-header::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; height: 1.5px;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1.5px;
       background: linear-gradient(90deg, transparent, #3b82f6, #60a5fa, transparent);
       opacity: 0.7;
       animation: shimmer 2.5s infinite ease-in-out;
     }
 
     @keyframes shimmer {
-      0%, 100% { transform: translateX(-100%); }
-      50% { transform: translateX(100%); }
+
+      0%,
+      100% {
+        transform: translateX(-100%);
+      }
+
+      50% {
+        transform: translateX(100%);
+      }
     }
 
     .smart-input {
@@ -69,7 +86,8 @@
 
     .label-float {
       position: absolute;
-      top: 0.75rem; left: 1rem;
+      top: 0.75rem;
+      left: 1rem;
       font-size: 0.8rem;
       color: #94a3b8;
       pointer-events: none;
@@ -78,8 +96,8 @@
     }
 
     /* LABEL FLOATS ON FOCUS OR WHEN FILLED */
-    .peer:focus ~ .label-float,
-    .peer-filled ~ .label-float {
+    .peer:focus~.label-float,
+    .peer-filled~.label-float {
       top: -0.5rem;
       left: 0.75rem;
       font-size: 0.7rem;
@@ -88,10 +106,46 @@
       padding: 0 0.4rem;
     }
 
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3b82f6;
+    }
+
+    /* Flatpickr Custom Styling */
+    .flatpickr-calendar {
+      background: rgba(30, 35, 50, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+      backdrop-filter: blur(20px) !important;
+    }
+
+    .flatpickr-day.selected {
+      background: #3b82f6 !important;
+      border-color: #3b82f6 !important;
+    }
+
+    .flatpickr-day:hover {
+      background: rgba(59, 130, 246, 0.3) !important;
+    }
+
+    .flatpickr-months .flatpickr-month,
+    .flatpickr-current-month .flatpickr-monthDropdown-months,
+    .flatpickr-months .flatpickr-prev-month,
+    .flatpickr-months .flatpickr-next-month {
+      background: transparent !important;
+    }
   </style>
 </head>
 
@@ -103,7 +157,8 @@
       <div class="glass-card rounded-3xl overflow-hidden">
 
         <!-- HEADER -->
-        <div class="relative p-5 pb-4 bg-gradient-to-br from-[#3b82f6]/5 to-transparent border-b border-white/10 shimmer-header">
+        <div
+          class="relative p-5 pb-4 bg-gradient-to-br from-[#3b82f6]/5 to-transparent border-b border-white/10 shimmer-header">
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-2xl font-bold text-white">{{$title}}</h3>
@@ -122,13 +177,18 @@
         </div>
 
         <!-- FORM -->
-        <form wire:submit.prevent="{{$wireSubmit}}" class="p-6 space-y-6 overflow-y-auto max-h-[55vh]" enctype="multipart/form-data">
+        <form wire:submit.prevent="{{$wireSubmit}}" class="p-6 space-y-6 overflow-y-auto max-h-[55vh]"
+          enctype="multipart/form-data">
           <input type="hidden" id="employee-id">
 
           @error('connection')
           <div class="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-xs">
             <p class="text-red-400 flex items-center gap-1.5">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd" />
+              </svg>
               {{ $errors->first('connection') }}
             </p>
           </div>
@@ -137,71 +197,70 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <!-- Name -->
             <div class="relative">
-              <input wire:model="name" type="text" id="name"
-                class="peer smart-input w-full" placeholder=" " required>
+              <input wire:model="name" type="text" id="name" class="peer smart-input w-full" placeholder=" " required>
               <label for="name" class="label-float">Name <span class="text-red-400">*</span></label>
               @error('name') <p class="text-red-400 text-xs mt-1">{{ $errors->first('name') }}</p> @enderror
             </div>
 
             <!-- Designation -->
             <div class="relative">
-              <input wire:model="designation" type="text" id="designation"
-                class="peer smart-input w-full" placeholder=" " required>
+              <input wire:model="designation" type="text" id="designation" class="peer smart-input w-full"
+                placeholder=" " required>
               <label for="designation" class="label-float">Designation <span class="text-red-400">*</span></label>
-              @error('designation') <p class="text-red-400 text-xs mt-1">{{ $errors->first('designation') }}</p> @enderror
+              @error('designation') <p class="text-red-400 text-xs mt-1">{{ $errors->first('designation') }}</p>
+              @enderror
             </div>
 
             <!-- Address -->
             <div class="relative md:col-span-2">
-              <textarea wire:model="address" id="address" rows="2"
-                class="peer smart-input w-full resize-none" placeholder=" " required></textarea>
+              <textarea wire:model="address" id="address" rows="2" class="peer smart-input w-full resize-none"
+                placeholder=" " required></textarea>
               <label for="address" class="label-float">Address <span class="text-red-400">*</span></label>
               @error('address') <p class="text-red-400 text-xs mt-1">{{ $errors->first('address') }}</p> @enderror
             </div>
 
             <!-- Phone -->
             <div class="relative">
-              <input wire:model="phone" type="text" id="phone"
-                class="peer smart-input w-full" placeholder=" " required>
+              <input wire:model="phone" type="text" id="phone" class="peer smart-input w-full" placeholder=" " required>
               <label for="phone" class="label-float">Phone <span class="text-red-400">*</span></label>
               @error('phone') <p class="text-red-400 text-xs mt-1">{{ $errors->first('phone') }}</p> @enderror
             </div>
 
             <!-- Email -->
             <div class="relative">
-              <input wire:model="email" type="email" id="email"
-                class="peer smart-input w-full" placeholder=" " required>
+              <input wire:model="email" type="email" id="email" class="peer smart-input w-full" placeholder=" "
+                required>
               <label for="email" class="label-float">Email <span class="text-red-400">*</span></label>
               @error('email') <p class="text-red-400 text-xs mt-1">{{ $errors->first('email') }}</p> @enderror
             </div>
 
             <!-- NID -->
             <div class="relative">
-              <input wire:model="nid" type="text" id="nid"
-                class="peer smart-input w-full" placeholder=" " required>
+              <input wire:model="nid" type="text" id="nid" class="peer smart-input w-full" placeholder=" " required>
               <label for="nid" class="label-float">NID <span class="text-red-400">*</span></label>
               @error('nid') <p class="text-red-400 text-xs mt-1">{{ $errors->first('nid') }}</p> @enderror
             </div>
 
             <!-- Joining Date -->
             <div class="relative">
-              <input wire:model="joining_date" type="date" id="joining_date"
-                class="smart-input w-full" required>
-              @error('joining_date') <p class="text-red-400 text-xs mt-1">{{ $errors->first('joining_date') }}</p> @enderror
+              <input wire:model="joining_date" type="text" id="joining_date" class="peer smart-input w-full"
+                placeholder=" " required>
+              <label for="joining_date" class="label-float">Joining Date <span class="text-red-400">*</span></label>
+              @error('joining_date') <p class="text-red-400 text-xs mt-1">{{ $errors->first('joining_date') }}</p>
+              @enderror
             </div>
-          </div>
 
-          <!-- FOOTER -->
-          <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
-            <button type="button" data-modal-hide="{{$name}}"
-              class="px-6 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 text-sm font-medium hover:bg-white/10 hover:text-white hover:scale-105 transition-all z-20">
-              Cancel
-            </button>
-            <button type="submit"
-              class="px-6 py-2.5 rounded-lg bg-[#3b82f6] text-white text-sm font-bold shadow-md shadow-[#3b82f6]/30 hover:bg-[#2563eb] hover:shadow-lg hover:scale-105 transition-all z-20">
-              {{$actionName}}
-            </button>
-          </div>
+            <!-- FOOTER -->
+            <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+              <button type="button" data-modal-hide="{{$name}}"
+                class="px-6 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 text-sm font-medium hover:bg-white/10 hover:text-white hover:scale-105 transition-all z-20">
+                Cancel
+              </button>
+              <button type="submit"
+                class="px-6 py-2.5 rounded-lg bg-[#3b82f6] text-white text-sm font-bold shadow-md shadow-[#3b82f6]/30 hover:bg-[#2563eb] hover:shadow-lg hover:scale-105 transition-all z-20">
+                {{$actionName}}
+              </button>
+            </div>
         </form>
       </div>
     </div>
@@ -230,6 +289,24 @@
     });
   </script>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize Flatpickr
+      flatpickr("#joining_date", {
+        dateFormat: "Y-m-d",
+        theme: "dark",
+        animate: true,
+        disableMobile: true,
+        monthSelectorType: "static",
+        yearSelectorType: "static",
+        // Custom styling to match your modal
+        nextArrow: '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>',
+        prevArrow: '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>',
+      });
+    });
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
+
 </html>
