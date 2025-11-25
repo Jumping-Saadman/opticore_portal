@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Backup Manager - Laravel Payment Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+        }
+        .gradient-button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        .gradient-button:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex justify-center items-center p-5">
+    <div class="bg-slate-900/95 rounded-2xl shadow-2xl p-10 max-w-2xl w-full border border-white/10">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-white text-3xl font-semibold mb-2">Database Backup Manager</h1>
+            <p class="text-slate-400 text-sm">Laravel Payment Portal - Secure Database Management</p>
+        </div>
+
+        <!-- Download Section -->
+        <div class="bg-slate-800/60 rounded-xl p-8 mb-6 border border-white/5 hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-3">
+                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <h2 class="text-white text-lg font-semibold">Download Database Backup</h2>
+            </div>
+            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
+                Download the latest database backup for your Laravel payment portal. This includes all transactions, user data, and system configurations.
+            </p>
+            <button onclick="downloadBackup()" class="gradient-button text-white px-7 py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/40 active:translate-y-0 transition-all duration-300 inline-flex items-center gap-2 shadow-md shadow-indigo-500/30">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download Backup
+            </button>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="bg-slate-800/60 rounded-xl p-8 mb-6 border border-white/5 hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300">
+            <div class="flex items-center gap-3 mb-3">
+                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <h2 class="text-white text-lg font-semibold">Upload Database Backup</h2>
+            </div>
+            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
+                Restore your database from a previous backup file. Please ensure the backup file is compatible with your current Laravel version.
+            </p>
+            
+            <!-- File Input -->
+            <div class="mb-4">
+                <input type="file" id="fileInput" class="hidden" accept=".sql,.zip,.gz" onchange="handleFileSelect(event)">
+                <label for="fileInput" id="fileLabel" class="block p-4 bg-slate-800/80 border-2 border-dashed border-slate-600/30 rounded-lg text-center cursor-pointer hover:border-indigo-500/50 hover:bg-indigo-500/5 hover:text-indigo-300 transition-all duration-300 text-slate-400">
+                    <svg class="w-8 h-8 mx-auto mb-2 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <div>Click to select backup file or drag and drop</div>
+                    <div class="text-xs mt-1 opacity-70">Supports .sql, .zip, .gz formats</div>
+                </label>
+                <div id="fileName" class="hidden text-indigo-300 text-sm mt-2 break-all"></div>
+            </div>
+
+            <button onclick="uploadBackup()" id="uploadBtn" disabled class="gradient-button text-white px-7 py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/40 active:translate-y-0 transition-all duration-300 inline-flex items-center gap-2 shadow-md shadow-indigo-500/30 opacity-50 cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-md">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                Upload Backup
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 pt-5 border-t border-white/5">
+            <p class="text-slate-500 text-sm">⚠️ Always verify backup integrity before restoring</p>
+        </div>
+    </div>
+
+    <script>
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const fileLabel = document.getElementById('fileLabel');
+            const fileName = document.getElementById('fileName');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            if (file) {
+                fileLabel.classList.add('border-indigo-500/60', 'bg-indigo-500/10', 'text-indigo-300');
+                fileLabel.classList.remove('border-slate-600/30');
+                fileName.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                fileName.classList.remove('hidden');
+                uploadBtn.disabled = false;
+                uploadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                uploadBtn.classList.add('cursor-pointer');
+            } else {
+                fileLabel.classList.remove('border-indigo-500/60', 'bg-indigo-500/10', 'text-indigo-300');
+                fileLabel.classList.add('border-slate-600/30');
+                fileName.classList.add('hidden');
+                uploadBtn.disabled = true;
+                uploadBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                uploadBtn.classList.remove('cursor-pointer');
+            }
+        }
+
+        function downloadBackup() {
+            alert('Download initiated! In production, this would connect to your Laravel endpoint:\n\nRoute: POST /admin/backup/download');
+            console.log('Triggering backup download...');
+        }
+
+        function uploadBackup() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file first');
+                return;
+            }
+
+            alert(`Upload initiated for: ${file.name}\n\nIn production, this would connect to your Laravel endpoint:\n\nRoute: POST /admin/backup/upload`);
+            console.log('Uploading file:', file.name);
+            
+            // Reset form after upload
+            fileInput.value = '';
+            handleFileSelect({ target: { files: [] } });
+        }
+
+        // Drag and drop functionality
+        const fileLabel = document.getElementById('fileLabel');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileLabel.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileLabel.addEventListener(eventName, () => {
+                fileLabel.classList.add('border-indigo-500/80', 'bg-indigo-500/10');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileLabel.addEventListener(eventName, () => {
+                if (!document.getElementById('fileInput').files[0]) {
+                    fileLabel.classList.remove('border-indigo-500/80', 'bg-indigo-500/10');
+                }
+            });
+        });
+
+        fileLabel.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            document.getElementById('fileInput').files = files;
+            handleFileSelect({ target: { files: files } });
+        });
+    </script>
+</body>
+</html>

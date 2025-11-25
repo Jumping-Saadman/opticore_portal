@@ -1,0 +1,56 @@
+@if(session('success-nonIPN'))
+<div id="paymentSuccessModal" data-modal-target="paymentSuccessModal" tabindex="-1" aria-modal="true" role="dialog"
+    aria-labelledby="paymentSuccessTitle"
+    class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-200">
+
+    <div class="relative w-full max-w-md mx-4 animate-in fade-in zoom-in-95 duration-200">
+        <!-- Card -->
+        <div
+            class="bg-gray-900 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+
+            <!-- Success Header -->
+            <div class="px-6 pt-6 pb-4 text-center">
+                <div
+                    class="mx-auto w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center ring-8 ring-green-100/50 dark:ring-green-900/20">
+                    <svg class="w-9 h-9 text-green-600 dark:text-green-500" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 id="paymentSuccessTitle" class="mt-4 text-xl font-semibold text-gray-900 dark:text-white">
+                    Payment Successful
+                </h3>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    Your transaction has been completed securely.
+                </p>
+            </div>
+
+            <!-- Optional: Transaction Summary -->
+            <div class="px-6 pb-4 border-t border-gray-200 dark:border-gray-700">
+                <dl class="mt-4 space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500 dark:text-gray-400">Amount</dt>
+                        <dd class="font-medium text-gray-900 dark:text-white">$49.99</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500 dark:text-gray-400">Transaction ID</dt>
+                        <dd class="font-mono text-xs text-gray-700 dark:text-gray-300">TXN-8F2K9P</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <!-- Actions -->
+            <div class="px-6 pb-6 flex gap-3 justify-center">
+                <button type="button" data-modal-hide="paymentSuccessModal"
+                    class="px-5 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500/50 rounded-lg transition-colors duration-150">
+                    Continue
+                </button>
+                <button type="button"
+                    class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors duration-150">
+                    View Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@endif

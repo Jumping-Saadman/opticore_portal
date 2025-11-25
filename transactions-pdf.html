@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>All Transactions</title>
+    <style>
+        @page {
+            margin: 15mm;
+            size: A4 landscape;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+        }
+
+        body.printable-body {
+            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-size: 9px;
+            line-height: 1.3;
+            margin: 0;
+            color: #333;
+            position: relative;
+        }
+
+        /* HEADER */
+        .printable-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            background: linear-gradient(to bottom, #e0f2fe, #f0f9ff);
+            border-radius: 6px;
+            padding-top: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .printable-company-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 3px;
+        }
+
+        .printable-report-title {
+            font-size: 14px;
+            color: #1d4ed8;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        .printable-report-date {
+            font-size: 8px;
+            color: #64748b;
+        }
+
+        .printable-employee-count {
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+            margin-top: 10px;
+        }
+
+        /* TABLE */
+        .printable-table {
+            width: 277mm;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: fixed;
+            position: relative;
+            z-index: 1;
+            background-color: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+
+        .printable-th,
+        .printable-td {
+            border: 0.5px solid #d1d5db;
+            padding: 5px 4px;
+            vertical-align: middle;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .printable-th {
+            background: linear-gradient(to bottom, #dbeafe, #eff6ff);
+            color: #1e3a8a;
+            font-weight: 700;
+            font-size: 8.5px;
+            text-align: center;
+        }
+
+        .printable-tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .printable-tr:hover {
+            background-color: #e0f2fe;
+        }
+
+        .printable-td {
+            font-size: 8px;
+            color: #374151;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* FOOTER */
+        .printable-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 7.5px;
+            color: #475569;
+            background: linear-gradient(to top, #e0f2fe, #f0f9ff);
+            border-radius: 6px;
+            padding: 10px 0;
+            page-break-inside: avoid;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+
+        .printable-footer p {
+            margin: 2px 0;
+        }
+
+        .footer-images {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 12px;
+        }
+
+        .footer-images img {
+            height: 24px;
+            opacity: 0.75;
+        }
+
+        /* Page structure */
+        .printable-thead {
+            display: table-header-group;
+        }
+
+        .printable-tbody {
+            display: table-row-group;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        /* WATERMARK */
+        .printable-watermark {
+            position: fixed;
+            /* relative to the page */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 80%;
+            /* scale relative to page width */
+            max-height: 80%;
+            /* scale relative to page height */
+            width: auto;
+            /* keep aspect ratio */
+            height: auto;
+            /* keep aspect ratio */
+            opacity: 0.06;
+            /* subtle */
+            pointer-events: none;
+            z-index: 11;
+            /* behind table/header/footer */
+        }
+
+        .overflow-x-auto {
+            margin: 0 auto;
+            width: 100%;
+            /* Remove max-width to use full landscape width */
+        }
+
+        .text-right
+        {
+            text-align: right;
+        }
+
+        .text-center
+        {
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body class="printable-body">
+
+@php
+    // Read from resources folder
+    $watermarkPath = resource_path('images/logo/jana.jpeg');
+    $alliancePath = resource_path('images/logo/alliance.webp');
+    $opticorePath = resource_path('images/logo/opticore.png');
+    $janaPath = resource_path('images/logo/jana-back.png');
+
+    // Convert to base64
+    $watermarkImage = file_exists($watermarkPath) ? base64_encode(file_get_contents($watermarkPath)) : '';
+    $allianceImage = file_exists($alliancePath) ? base64_encode(file_get_contents($alliancePath)) : '';
+    $opticoreImage = file_exists($opticorePath) ? base64_encode(file_get_contents($opticorePath)) : '';
+    $janaImage = file_exists($janaPath) ? base64_encode(file_get_contents($janaPath)) : '';
+
+@endphp
+
+    <!-- WATERMARK -->
+
+<img src="data:image/jpeg;base64,{{ $watermarkImage }}" alt="Watermark" class="printable-watermark">
+
+<!-- HEADER -->
+<div class="printable-header">
+    <div class="printable-company-name">Opticore Solutions Limited</div>
+    <div class="printable-report-title">Transaction History</div>
+    <div class="printable-report-date">Generated on: {{ date('d-m-Y H:i:s') }}</div>
+</div>
+
+<!-- TABLE WRAPPER -->
+<div class="overflow-x-auto">
+
+    <!-- EMPLOYEE COUNT -->
+    <div class="printable-employee-count">
+        Total Records: {{ count($transactions) }}
+    </div>
+
+    <table class="printable-table">
+        <thead class="printable-thead">
+        <tr class="printable-tr">
+            <th width="6%" class="printable-th">SL. No</th>
+            <th width="18%" class="printable-th">Name</th>
+            <th width="28%" class="printable-th">Email</th>
+            <th width="15%" class="printable-th">Phone</th>
+            <th width="22%" class="printable-th">Invoice Number</th>
+            <th width="25%" class="printable-th">Transaction Id</th>
+            <th width="12%" class="printable-th">Amount</th>
+            <th width="12%" class="printable-th">Card Type</th>
+            <th width="14%" class="printable-th">Store Amount</th>
+            <th width="22%" class="printable-th">Transaction Date</th>
+            <th width="12%" class="printable-th">Currency</th>
+            <th width="14%" class="printable-th">Card Issuer</th>
+            <th width="12%" class="printable-th">Card Brand</th>
+            <th width="14%" class="printable-th">Currency Amount</th>
+            <th width="14%" class="printable-th">Currency Rate</th>
+        </tr>
+        </thead>
+        <tbody class="printable-tbody">
+        @if($transactions->isEmpty())
+            <tr class="printable-tr">
+                <td colspan="7" class="text-center printable-td">No records found</td>
+            </tr>
+        @else
+            @foreach($transactions as $transaction)
+                <tr class="printable-tr">
+                    <td class="text-center printable-td">{{ $loop->iteration }}</td>
+                    <td class="printable-td">{{ $transaction->name }}</td>
+                    <td class="printable-td">{{ $transaction->email }}</td>
+                    <td class="printable-td">{{ $transaction->phone }}</td>
+                    <td class="printable-td text-center">{{ $transaction->invoice_number }}</td>
+                    <td class="printable-td text-right">{{ $transaction->transaction_id }}</td>
+                    <td class="printable-td text-right">{{ $transaction->amount }}</td>
+                    <td class="printable-td text-right">{{ $transaction->card_type }}</td>
+                    <td class="printable-td">{{ $transaction->store_amount }}</td>
+                    <td class="printable-td text-center">{{ $transaction->tran_date }}</td>
+                    <td class="printable-td">{{ $transaction->currency }}</td>
+                    <td class="printable-td">{{ $transaction->card_issuer }}</td>
+                    <td class="printable-td">{{ $transaction->card_brand }}</td>
+                    <td class="printable-td">{{ $transaction->currency_amount }}</td>
+                    <td class="printable-td">{{ $transaction->currency_rate }}</td>
+                </tr>
+            @endforeach
+        @endif
+        </tbody>
+    </table>
+</div>
+
+<!-- FOOTER -->
+<div class="printable-footer">
+    <div class="footer-images">
+        @if($allianceImage)
+            <img src="data:image/webp;base64,{{ $allianceImage }}" alt="Partner Logo 1">
+        @endif
+        @if($opticoreImage)
+            <img src="data:image/png;base64,{{ $opticoreImage }}" alt="Certification Logo 2">
+        @endif
+        @if($janaImage)
+            <img src="data:image/png;base64,{{ $janaImage }}" alt="Payment Logo 3">
+        @endif
+    </div>
+    <p>This is a system generated report. No signature required.</p>
+    <p>Report generated by {{ config('app.name') }} on {{ date('d-m-Y H:i:s') }}</p>
+</div>
+
+</body>
+</html>
