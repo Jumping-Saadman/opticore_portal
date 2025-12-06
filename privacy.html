@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy — SecurePay Portal</title>
+  <meta name="description" content="SecurePay Portal Privacy Policy — dark theme, interactive, Tailwind CSS" />
+
+  <!-- Tailwind CDN (for quick single-file demo) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <script>
+    // Tailwind config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            spay: {
+              50: '#f6fbfb',
+              100: '#eaf7f8',
+              900: '#04171a'
+            }
+          }
+        }
+      }
+    }
+  </script> -->
+
+  <style>
+    /* small custom styles for the demo */
+    :root { --glass: rgba(255,255,255,0.04); }
+    html,body { height: 100%; }
+    .frost { background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); backdrop-filter: blur(6px); }
+    .progress-track { height: 6px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); }
+    .progress-fill { height: 6px; border-radius: 999px; transform-origin: left center; }
+    .pulse-glow { box-shadow: 0 0 24px rgba(99,102,241,0.06); }
+    pre code { white-space: pre-wrap; }
+    /* animated section reveal */
+    .reveal { opacity: 0; transform: translateY(10px) scale(0.995); transition: all 600ms cubic-bezier(.16,.84,.44,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-slate-200 antialiased selection:bg-emerald-400 selection:text-slate-900">
+
+  <!-- Top fixed header with progress/index -->
+  <header class="fixed top-4 left-1/2 transform -translate-x-1/2 w-[92%] max-w-6xl z-40">
+    <div class="frost border border-white/5 rounded-3xl p-3 flex items-center gap-4 shadow-lg">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400/20 to-cyan-400/10 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-emerald-300 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-2.21 0-4 .895-4 2s1.79 2 4 2 4-.895 4-2-1.79-2-4-2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v2m0 8v2m4-10v2M8 6v2M7 20h10M4 12h16" />
+          </svg>
+        </div>
+        <div>
+          <div class="text-sm font-medium">SecurePay Portal</div>
+          <div class="text-[11px] text-slate-400">Privacy Policy — Effective Nov 26, 2025</div>
+        </div>
+      </div>
+
+      <!-- Progress bar (fills left-to-right) -->
+      <div class="flex-1 px-4">
+        <div class="progress-track relative overflow-hidden">
+          <div id="progressFill" class="progress-fill absolute left-0 top-0 bg-gradient-to-r from-emerald-400 to-cyan-300 w-0"></div>
+        </div>
+        <div class="mt-2 flex items-center justify-between text-xs text-slate-400">
+          <div id="progressLabel">Section: Introduction</div>
+          <div id="progressPercent">0%</div>
+        </div>
+      </div>
+
+      <!-- Index menu for quick navigation -->
+      <nav class="hidden md:flex items-center gap-2">
+        <button class="index-btn px-3 py-1 rounded-md text-xs font-medium bg-white/3 hover:bg-white/6 transition" data-target="#information-we-collect">1</button>
+        <button class="index-btn px-3 py-1 rounded-md text-xs font-medium bg-white/3 hover:bg-white/6 transition" data-target="#how-we-use-your-information">2</button>
+        <button class="index-btn px-3 py-1 rounded-md text-xs font-medium bg-white/3 hover:bg-white/6 transition" data-target="#how-we-share-your-information">3</button>
+        <button class="index-btn px-3 py-1 rounded-md text-xs font-medium bg-white/3 hover:bg-white/6 transition" data-target="#data-security">4</button>
+        <button class="index-btn px-3 py-1 rounded-md text-xs font-medium bg-white/3 hover:bg-white/6 transition" data-target="#your-rights-and-choices">5</button>
+        <button id="tocToggle" class="ml-3 px-3 py-1 rounded-md text-xs font-medium bg-emerald-500/10 hover:bg-emerald-500/20 transition">Open Index</button>
+      </nav>
+
+      <div class="ml-3 md:hidden">
+        <button id="tocToggleMobile" class="px-3 py-1 rounded-md text-xs font-medium bg-emerald-500/10 hover:bg-emerald-500/20 transition">Index</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Offcanvas/table of contents -->
+  <aside id="toc" class="fixed right-6 top-28 z-50 w-80 p-4 rounded-2xl bg-[#081018]/70 border border-white/3 shadow-xl backdrop-blur-md transform scale-95 opacity-0 pointer-events-none transition-all">
+    <div class="flex items-center justify-between mb-4">
+      <h4 class="text-sm font-semibold">Policy Index</h4>
+      <button id="closeToc" class="text-sm text-slate-400 hover:text-white">Close</button>
+    </div>
+    <ol class="space-y-2 text-sm text-slate-300">
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#information-we-collect">1. Information We Collect</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#how-we-use-your-information">2. How We Use Your Information</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#how-we-share-your-information">3. How We Share Your Information</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#data-security">4. Data Security</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#your-rights-and-choices">5. Your Rights and Choices</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#cookies-and-tracking-technologies">6. Cookies & Tracking</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#childrens-privacy">7. Children's Privacy</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#international-data-transfers">8. International Transfers</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#data-retention">9. Data Retention</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#changes-to-this-privacy-policy">10. Changes</a></li>
+      <li><a class="toc-link block p-2 rounded-md hover:bg-white/2" href="#contact-us">11. Contact</a></li>
+    </ol>
+  </aside>
+
+  <!-- Main content -->
+  <main class="pt-28 pb-24 px-6 md:px-10 max-w-6xl mx-auto">
+
+    <article class="">
+      <!-- Left column: content -->
+      <section class=" space-y-8">
+
+        <section id="intro" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h1 class="text-3xl font-extrabold tracking-tight text-white">Privacy Policy</h1>
+          <p class="mt-2 text-slate-300">Effective Date: <strong>November 26, 2025</strong></p>
+          <p class="mt-4 text-slate-300">SecurePay Portal Inc. ("we," "us," or "our") operates the SecurePay Portal web application — a payment portal facilitating transactions for hotel share purchases by individual clients and IT company service purchases by business clients. This Privacy Policy explains what data we collect, how we use it, who we share it with, and your rights regarding your data.</p>
+        </section>
+
+        <section id="information-we-collect" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">1. Information We Collect</h2>
+          <p class="mt-3 text-slate-300">We collect information to provide and improve our services, process payments securely, and comply with legal obligations. We only collect what is necessary and obtain your consent where required.</p>
+
+          <h3 class="mt-4 font-semibold">Personal Information You Provide</h3>
+          <ul class="mt-2 list-inside list-disc text-slate-300 space-y-2">
+            <li><strong>Account Creation and Signup</strong>: When you create an account via email, we collect your full name, email address, phone number, and billing/shipping address (for hotel share clients) or company details (for IT service clients).</li>
+            <li><strong>Payment Processing</strong>: For transactions, we collect payment details such as credit card numbers, expiration dates, and CVV (but we do not store full card details; these are tokenized and processed via our PCI-compliant payment gateway).</li>
+            <li><strong>Company Information (for IT clients)</strong>: Company name, business email, phone number, address, tax ID, and authorized representative details.</li>
+          </ul>
+
+          <h3 class="mt-4 font-semibold">Information from Third-Party Logins</h3>
+          <p class="mt-2 text-slate-300">If you sign up or log in via Google or Facebook, we receive profile information necessary for authentication. We only request essential scopes and use the data for account creation and login.</p>
+
+          <h3 class="mt-4 font-semibold">Automatically Collected Information</h3>
+          <p class="mt-2 text-slate-300">Device and usage data: IP address, browser type, operating system, pages visited, time and date of access, and referral sources. Transaction metadata such as purchase history and transaction IDs may also be collected.</p>
+
+        </section>
+
+        <section id="how-we-use-your-information" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">2. How We Use Your Information</h2>
+          <p class="mt-3 text-slate-300">We use your information for legitimate business purposes, including:</p>
+          <ul class="mt-3 list-disc list-inside text-slate-300 space-y-2">
+            <li><strong>Providing Services</strong>: Create accounts, process payments, verify identities, and fulfill purchases.</li>
+            <li><strong>Communication</strong>: Send confirmations, support responses, and promotional emails (with opt-out options).</li>
+            <li><strong>Improvement & Analytics</strong>: Analyze usage to enhance the Site and prevent fraud.</li>
+            <li><strong>Legal Compliance</strong>: Tax, anti-money-laundering, and regulatory requirements.</li>
+            <li><strong>OAuth-Specific Uses</strong>: Use provided Google/Facebook data for authentication only.</li>
+          </ul>
+        </section>
+
+        <section id="how-we-share-your-information" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">3. How We Share Your Information</h2>
+          <p class="mt-3 text-slate-300">We do not sell your personal or company data. We share it only as necessary and with your knowledge:</p>
+          <ul class="mt-3 list-disc list-inside text-slate-300 space-y-2">
+            <li><strong>Service Providers</strong>: Payment gateways, email services, analytics tools, and hosting providers bound by contracts to protect your data.</li>
+            <li><strong>Business Transfers</strong>: In the event of a merger or sale, data may be transferred with appropriate notice.</li>
+            <li><strong>Legal Requirements</strong>: To comply with laws or respond to legal requests.</li>
+            <li><strong>Third-Party Logins</strong>: We use data from Google/Facebook for authentication; we do not share transaction details back to them.</li>
+          </ul>
+        </section>
+
+        <section id="data-security" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">4. Data Security</h2>
+          <p class="mt-3 text-slate-300">We implement administrative, technical, and physical safeguards including HTTPS, access controls, and regular audits. Payment data is handled via PCI-DSS compliant gateways. In the event of a breach, affected users and authorities will be notified as required by law.</p>
+        </section>
+
+        <section id="your-rights-and-choices" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">5. Your Rights and Choices</h2>
+          <p class="mt-3 text-slate-300">Depending on your location, you may have rights to access, correct, delete, restrict processing, object, or portability. To exercise these rights, contact <a class="text-emerald-300 underline" href="mailto:privacy@securepayportal.com">privacy@securepayportal.com</a>. We respond within 30-45 days (or as required by law).</p>
+        </section>
+
+        <section id="cookies-and-tracking-technologies" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">6. Cookies and Tracking Technologies</h2>
+          <p class="mt-3 text-slate-300">We use cookies, pixels, and similar tools for functionality, analytics, and advertising. Essential cookies cannot be disabled; others can be managed via the cookie banner or browser settings.</p>
+        </section>
+
+        <section id="childrens-privacy" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">7. Children's Privacy</h2>
+          <p class="mt-3 text-slate-300">The Site is not intended for children under 13 (or 16 in some jurisdictions). We do not knowingly collect data from children; discovered data will be promptly deleted.</p>
+        </section>
+
+        <section id="international-data-transfers" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">8. International Data Transfers</h2>
+          <p class="mt-3 text-slate-300">We are based in [Your Country] and may transfer data to affiliates or providers in other countries. We use Standard Contractual Clauses or equivalent safeguards. For EU users see our EU Data Transfers Addendum if applicable.</p>
+        </section>
+
+        <section id="data-retention" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">9. Data Retention</h2>
+          <p class="mt-3 text-slate-300">We retain data only as long as necessary: account & transaction data for 7 years; marketing data until opt-out; OAuth session data as needed for authentication. Deleted data is anonymized or securely erased.</p>
+        </section>
+
+        <section id="changes-to-this-privacy-policy" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">10. Changes to This Privacy Policy</h2>
+          <p class="mt-3 text-slate-300">We may update this Policy. Significant updates will be posted with a revised effective date and notified via email or Site notice. Continued use constitutes acceptance.</p>
+        </section>
+
+        <section id="contact-us" class="reveal rounded-2xl p-6 frost border border-white/3">
+          <h2 class="text-2xl font-bold">11. Contact Us</h2>
+          <p class="mt-3 text-slate-300">For privacy concerns or data rights requests contact:</p>
+          <div class="mt-4 grid sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-[#0b1114]/60 border border-white/3">
+              <p class="text-slate-300">SecurePay Portal Inc.<br>[Your Address]</p>
+            </div>
+            <div class="p-4 rounded-xl bg-[#0b1114]/60 border border-white/3">
+              <p class="text-slate-300">Email: <a class="text-emerald-300 underline" href="mailto:privacy@securepayportal.com">privacy@securepayportal.com</a><br>Phone: [Your Phone Number]</p>
+            </div>
+          </div>
+          <p class="mt-4 text-slate-400 text-sm">This Policy is governed by [Your Jurisdiction]. Last reviewed: November 26, 2025.</p>
+        </section>
+
+      </section>
+
+      <!-- Right column: sticky mini index and quick actions -->
+      <!-- <aside class="md:col-span-3 hidden md:block sticky top-36 h-fit">
+        <div class="rounded-2xl p-4 frost border border-white/3 shadow-md">
+          <h4 class="text-sm font-semibold mb-3">On this page</h4>
+          <nav class="space-y-2 text-sm text-slate-300">
+            <a class="page-link block p-2 rounded-md hover:bg-white/3" href="#information-we-collect">1. Information We Collect</a>
+            <a class="page-link block p-2 rounded-md hover:bg-white/3" href="#how-we-use-your-information">2. How We Use</a>
+            <a class="page-link block p-2 rounded-md hover:bg-white/3" href="#how-we-share-your-information">3. How We Share</a>
+            <a class="page-link block p-2 rounded-md hover:bg-white/3" href="#data-security">4. Data Security</a>
+            <a class="page-link block p-2 rounded-md hover:bg-white/3" href="#your-rights-and-choices">5. Your Rights</a>
+            <a class="page-link block p-2 rounded-md hover:bg-white/3" href="#cookies-and-tracking-technologies">6. Cookies</a>
+            <a class="page-link block p-2 rounded-md hover:bg-white/3" href="#contact-us">11. Contact</a>
+          </nav>
+
+          <div class="mt-4 border-t border-white/3 pt-3 text-sm text-slate-400">
+            <button id="downloadBtn" class="w-full py-2 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20">Download PDF</button>
+            <button id="toggleTheme" class="mt-3 w-full py-2 rounded-md bg-white/3 hover:bg-white/5">Toggle Theme</button>
+          </div>
+        </div>
+      </aside> -->
+
+    </article>
+  </main>
+
+  <!-- Floating back-to-top -->
+  <button id="backTop" class="fixed right-6 bottom-6 z-50 w-12 h-12 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 flex items-center justify-center text-emerald-300 shadow-lg hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 15l7-7 7 7"/></svg>
+  </button>
+
+  <footer class="mt-12 pb-12 text-center text-sm text-slate-500">
+    <div>© SecurePay Portal Inc. — Effective November 26, 2025</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Smooth in-page scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e){
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => obs.observe(r));
+
+    // Progress bar logic
+    const sections = Array.from(document.querySelectorAll('main section[id]'));
+    const progressFill = document.getElementById('progressFill');
+    const progressLabel = document.getElementById('progressLabel');
+    const progressPercent = document.getElementById('progressPercent');
+
+    function updateProgress(){
+      const scrollTop = window.scrollY || window.pageYOffset;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const percent = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+      progressFill.style.width = percent + '%';
+      progressPercent.textContent = percent + '%';
+
+      // Find current section (center of viewport)
+      const middle = scrollTop + window.innerHeight/3;
+      let current = sections[0];
+      for (let sec of sections){
+        const rect = sec.getBoundingClientRect();
+        const topAbs = sec.offsetTop;
+        if (middle >= topAbs) current = sec;
+      }
+      const label = current.querySelector('h2') ? current.querySelector('h2').innerText : 'Introduction';
+      progressLabel.textContent = 'Section: ' + label;
+
+      // show back-to-top after some scroll
+      const backTop = document.getElementById('backTop');
+      if (scrollTop > 600) backTop.classList.remove('hidden'); else backTop.classList.add('hidden');
+    }
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+
+    // TOC toggle
+    const toc = document.getElementById('toc');
+    const tocToggle = document.getElementById('tocToggle');
+    const tocToggleMobile = document.getElementById('tocToggleMobile');
+    const closeToc = document.getElementById('closeToc');
+    function openToc(){
+      toc.style.transform = 'none';
+      toc.style.opacity = '1';
+      toc.style.pointerEvents = 'auto';
+      toc.classList.add('pulse-glow');
+    }
+    function closeTocFn(){
+      toc.style.transform = 'scale(0.95) translateY(-8px)';
+      toc.style.opacity = '0';
+      toc.style.pointerEvents = 'none';
+      toc.classList.remove('pulse-glow');
+    }
+    tocToggle?.addEventListener('click', openToc);
+    tocToggleMobile?.addEventListener('click', openToc);
+    closeToc?.addEventListener('click', closeTocFn);
+
+    // Clicking a toc link closes panel
+    document.querySelectorAll('.toc-link').forEach(el => el.addEventListener('click', () => { closeTocFn(); }));
+
+    // Index buttons
+    document.querySelectorAll('.index-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.querySelector(btn.dataset.target);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Quick page links highlight on scroll
+    const pageLinks = document.querySelectorAll('.page-link');
+    function highlightPageLinks(){
+      const scrollTop = window.scrollY + 120;
+      pageLinks.forEach(link => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        const top = target.offsetTop;
+        const bottom = top + target.offsetHeight;
+        if (scrollTop >= top && scrollTop < bottom) link.classList.add('bg-emerald-500/10', 'text-emerald-300');
+        else link.classList.remove('bg-emerald-500/10', 'text-emerald-300');
+      });
+    }
+    window.addEventListener('scroll', highlightPageLinks);
+    highlightPageLinks();
+
+    // Back-to-top
+    document.getElementById('backTop').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+    // // Theme toggle (for demo; page defaults to dark)
+    // const toggleTheme = document.getElementById('toggleTheme');
+    // toggleTheme.addEventListener('click', () => {
+    //   document.documentElement.classList.toggle('dark');
+    //   // small flash
+    //   document.body.animate([{opacity:0.98},{opacity:1}], {duration:220});
+    // });
+
+
+    // Download PDF (simple print-to-pdf for demo)
+    // document.getElementById('downloadBtn').addEventListener('click', () => {
+    //   // temporarily hide UI chrome
+    //   const header = document.querySelector('header');
+    //   const aside = document.getElementById('toc');
+    //   header.style.display = 'none';
+    //   if (aside) aside.style.display = 'none';
+    //   window.print();
+    //   setTimeout(()=>{header.style.display=''; if (aside) aside.style.display='';}, 800);
+    // });
+
+    // Small accessibility: keyboard close for TOC
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTocFn(); });
+
+  </script>
+</body>
+</html>

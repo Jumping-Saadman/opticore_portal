@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <style>
+        /* DOMPdf compatible styles */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #374151;
+            background: white;
+        }
+
+        .page {
+            width: 210mm;
+            margin: 0 auto;
+            position: relative;
+            background: white;
+            padding-bottom: 80mm;
+        }
+
+        /* Header with gradient effect */
+        .header {
+            background: linear-gradient(to bottom, #93C5FD, #FFFFFF);
+            padding: 20px;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 20;
+        }
+
+        .header-flex {
+            display: table;
+            width: 100%;
+        }
+
+        .header-left {
+            display: table-cell;
+            vertical-align: top;
+            width: 60%;
+        }
+
+        .header-right {
+            display: table-cell;
+            vertical-align: top;
+            width: 40%;
+            text-align: right;
+        }
+
+        .logo-section {
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            width: 72px;
+            height: 64px;
+            float: left;
+            margin-right: 15px;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 5px;
+        }
+
+        .company-slogan {
+            font-size: 12px;
+            color: #4B5563;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .company-details {
+            font-size: 9px;
+            color: #6B7280;
+            line-height: 1.6;
+        }
+
+        .invoice-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 15px;
+        }
+
+        .invoice-meta {
+            font-size: 11px;
+            color: #4B5563;
+            line-height: 1.8;
+        }
+
+        /* Bill To / Ship To */
+        .address-section {
+            display: table;
+            width: 100%;
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            position: relative;
+            z-index: 15;
+        }
+
+        .address-col {
+            display: table-cell;
+            vertical-align: top;
+            width: 50%;
+            padding-right: 20px;
+        }
+
+        .address-title {
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .address-text {
+            font-size: 11px;
+            color: #4B5563;
+            line-height: 1.6;
+        }
+
+        /* Table */
+        .table-section {
+            padding: 20px;
+            position: relative;
+            z-index: 15;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #D1D5DB;
+        }
+
+        thead {
+            background-color: #F3F4F6;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #374151;
+            border: 1px solid #D1D5DB;
+        }
+
+        th.text-right {
+            text-align: right;
+        }
+
+        td {
+            padding: 12px;
+            font-size: 11px;
+            color: #4B5563;
+            border: 1px solid #D1D5DB;
+        }
+
+        td.text-right {
+            text-align: right;
+        }
+
+        td.font-medium {
+            color: #374151;
+            font-weight: 600;
+        }
+
+        tr.subtotal-row {
+            background-color: #F9FAFB;
+            font-weight: 600;
+        }
+
+        tr.total-row {
+            background-color: #EFF6FF;
+            font-weight: bold;
+            font-size: 14px;
+            border-top: 2px solid #9CA3AF;
+        }
+
+        tr.total-row td {
+            padding: 15px 12px;
+            color: #1F2937;
+        }
+
+        tr.total-row td.total-amount {
+            color: #2563EB;
+            font-size: 16px;
+        }
+
+        /* Watermark Container - Zigzag Pattern */
+        .watermark-container {
+            position: absolute;
+            top: 160px; /* Below header */
+            bottom: 80mm; /* Above footer */
+            left: 0;
+            right: 0;
+            z-index: 20;
+            overflow: hidden;
+        }
+
+        .watermark-row {
+            display: block;
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+
+        .watermark-row img {
+            width: 200px;
+            transform: rotate(-45deg);
+            opacity: 0.06;
+            margin: 0 30px;
+            vertical-align: middle;
+        }
+
+        .watermark-row.zigzag-left {
+            text-align: center;
+        }
+
+        .watermark-row.zigzag-right {
+            text-align: center;
+        }
+
+        /* Footer */
+        .page-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 9px;
+            color: #4B5563;
+            background: linear-gradient(to bottom, #FFFFFF, #93C5FD);
+            height: 140px;
+            z-index: 20;
+        }
+
+        .footer-logos {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin: 0 15px;
+            opacity: 0.75;
+            vertical-align: middle;
+        }
+
+        .footer-text {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .footer-thank-you {
+            margin-top: 12px;
+            font-weight: bold;
+            color: #1F2937;
+            font-size: 10px;
+        }
+
+        /* Clear floats */
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- Watermark Pattern - Zigzag -->
+    <div class="watermark-container">
+        <div class="watermark-row zigzag-left">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+        </div>
+        <div class="watermark-row zigzag-right">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+        </div>
+        <div class="watermark-row zigzag-left">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+        </div>
+        <div class="watermark-row zigzag-right">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+        </div>
+        <div class="watermark-row zigzag-left">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+        </div>
+        <div class="watermark-row zigzag-right">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+            <img src="opticore.png" alt="Watermark">
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-flex">
+            <div class="header-left">
+                <div class="logo-section clearfix">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(base_path('resources/images/logo/osl-half.png'))) }}" class="logo" alt="Logo">
+                    <div>
+                        <div class="company-name">Opticore Solutions Limited</div>
+                        <div class="company-slogan">Affordable Services For All</div>
+                        <div class="company-details">
+                            </br>
+                            1178, East Monipur, Mirpur<br>
+                            Dhaka-1216, Bangladesh<br>
+                            Phone: +880-1896-204400<br>
+                            Email: osl@opticoresolutionsltd.com
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="invoice-title">INVOICE</div>
+                <div class="invoice-meta">
+                    <strong>Invoice No:</strong> {{$invoice->invoice_number}}<br>
+                    <strong>Date:</strong> {{$invoice->invoice_date}}<br>
+                    <strong>Due Date:</strong> {{$invoice->due_date}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bill To / Ship To -->
+    <div class="address-section">
+        <div class="address-col">
+            <div class="address-title">Bill To:</div>
+            <div class="address-text">
+                {{$invoice->order->client->company_name}}<br>
+                {{$invoice->order->client->company_address}}<br>
+                Phone: {{$invoice->order->client->phone}}
+            </div>
+        </div>
+        <div class="address-col">
+            <div class="address-title">Ship To:</div>
+            <div class="address-text">
+                {{$invoice->order->client->name}}<br>
+                {{$invoice->order->client->address}}<br>
+                Phone: {{$invoice->order->client->phone_secondary}}
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-section">
+        <table>
+            <thead>
+            <tr>
+                <th style="width: 10%;">SL. No</th>
+                <th style="width: 50%;">Description</th>
+                <th style="width: 10%;">Quantity</th>
+                <th class="text-right" style="width: 15%;">Unit Price</th>
+                <th class="text-right" style="width: 15%;">Due Amount</th>
+                <th class="text-right" style="width: 15%;">Paid Amount</th>
+                <th class="text-center" style="width: 15%;">Remarks</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($invoice->order->services as $service)
+                <tr>
+                    <td>{{$loop->iteration}}</td>
+                    <td class="font-medium">{{$service->name}}</td>
+                    <td class="text-right">{{$service->pivot->quantity}}</td>
+                    <td class="text-right">{{number_format($service->pivot->unit_price)}}</td>
+                    @if($loop->iteration == 1)
+                        <td rowspan="{{$invoice->order->services->count()}}" class="text-right">{{number_format($invoice->due_amount)}}</td>
+                        <td rowspan="{{$invoice->order->services->count()}}" class="text-right">{{number_format($invoice->payment_amount)}}</td>
+                        <td rowspan="{{$invoice->order->services->count()+1}}">{{$invoice->remarks}}</td>
+                    @endif
+                </tr>
+            @endforeach
+
+            <tr class="subtotal-row">
+                <td colspan="3" class="text-right">Subtotal</td>
+                <td class="text-right font-medium">{{number_format($invoice->order->contracted_amount)}}</td>
+                <td class="text-right font-medium">{{number_format($invoice->due_amount)}}</td>
+                <td class="text-right font-medium">{{number_format($invoice->payment_amount)}}</td>
+            </tr>
+            <tr class="total-row">
+                <td colspan="5" class="text-right">Total Payment</td>
+                <td class="text-right total-amount">{{number_format($invoice->payment_amount)}}</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="page-footer">
+        <div class="footer-logos">
+            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(base_path('resources/images/logo/alliance.webp'))) }}" alt="Partner Logo 1" class="footer-logo">
+            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(base_path('resources/images/logo/opticore.png'))) }}" alt="Certification Logo 2" class="footer-logo">
+            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(base_path('resources/images/logo/jana.png'))) }}" alt="Payment Logo 3" class="footer-logo">
+        </div>
+        <div class="footer-text">
+            This invoice was generated on a computer and is valid without a signature or seal.
+        </div>
+        <div class="footer-text">
+            If you have any questions concerning this invoice, please contact us.<br>
+        </div>
+        <div class="footer-thank-you">
+            Thank you for your business!
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
