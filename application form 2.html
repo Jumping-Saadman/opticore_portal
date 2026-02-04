@@ -94,35 +94,34 @@
   <div class="space-y-3 text-sm">
 
     <div class="flex items-baseline  pb-0.5">
-      <span class="field-label">Name:</span>
-      <div class="underline ml-2"></div>
-      <span class="ml-6 whitespace-nowrap">Sex (M/F):</span>
-      <div class="underline w-16 ml-2"></div>
+      <span class="">Name:</span>
+      <div class="underline"></div>
+      <span class="ml-2 whitespace-nowrap">Sex (M/F):</span>
     </div>
 
     <div class="flex items-baseline  pb-0.5">
-      <span class="field-label">Father's Name:</span>
+      <span class="">Father's Name:</span>
       <div class="underline ml-2 flex-1"></div>
     </div>
 
     <div class="flex items-baseline  pb-0.5">
-      <span class="field-label">Mother's Name:</span>
+      <span class="">Mother's Name:</span>
       <div class="underline ml-2 flex-1"></div>
     </div>
 
     <div class="flex items-baseline  pb-0.5">
-      <span class="field-label">Address (Present):</span>
+      <span class="">Address (Present):</span>
       <div class="underline ml-2 flex-1"></div>
     </div>
 
     <div class="flex items-baseline  pb-0.5">
-      <span class="field-label">Address (Permanent):</span>
+      <span class="">Address (Permanent):</span>
       <div class="underline ml-2 flex-1"></div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div class="flex items-baseline  pb-0.5">
-        <span class="field-label">Spouse Name :</span>
+        <span class="">Spouse Name :</span>
         <div class="underline ml-2 flex-1"></div>
       </div>
       <div class="flex items-baseline  pb-0.5">
@@ -133,7 +132,7 @@
 
     <div class="grid grid-cols-2 gap-4">
       <div class="flex items-baseline  pb-0.5">
-        <span class="field-label">National ID No. :</span>
+        <span class="">National ID No. :</span>
         <div class="underline ml-2 flex-1"></div>
       </div>
       <div class="flex items-baseline  pb-0.5">
@@ -142,40 +141,39 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-2 gap-4">
       <div class="flex items-baseline  pb-0.5">
-        <span class="field-label">Date of Birth :</span>
-        <div class="underline ml-2 flex-1"></div>
+        <span class="">Date of Birth :</span>
+        <div class="underline ml-2"></div>
       </div>
-      <div class="flex items-baseline  pb-0.5 col-span-2">
-        <span class="field-label">Profession :</span>
-        <div class="underline ml-2 flex-1"></div>
+      <div class="flex items-baseline pb-0.5">
+        <span class="">Profession :</span>
+        <div class="underline ml-2"></div>
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
-      <div class="flex items-baseline  pb-0.5">
-        <span class="field-label">E-mail :</span>
+      <div class="flex items-baseline pb-0.5">
+        <span>E-mail :</span>
         <div class="underline ml-2 flex-1"></div>
       </div>
-      <div class="flex items-baseline  pb-0.5">
+      <div class="flex items-baseline pb-0.5">
         <span>Marriage Day :</span>
         <div class="underline ml-2 w-40"></div>
       </div>
     </div>
 
     <!-- Project / Ownership Section -->
-    <div class="pt-2">
-      <div class="grid grid-cols-[auto,1fr,auto,1fr,auto,auto] gap-x-3 gap-y-1 items-baseline">
+    <div>
+      <div class="grid grid-cols-[auto,1fr,auto,1fr] gap-x-3 gap-y-1 items-baseline">
         <span>Project Name :</span>      <div class="underline"></div>
-        <span class="ml-4">Category of Ownership :</span> <div class="underline w-32"></div>
-        <span class="ml-4">Number of Ownership :</span> <div class="underline w-20"></div>
-        <span class="ml-4">Size :</span> <div class="underline w-20"></div> Sft
+        <span class="ml-4">Category of Ownership :</span> <div class="underline"></div>
       </div>
 
-      <div class="grid grid-cols-[auto,1fr,auto,1fr] gap-x-3 gap-y-1 items-baseline mt-1">
+      <div class="grid grid-cols-[auto,1fr,auto,1fr,auto,auto] gap-x-3 gap-y-1 items-baseline mt-1">
         <span>Location :</span> <div class="underline"></div>
-        <span class="ml-4">Number of Ownership :</span> <div class="underline w-20"></div>
+        <span class="ml-4">Number of Ownership :</span> <div class="underline"></div>
+        <span class="ml-4 flex ">Size :<div class="underline"></div> Sft</span> 
       </div>
     </div>
 
@@ -204,9 +202,9 @@
         </div>
 
         <div class="flex items-center font-bold mt-3">
-          <div class="flex-1 h-px bg-black"></div>
+          <div class="flex-1 h-0 bg-black"></div>
           <span class="px-4">Agreed Price Total =</span>
-          <div class="flex-1 h-px bg-black"></div>
+          <div class="flex-1 h-4 bg-black/20"></div>
         </div>
 
         <div class="flex items-baseline mt-2">
@@ -220,12 +218,11 @@
     <!-- Payment Section -->
     <div class="space-y-1.5 mt-4 text-sm">
       <div class="flex items-baseline">
-        <span class="w-56">Mode of Payment (Cash/Cheque/Pay Order/D.D):</span>
-        <div class="underline flex-1"></div>
+        <span>Mode of Payment (Cash/Cheque/Pay Order/D.D):</span>
       </div>
 
       <div class="flex items-baseline">
-        <span class="w-56">Booking Money</span>
+        <span class="">Booking Money</span>
         <span class="w-8 text-center">=</span>
         <div class="underline w-32 mx-2"></div> Tk
         <span class="ml-4">(Date</span>
@@ -233,20 +230,10 @@
       </div>
 
       <div class="flex items-baseline">
-        <span class="w-56">Booking Down Money</span>
+        <span class="">Down Payment</span>
         <span class="w-8 text-center">=</span>
         <div class="underline w-32 mx-2"></div> Tk
         <span class="ml-4">(Date</span>
-        <div class="underline w-24 mx-1"></div>)
-      </div>
-
-      <div class="flex items-baseline">
-        <span class="w-56">Down Payment</span>
-        <span class="w-8 text-center">=</span>
-        <div class="underline w-32 mx-2"></div> Tk
-        <span class="ml-4">Installments Tk</span>
-        <div class="underline w-20 mx-1"></div>
-        <span class="ml-2">(From</span>
         <div class="underline w-24 mx-1"></div>)
       </div>
 
@@ -261,7 +248,6 @@
 
       <div class="flex items-baseline">
         <span>Instruction of mode of payment (if any):</span>
-        <div class="underline flex-1 ml-3"></div>
       </div>
 
       <div class="pt-2">
@@ -273,11 +259,11 @@
         </div>
         <div class="flex items-baseline mt-1">
           <span>Phone :</span>
-          <div class="underline w-48 ml-3"></div>
+          <div class="underline ml-3"></div>
+          <span class="ml-3">Address :</span>
+          <div class="underline ml-3"></div>
         </div>
         <div class="flex items-baseline mt-1">
-          <span>Address :</span>
-          <div class="underline flex-1 ml-3"></div>
         </div>
       </div>
 
@@ -289,26 +275,26 @@
   </div>
 
   <!-- Signatures -->
-  <div class="grid grid-cols-5 gap-2 text-center mt-10 pt-8 border-t border-black text-sm font-medium">
+  <div class="grid grid-cols-5 gap-2 text-center mt-10 pt-8 text-sm font-medium">
     <div>
       Applicant
-      <div class="h-10  mt-6 w-3/4 mx-auto"></div>
+      <div class="w-3/4 mx-auto"></div>
     </div>
     <div>
       Sales Officer
-      <div class="h-10  mt-6 w-3/4 mx-auto"></div>
+      <div class="w-3/4 mx-auto"></div>
     </div>
     <div>
       Accounts
-      <div class="h-10  mt-6 w-3/4 mx-auto"></div>
+      <div class="w-3/4 mx-auto"></div>
     </div>
     <div>
       AGM
-      <div class="h-10  mt-6 w-3/4 mx-auto"></div>
+      <div class="w-3/4 mx-auto"></div>
     </div>
     <div>
       M.D/Chairman
-      <div class="h-10  mt-6 w-3/4 mx-auto"></div>
+      <div class="w-3/4 mx-auto"></div>
     </div>
   </div>
 
