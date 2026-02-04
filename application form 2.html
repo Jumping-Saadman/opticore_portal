@@ -94,11 +94,15 @@
   <!-- Main Form -->
   <div class="space-y-3 text-sm">
 
-    <div class="flex items-baseline  pb-0.5">
-      <span class="">Name:</span>
-      <div class="underline flex-grow"></div>
-      <span class="ml-2 whitespace-nowrap">Sex (M/F):</span>
-      <div class="underline ml-2"></div>
+    <div class="grid grid-cols-[8fr_2fr] items-baseline  pb-0.5">
+      <div class="flex">
+        <span class="">Name:</span>
+        <div class="underline flex-grow"></div>
+      </div>
+      <div class="flex">
+        <span class="ml-2 whitespace-nowrap">Sex (M/F):</span>
+        <div class="underline ml-2"></div>
+      </div>
     </div>
 
     <div class="flex items-baseline  pb-0.5">
@@ -121,47 +125,47 @@
       <div class="underline ml-2 flex-1"></div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
-      <div class="flex items-baseline  pb-0.5">
+    <div class="grid grid-cols-[7fr_3fr] gap-2">
+      <div class="flex items-baseline pb-0.5">
         <span class="">Spouse Name :</span>
         <div class="underline ml-2 flex-1"></div>
       </div>
       <div class="flex items-baseline  pb-0.5">
         <span>Mobile :</span>
-        <div class="underline ml-2 w-40"></div>
+        <div class="underline  w-40"></div>
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-[7fr_3fr] gap-2">
       <div class="flex items-baseline  pb-0.5">
         <span class="">National ID No. :</span>
-        <div class="underline ml-2 flex-1"></div>
+        <div class="underline"></div>
       </div>
       <div class="flex items-baseline  pb-0.5">
         <span>Religion :</span>
-        <div class="underline ml-2 w-40"></div>
+        <div class="underline"></div>
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-[7fr_3fr] gap-2">
       <div class="flex items-baseline  pb-0.5">
         <span class="">Date of Birth :</span>
-        <div class="underline ml-2"></div>
+        <div class="underline "></div>
       </div>
       <div class="flex items-baseline pb-0.5">
         <span class="">Profession :</span>
-        <div class="underline ml-2"></div>
+        <div class="underline "></div>
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-[7fr_3fr] gap-2">
       <div class="flex items-baseline pb-0.5">
         <span>E-mail :</span>
-        <div class="underline ml-2 flex-1"></div>
+        <div class="underline  flex-1"></div>
       </div>
       <div class="flex items-baseline pb-0.5">
         <span>Marriage Day :</span>
-        <div class="underline ml-2 w-40"></div>
+        <div class="underline"></div>
       </div>
     </div>
 
@@ -172,10 +176,14 @@
         <span class="ml-4">Category of Ownership :</span> <div class="underline"></div>
       </div>
 
-      <div class="grid grid-cols-[auto,1fr,auto,1fr,auto,auto] gap-x-3 gap-y-1 items-baseline mt-1">
-        <span>Location :</span> <div class="underline"></div>
-        <span class="ml-4">Number of Ownership :</span> <div class="underline"></div>
-        <span class="ml-4 flex ">Size :<div class="underline"></div> Sft</span> 
+      <div class="grid grid-cols-[auto,1fr,auto,1fr] gap-x-3 gap-y-1 items-baseline mt-1">
+        <span>Location :</span> 
+        <div class="underline"></div>
+        <span class="ml-2">Number of Ownership :</span>
+        <div class="flex">
+          <div class="underline"></div>
+          <span class="ml-2 flex ">Size :<div class="underline"></div> Sft</span> 
+        </div>
       </div>
     </div>
 
