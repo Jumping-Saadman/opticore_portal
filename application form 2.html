@@ -1,413 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Hotel Jana Application Form - dompdf</title>
-
-    <style type="text/css">
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Hotel Jana Application Form</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 10mm;
         }
 
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
-            font-size: 11.5pt;
-            line-height: 1.35;
-            color: #2F2E7A;
-            background: white;
-        }
-
-        .page {
-            width: 210mm;
-            min-height: 297mm;
-            padding: 0;
-            margin: 0 auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        td, th {
-            vertical-align: top;
-        }
-
-        .header-logo {
-            width: 110px;
-        }
-
-        .header-title {
-            font-family: 'Algeria', serif;
-            font-size: 28pt;
-            color: #2F2E7A;
-        }
-
-        .badge {
-            background-color: #2F2E7A;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
             font-size: 10pt;
-            font-weight: bold;
-            white-space: nowrap;
+            color: #2F2E7A;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
         }
 
-        .underline {
-            border-bottom: 1px dotted #2F2E7A;
-            min-height: 20px;
+        /* Utility Classes for dompdf */
+        .w-full {
             width: 100%;
         }
 
-        .double-underline {
-            border-bottom: 2px double #2F2E7A;
-        }
-
-        .field-label {
-            font-weight: bold;
-            white-space: nowrap;
-            padding-right: 8px;
-            width: 140px;
-            min-width: 140px;
-        }
-
-        .small-label {
-            font-size: 9pt;
-        }
-
-        .dotted-line {
-            border-bottom: 1px dotted #2F2E7A;
-        }
-
-        .qr-cell {
-            width: 130px;
+        .text-center {
             text-align: center;
         }
 
-        .photo-cell {
-            width: 110px;
+        .text-right {
             text-align: right;
         }
 
-        .amount-cell {
-            width: 140px;
-            text-align: center;
+        .font-bold {
+            font-weight: bold;
         }
 
-        .price-row td {
-            padding: 2px 0;
+        .underliney {
+            border-bottom: 1px dotted #2F2E7A;
+        }
+
+        /* Header Table */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .header-table td {
+            vertical-align: middle;
+        }
+
+        .title-box {
+            background-color: #2F2E7A;
+            color: white;
+            padding: 3px 15px;
+            border-radius: 15px;
+            display: inline-block;
+            font-size: 11pt;
+            margin-top: 5px;
+        }
+
+        /* Field Layouts using tables for precision */
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+
+        .field-table td {
+            vertical-align: bottom;
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border-top: 2px solid #2F2E7A;
+        }
+
+        .price-table td {
+            padding: 4px 0;
         }
 
         .total-row {
+            background-color: #e5e5e5;
             font-weight: bold;
-            border-top: 2px solid #2F2E7A;
-            padding-top: 6px;
         }
 
         .note-box {
-            background: #00000010;
-            padding: 10px;
-            font-size: 9.5pt;
-            border-radius: 4px;
+            background-color: #f0f0f0;
+            padding: 8px;
+            font-size: 8.5pt;
+            margin-top: 15px;
+            border-radius: 5px;
         }
 
-        .signature {
-            border-top: 2px solid #2F2E7A;
-            padding-top: 28px;
+        /* Signature Section */
+        .footer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+
+        .footer-table td {
+            width: 20%;
             text-align: center;
-            font-weight: bold;
-            font-size: 10pt;
+            font-size: 9pt;
+            border-top: 1.5px solid #2F2E7A;
+            padding-top: 5px;
         }
 
-        .heading {
-            font-family: 'Algeria', serif !important;
-        }
-
-        /* Fallback font for Algeria if not embedded */
-        @font-face {
-            font-family: 'Algeria';
-            src: url('ALGER.TTF') format('truetype');
+        .photo-box {
+            border: 1px solid #ccc;
+            width: 110px;
+            height: 130px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-<div class="page">
+<table class="header-table">
+    <tr>
+        <td width="15%">
+            <img src="jana.png" style="width: 80px;" alt="logo">
+        </td>
+        <td width="55%" style="padding-left: 10px;">
+            <h1 style="margin: 0; font-size: 24pt; font-family: serif;">Hotel Jana</h1>
+            <div class="title-box">APPLICATION FORM</div>
+            <p style="font-size: 7.5pt; margin: 5px 0 0 0;">
+                <strong>Corporate Office :</strong> House #153, (3rd Floor) Road #01, West Kazipara, Mirpur, Dhaka-1216.<br>
+                <strong>Mirpur Office :</strong> Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur,
+                Dhaka-1216.<br>
+                Office: 01896204440, 01994045686, Tel: +88 02 226-621444, Email: asad@alliancebuildersltd.org
+            </p>
+        </td>
+        <td width="15%" class="text-center">
+            <img src="qr.svg" style="width: 70px;" alt="QR"><br>
+            <span style="font-size: 7pt;">Scan to verify</span><br>
+            <strong style="text-decoration: underline;">AA00A00</strong>
+        </td>
+        <td width="15%" style="text-align: right;">
+            <div class="photo-box">
+                <img src="it.jpg" style="width: 100%; height: 100%;" alt="Client">
+            </div>
+        </td>
+    </tr>
+</table>
 
-    <!-- Header -->
-    <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 12px;">
-        <tr>
-            <!-- Logo -->
-            <td class="header-logo" rowspan="2">
-                <img src="jana.png" alt="Jana Logo" style="width:110px; height:auto;">
-            </td>
+<table class="field-table">
+    <tr>
+        <td width="10%"><strong>Name:</strong></td>
+        <td width="65%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
+        <td width="8%" style="padding-left: 10px;"><strong>Sex:</strong></td>
+        <td width="17%" class="underliney">Rather not say</td>
+    </tr>
+</table>
 
-            <!-- Title + Badge + Addresses -->
-            <td style="padding-left: 12px;">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                        <td>
-                            <span class="heading header-title">Hotel Jana</span>
-                        </td>
-                        <td style="text-align:right; vertical-align:middle;">
-                            <span class="badge">APPLICATION FORM</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="font-size:9pt; padding-top:4px;">
-                            <strong>Corporate Office :</strong> House #153, (3rd Floor) Road #01, West Kazipara, Mirpur, Dhaka-1216.<br>
-                            <strong>Mirpur Office :</strong> Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur, Dhaka-1216.<br>
-                            <strong>Office:</strong> 01896204440, 01994045686, Tel: +88 02 226-621444, Email: asad@alliancebuildersltd.org
-                        </td>
-                    </tr>
-                </table>
-            </td>
+<table class="field-table">
+    <tr>
+        <td width="18%"><strong>Father's Name:</strong></td>
+        <td width="82%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
+    </tr>
+</table>
 
-            <!-- QR + Form No + Photo -->
-            <td class="qr-cell" rowspan="2" style="vertical-align:top;">
-                <img src="qr.svg" alt="QR Code" style="width:110px; filter: grayscale(1) contrast(1.2);">
-                <div style="font-size:9pt; margin-top:4px;">Scan to verify</div>
-                <div style="font-weight:bold; text-decoration:underline; margin-top:8px; text-align:center;">AA00A00</div>
-            </td>
+<table class="field-table">
+    <tr>
+        <td width="18%"><strong>Mother's Name:</strong></td>
+        <td width="82%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
+    </tr>
+</table>
 
-            <td class="photo-cell" rowspan="2">
-                <img src="it.jpg" alt="Client Photo" style="width:100px; height:auto; border-radius:6px;">
-            </td>
-        </tr>
-    </table>
+<table class="field-table">
+    <tr>
+        <td width="20%"><strong>Address (Present):</strong></td>
+        <td width="80%" class="underliney">Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur, Dhaka-1216.</td>
+    </tr>
+</table>
 
-    <!-- Main Form Content -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        <tr>
-            <td class="field-label">Name:</td>
-            <td class="dotted-line"></td>
-            <td style="width:20px;"></td>
-            <td class="field-label">Sex:</td>
-            <td class="dotted-line" style="width:140px;"></td>
-        </tr>
+<table class="field-table">
+    <tr>
+        <td width="20%"><strong>Address (Perm.):</strong></td>
+        <td width="80%" class="underliney">Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur, Dhaka-1216.</td>
+    </tr>
+</table>
 
-        <tr><td colspan="5" style="height:6px;"></td></tr>
+<table class="field-table">
+    <tr>
+        <td width="15%"><strong>Spouse Name:</strong></td>
+        <td width="55%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
+        <td width="10%" style="padding-left: 10px;"><strong>Mobile:</strong></td>
+        <td width="20%" class="underliney">+880 1234567890</td>
+    </tr>
+</table>
 
-        <tr>
-            <td class="field-label">Father's Name:</td>
-            <td class="dotted-line" colspan="4"></td>
-        </tr>
+<table class="field-table">
+    <tr>
+        <td width="18%"><strong>National ID:</strong></td>
+        <td width="52%" class="underliney">4222 992229 334443 9922344</td>
+        <td width="10%" style="padding-left: 10px;"><strong>Religion:</strong></td>
+        <td width="20%" class="underliney">Christianity</td>
+    </tr>
+</table>
 
-        <tr><td colspan="5" style="height:6px;"></td></tr>
+<table class="field-table" style="margin-top: 10px;">
+    <tr>
+        <td width="18%"><strong>Project Name:</strong></td>
+        <td width="42%" class="underliney">Alliance Dil Mohammad Tower</td>
+        <td width="20%" style="padding-left: 10px;"><strong>Category:</strong></td>
+        <td width="20%" class="underliney">???</td>
+    </tr>
+</table>
 
-        <tr>
-            <td class="field-label">Mother's Name:</td>
-            <td class="dotted-line" colspan="4"></td>
-        </tr>
+<table class="price-table">
+    <tr>
+        <td width="40%"><strong>01. Price For Ownership</strong></td>
+        <td width="40%" class="underliney"></td>
+        <td width="5%" class="text-center">=</td>
+        <td width="15%" class="underliney text-right">999,99,99,999৳</td>
+    </tr>
+    <tr>
+        <td><strong>02. Special Discount</strong></td>
+        <td class="underliney"></td>
+        <td class="text-center">=</td>
+        <td class="underliney text-right">999,99,99,999৳</td>
+    </tr>
+    <tr>
+        <td><strong>03. Agreed Price</strong></td>
+        <td class="underliney"></td>
+        <td class="text-center">=</td>
+        <td class="underliney text-right">999,99,99,999৳</td>
+    </tr>
+    <tr class="total-row">
+        <td colspan="2" class="text-right" style="padding-right: 10px;">Agreed Price Total</td>
+        <td class="text-center">=</td>
+        <td class="text-right">999,99,99,999৳</td>
+    </tr>
+</table>
 
-        <tr><td colspan="5" style="height:6px;"></td></tr>
+<p style="margin-top: 10px;">
+    <strong>In Words Tk: (</strong> <span class="underliney">Nine hundred ninety nine crore ninety nine lakh ninety nine thousand nine hundred ninety nine only</span>
+    <strong>)</strong>
+</p>
 
-        <tr>
-            <td class="field-label">Address (Present):</td>
-            <td class="dotted-line" colspan="4"></td>
-        </tr>
-
-        <tr><td colspan="5" style="height:6px;"></td></tr>
-
-        <tr>
-            <td class="field-label">Address (Permanent):</td>
-            <td class="dotted-line" colspan="4"></td>
-        </tr>
-
-        <tr><td colspan="5" style="height:12px;"></td></tr>
-
-        <!-- Spouse + Mobile -->
-        <tr>
-            <td class="field-label">Spouse Name :</td>
-            <td class="dotted-line"></td>
-            <td style="width:20px;"></td>
-            <td class="field-label">Mobile :</td>
-            <td class="dotted-line" style="width:180px;"></td>
-        </tr>
-
-        <tr><td colspan="5" style="height:6px;"></td></tr>
-
-        <!-- NID + Religion -->
-        <tr>
-            <td class="field-label">National ID No. :</td>
-            <td class="dotted-line"></td>
-            <td style="width:20px;"></td>
-            <td class="field-label">Religion :</td>
-            <td class="dotted-line" style="width:140px; text-align:center;"></td>
-        </tr>
-
-        <tr><td colspan="5" style="height:6px;"></td></tr>
-
-        <!-- DOB + Profession -->
-        <tr>
-            <td class="field-label">Date of Birth :</td>
-            <td class="dotted-line" style="width:140px; text-align:center;"></td>
-            <td style="width:20px;"></td>
-            <td class="field-label">Profession :</td>
-            <td class="dotted-line" style="text-align:center;"></td>
-        </tr>
-
-        <tr><td colspan="5" style="height:6px;"></td></tr>
-
-        <!-- Email + Marriage Day -->
-        <tr>
-            <td class="field-label">E-mail :</td>
-            <td class="dotted-line"></td>
-            <td style="width:20px;"></td>
-            <td class="field-label">Marriage Day :</td>
-            <td class="dotted-line" style="width:140px; text-align:center;"></td>
-        </tr>
-
-        <tr><td colspan="5" style="height:18px;"></td></tr>
-
-        <!-- Project Section -->
-        <tr>
-            <td class="field-label">Project Name :</td>
-            <td class="dotted-line"></td>
-            <td style="width:20px;"></td>
-            <td class="field-label">Category of Ownership :</td>
-            <td class="dotted-line" style="text-align:center;"></td>
-        </tr>
-
-        <tr><td colspan="5" style="height:8px;"></td></tr>
-
-        <tr>
-            <td class="field-label">Location :</td>
-            <td class="dotted-line"></td>
-            <td style="width:20px;"></td>
-            <td class="field-label">Number of Ownership :</td>
-            <td class="dotted-line" style="width:80px; text-align:center;"></td>
-            <td style="width:20px;"></td>
-            <td class="field-label">Size :</td>
-            <td class="dotted-line" style="width:120px; text-align:center;"></td>
-        </tr>
-
-        <tr><td colspan="8" style="height:18px; border-bottom: 2px solid #2F2E7A;"></td></tr>
-    </table>
-
-    <!-- Pricing Section -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:12px;">
-        <tr class="price-row">
-            <td style="width:260px; font-weight:bold;">01. Price For Ownership</td>
-            <td class="dotted-line"></td>
-            <td style="width:30px; text-align:center;">=</td>
-            <td class="amount-cell dotted-line"></td>
-        </tr>
-        <tr class="price-row">
-            <td style="font-weight:bold;">02. Special Discount</td>
-            <td class="dotted-line"></td>
-            <td style="text-align:center;">=</td>
-            <td class="amount-cell dotted-line"></td>
-        </tr>
-        <tr class="price-row">
-            <td style="font-weight:bold;">03. Agreed Price</td>
-            <td class="dotted-line"></td>
-            <td style="text-align:center;">=</td>
-            <td class="amount-cell dotted-line"></td>
-        </tr>
-
-        <tr class="total-row">
-            <td></td>
-            <td style="text-align:right; padding-right:12px;">Agreed Price Total</td>
-            <td style="text-align:center;">=</td>
-            <td class="amount-cell" style="background:#00000020; padding:4px 0;">999,99,99,999৳</td>
-        </tr>
-
-        <tr style="height:12px;"><td colspan="4"></td></tr>
-
-        <tr>
-            <td style="font-weight:bold;">In Words Tk: (</td>
-            <td class="dotted-line" colspan="2"></td>
-            <td style="text-align:right; padding-right:8px;">)</td>
-        </tr>
-    </table>
-
-    <!-- Payment & Nominee -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:16px;">
-        <tr>
-            <td colspan="4" style="font-weight:bold;">Mode of Payment (Cash/Cheque/Pay Order/D.D):</td>
-        </tr>
-
-        <tr style="height:8px;"><td colspan="4"></td></tr>
-
-        <tr>
-            <td style="font-weight:bold; width:160px;">Booking Money</td>
-            <td style="width:30px; text-align:center;">=</td>
-            <td class="dotted-line" style="width:160px; text-align:center;"></td>
-            <td style="padding-left:12px;">Tk&nbsp;&nbsp;&nbsp;<strong>(Date</strong>&nbsp;<span class="dotted-line" style="width:100px; display:inline-block; text-align:center;"></span>)</td>
-        </tr>
-
-        <tr style="height:6px;"><td colspan="4"></td></tr>
-
-        <tr>
-            <td style="font-weight:bold;">Down Payment</td>
-            <td style="text-align:center;">=</td>
-            <td class="dotted-line" style="text-align:center;"></td>
-            <td style="padding-left:12px;">Tk&nbsp;&nbsp;&nbsp;<strong>(Date</strong>&nbsp;<span class="dotted-line" style="width:100px; display:inline-block; text-align:center;"></span>)</td>
-        </tr>
-
-        <tr style="height:6px;"><td colspan="4"></td></tr>
-
-        <tr>
-            <td style="font-weight:bold;">Rest amount By</td>
-            <td class="dotted-line" style="width:60px; text-align:center;"></td>
-            <td style="padding-left:12px; font-weight:bold;">Installments Tk</td>
-            <td class="dotted-line" style="text-align:center;"></td>
-            <td style="padding-left:12px;"><strong>(From</strong>&nbsp;<span class="dotted-line" style="width:100px; display:inline-block; text-align:center;"></span>)</td>
-        </tr>
-
-        <tr style="height:12px;"><td colspan="5"></td></tr>
-
-        <tr>
-            <td colspan="5" style="font-weight:bold;">Instruction of mode of payment (if any):</td>
-        </tr>
-
-        <tr style="height:28px;"><td colspan="5"></td></tr>
-
-        <!-- Nominee -->
-        <tr>
-            <td colspan="5" style="font-weight:bold;">Nominee:</td>
-        </tr>
-
-        <tr style="height:6px;"><td colspan="5"></td></tr>
-
-        <tr>
-            <td style="font-weight:bold; width:100px;">1.</td>
-            <td class="dotted-line" colspan="3"></td>
-            <td style="font-weight:bold; width:60px; text-align:right;">2.</td>
-            <td class="dotted-line"></td>
-        </tr>
-
-        <tr style="height:8px;"><td colspan="6"></td></tr>
-
-        <tr>
-            <td style="font-weight:bold;">Phone :</td>
-            <td class="dotted-line" style="width:160px; text-align:center;"></td>
-            <td style="width:40px;"></td>
-            <td style="font-weight:bold;">Address :</td>
-            <td class="dotted-line" colspan="2"></td>
-        </tr>
-    </table>
-
-    <!-- Note -->
-    <div class="note-box" style="margin-top:20px;">
-        <strong>Note:</strong> Booking/Down payment/Installments Should be paid in according to the payment schedule. Otherwise the Company will have the absolute right to cancel this sale/deed. If any book desires to cancel his/her booking company will return money.
+<div style="margin-top: 15px;">
+    <p><strong>Mode of Payment (Cash/Cheque/Pay Order/D.D):</strong></p>
+    <div style="margin-bottom: 5px;">
+        <span style="display:inline-block; width: 120px;"><strong>Booking Money</strong></span> =
+        <span class="underliney" style="display:inline-block; width: 150px; text-align:center;">999,99,99,999</span> Tk
+        <strong>(Date:</strong> <span class="underliney">01/01/2025</span>)
     </div>
-
-    <!-- Signatures -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:60px;">
-        <tr>
-            <td class="signature">Applicant</td>
-            <td class="signature">Sales Officer</td>
-            <td class="signature">Accounts</td>
-            <td class="signature">AGM</td>
-            <td class="signature">M.D/Chairman</td>
-        </tr>
-    </table>
-
+    <div>
+        <span style="display:inline-block; width: 120px;"><strong>Down Payment</strong></span> =
+        <span class="underliney" style="display:inline-block; width: 150px; text-align:center;">999,99,99,999</span> Tk
+        <strong>(Date:</strong> <span class="underliney">01/01/2025</span>)
+    </div>
 </div>
+
+<table class="field-table" style="margin-top: 15px;">
+    <tr>
+        <td width="12%"><strong>Nominee 1.</strong></td>
+        <td width="38%" class="underliney">Mr. Muhammad Saadman</td>
+        <td width="5%" style="padding-left: 5px;"><strong>2.</strong></td>
+        <td width="45%" class="underliney">Mr. Muhammad Saadman</td>
+    </tr>
+</table>
+
+<div class="note-box">
+    <strong>Note:</strong> Booking/Down payment/Installments should be paid according to the schedule. Otherwise, the
+    Company has the absolute right to cancel this sale/deed.
+</div>
+
+<table class="footer-table">
+    <tr>
+        <td>Applicant</td>
+        <td style="border-top: 0;"></td>
+        <td>Sales Officer</td>
+        <td style="border-top: 0;"></td>
+        <td>Accounts</td>
+        <td style="border-top: 0;"></td>
+        <td>AGM</td>
+        <td style="border-top: 0;"></td>
+        <td>M.D/Chairman</td>
+    </tr>
+</table>
 
 </body>
 </html>
