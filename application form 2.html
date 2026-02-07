@@ -2,364 +2,425 @@
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Hotel Jana Application Form</title>
-  <style>
-    @page {
-      size: A4 portrait;
-      padding: 10mm;
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Hotel Jana Application Form</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            padding: 10mm;
 
-    }
+        }
 
-    body {
-      font-family: 'Helvetica', 'Arial', sans-serif;
-      font-size: 10pt;
-      color: #2F2E7A;
-      margin: 0;
-      padding: 0;
-      line-height: 1.4;
-    }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-size: 10pt;
+            color: #2F2E7A;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+        }
 
-    /* Utility Classes for dompdf */
-    .w-full {
-      width: 100%;
-    }
+        /* Utility Classes for dompdf */
+        .w-full {
+            width: 100%;
+        }
 
-    .text-center {
-      text-align: center;
-    }
+        .text-center {
+            text-align: center;
+        }
 
-    .text-right {
-      text-align: right;
-    }
+        .text-right {
+            text-align: right;
+        }
 
-    .font-bold {
-      font-weight: bold;
-    }
+        .font-bold {
+            font-weight: bold;
+        }
 
-    .underliney {
-      border-bottom: 1px dotted #2F2E7A;
-    }
+        .underliney {
+            border-bottom: 1px dotted #2F2E7A;
+        }
 
-    /* Header Table */
-    .header-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
-    }
+        /* Header Table */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
 
-    .header-table td {
-      vertical-align: middle;
-    }
+        .header-table td {
+            vertical-align: middle;
+        }
 
-    .title-box {
-      background-color: #2F2E7A;
-      color: white;
-      padding: 3px 15px;
-      border-radius: 15px;
-      display: inline-block;
-      font-size: 11pt;
-      margin-top: 5px;
-    }
+        .title-box {
+            background-color: #2F2E7A;
+            color: white;
+            padding: 3px 15px;
+            border-radius: 15px;
+            display: inline-block;
+            font-size: 11pt;
+            margin-top: 5px;
+        }
 
-    /* Field Layouts using tables for precision */
-    .field-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 8px;
-    }
+        /* Field Layouts using tables for precision */
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
 
-    .field-table td {
-      vertical-align: bottom;
-    }
+        .field-table td {
+            vertical-align: bottom;
+        }
 
-    .price-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      border-top: 2px solid #2F2E7A;
-    }
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border-top: 2px solid #2F2E7A;
+        }
 
-    .price-table td {
-      padding: 4px 0;
-    }
+        .price-table td {
+            padding: 4px 0;
+        }
 
-    .total-row {
-      
-      font-weight: bold;
-    }
+        .total-row {
 
-    .note-box {
-      background-color: #f0f0f0;
-      padding: 8px;
-      font-size: 8.5pt;
-      margin-top: 15px;
-      border-radius: 5px;
-    }
+            font-weight: bold;
+        }
 
-    /* Signature Section */
-    .footer-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 40px;
-    }
+        .note-box {
+            background-color: #f0f0f0;
+            padding: 8px;
+            font-size: 8.5pt;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
 
-    .footer-table td {
-      width: 20%;
-      text-align: center;
-      font-size: 9pt;
-      border-top: 1.5px solid #2F2E7A;
-      padding-top: 5px;
-    }
+        /* Signature Section */
+        .footer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
 
-    .photo-box {
-      border: 1px solid #ccc;
-      width: 110px;
-      height: 130px;
-      text-align: center;
-    }
-  </style>
+        .footer-table td {
+            width: 20%;
+            text-align: center;
+            font-size: 9pt;
+            border-top: 1.5px solid #2F2E7A;
+            padding-top: 5px;
+        }
+
+        .photo-box {
+            border: 1px solid #ccc;
+            width: 110px;
+            height: 130px;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
 
-  <table class="header-table">
+<table class="header-table">
     <tr>
-      <td width="15%">
-        <img src="jana.png" style="width: 80px;" alt="logo">
-      </td>
+        <td width="15%">
+            <img src="jana.png" style="width: 80px;" alt="logo">
+        </td>
 
-      <td width="55%">
-        <table width="100%">
-          <tr>
-            <td style="vertical-align: top;">
-              <h1 style="margin: 0; font-size: 24pt; font-family: serif;">Hotel Jana</h1>
-            </td>
-            <td style="vertical-align: middle; text-align: right; padding-right: 8px;">
-              <div class="title-box">APPLICATION FORM</div>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" style="padding-top: 4px;">
-              <p style="font-size: 8px; margin: 5px 0 0 0; line-height: 1.28;">
-                <strong>Corporate Office :</strong> House #153, (3rd Floor) Road #01, West Kazipara, Mirpur,
-                Dhaka-1216.<br>
-                <strong>Mirpur Office :</strong> Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur,
-                Dhaka-1216.<br>
-                Office: 01896204440, 01994045686, Tel: +88 02 226-621444, Email: asad@alliancebuildersltd.org
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
+        <td width="55%">
+            <table width="100%">
+                <tr>
+                    <td style="vertical-align: top;">
+                        <h1 style="margin: 0; font-size: 24pt; font-family: serif;">Hotel Jana</h1>
+                    </td>
+                    <td style="vertical-align: middle; text-align: right; padding-right: 8px;">
+                        <div class="title-box">APPLICATION FORM</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-top: 4px;">
+                        <p style="font-size: 8px; margin: 5px 0 0 0; line-height: 1.28;">
+                            <strong>Corporate Office :</strong> House #153, (3rd Floor) Road #01, West Kazipara, Mirpur,
+                            Dhaka-1216.<br>
+                            <strong>Mirpur Office :</strong> Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur,
+                            Dhaka-1216.<br>
+                            Office: 01896204440, 01994045686, Tel: +88 02 226-621444, Email: asad@alliancebuildersltd.org
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
 
-      <td width="15%" class="text-center">
-        <img src="qr.svg" style="width: 70px;" alt="QR"><br>
-        <span style="font-size: 7pt;">Scan to verify</span><br>
-        <strong style="text-decoration: underline;">AA00A00</strong>
-      </td>
+        <td width="15%" class="text-center">
+            <img src="qr.svg" style="width: 70px;" alt="QR"><br>
+            <span style="font-size: 7pt;">Scan to verify</span><br>
+            <strong style="text-decoration: underline;">AA00A00</strong>
+        </td>
 
-      <td width="15%" style="text-align: right;">
-        <div class="photo-box" style="border-radius: 15%;">
-          <img src="it.jpg" style="width: 100%; height: 100%; border-radius: 15%;" alt="Client">
-        </div>
-      </td>
+        <td width="15%" style="text-align: right;">
+            <div class="photo-box" style="border-radius: 15%;">
+                <img src="it.jpg" style="width: 100%; height: 100%; border-radius: 15%;" alt="Client">
+            </div>
+        </td>
     </tr>
-  </table>
+</table>
 
-  <table class="field-table">
+<table class="field-table">
     <tr>
-      <td width="10%"><strong>Name:</strong></td>
-      <td width="65%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
-      <td width="8%" style="padding-left: 10px;"><strong>Sex:</strong></td>
-      <td width="17%" class="underliney">Rather not say</td>
+        <td width="10%"><strong>Name:</strong></td>
+        <td width="65%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
+        <td width="8%" style="padding-left: 10px;"><strong>Sex:</strong></td>
+        <td width="17%" class="underliney">Rather not say</td>
     </tr>
-  </table>
+</table>
 
-  <table class="field-table">
+<table class="field-table">
     <tr>
-      <td width="18%"><strong>Father's Name:</strong></td>
-      <td width="82%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
+        <td width="18%"><strong>Father's Name:</strong></td>
+        <td width="82%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
     </tr>
-  </table>
+</table>
 
-  <table class="field-table">
+<table class="field-table">
     <tr>
-      <td width="18%"><strong>Mother's Name:</strong></td>
-      <td width="82%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
+        <td width="18%"><strong>Mother's Name:</strong></td>
+        <td width="82%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
     </tr>
-  </table>
+</table>
 
-  <table class="field-table">
+<table class="field-table">
     <tr>
-      <td width="20%"><strong>Address (Present):</strong></td>
-      <td width="80%" class="underliney">Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur, Dhaka-1216.</td>
+        <td width="20%"><strong>Address (Present):</strong></td>
+        <td width="80%" class="underliney">Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur, Dhaka-1216.</td>
     </tr>
-  </table>
+</table>
 
-  <table class="field-table">
+<table class="field-table">
     <tr>
-      <td width="20%"><strong>Address (Perm.):</strong></td>
-      <td width="80%" class="underliney">Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur, Dhaka-1216.</td>
+        <td width="20%"><strong>Address (Perm.):</strong></td>
+        <td width="80%" class="underliney">Ahmad Villa, House #640, (1st Floor), West Kazipara, Mirpur, Dhaka-1216.</td>
     </tr>
-  </table>
+</table>
 
-  <table class="field-table">
+<table class="field-table">
     <tr>
-      <td width="15%"><strong>Spouse Name:</strong></td>
-      <td width="55%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
-      <td width="10%" style="padding-left: 10px;"><strong>Mobile:</strong></td>
-      <td width="20%" class="underliney">+880 1234567890</td>
+        <td width="15%"><strong>Spouse Name:</strong></td>
+        <td width="55%" class="underliney">Mr. Muhammad Saadman Omar Siddique</td>
+        <td width="10%" style="padding-left: 10px;"><strong>Mobile:</strong></td>
+        <td width="20%" class="underliney">+880 1234567890</td>
     </tr>
-  </table>
+</table>
 
-  <!-- National ID + Religion (your original, kept as reference) -->
-  <table class="field-table">
+<!-- National ID + Religion (your original, kept as reference) -->
+<table class="field-table">
     <tr>
-      <td width="18%"><strong>National ID:</strong></td>
-      <td width="52%" class="underliney">4222 992229 334443 9922344</td>
-      <td width="10%" style="padding-left: 10px;"><strong>Religion:</strong></td>
-      <td width="20%" class="underliney">Christianity</td>
+        <td width="18%"><strong>National ID:</strong></td>
+        <td width="52%" class="underliney">4222 992229 334443 9922344</td>
+        <td width="10%" style="padding-left: 10px;"><strong>Religion:</strong></td>
+        <td width="20%" class="underliney">Christianity</td>
     </tr>
-  </table>
+</table>
 
-  <!-- DOB + Profession – ~40 / 60 split -->
-  <table class="field-table" style="margin-top: 10px;">
+<!-- DOB + Profession – ~40 / 60 split -->
+<table class="field-table" style="margin-top: 10px;">
     <tr>
-      <td width="18%"><strong>Date of Birth:</strong></td>
-      <td width="30%" class="underliney">01-01-1990</td>
-      <td width="12%" style="padding-left: 10px;"><strong>Profession:</strong></td>
-      <td width="40%" class="underliney">Software Engineer</td>
+        <td width="18%"><strong>Date of Birth:</strong></td>
+        <td width="30%" class="underliney">01-01-1990</td>
+        <td width="12%" style="padding-left: 10px;"><strong>Profession:</strong></td>
+        <td width="40%" class="underliney">Software Engineer</td>
     </tr>
-  </table>
+</table>
 
-  <!-- Email + Marriage Day – same split as NID row (18/52 + 10/20) -->
-  <table class="field-table" style="margin-top: 10px;">
+<!-- Email + Marriage Day – same split as NID row (18/52 + 10/20) -->
+<table class="field-table" style="margin-top: 10px;">
     <tr>
-      <td width="18%"><strong>E-mail:</strong></td>
-      <td width="48%" class="underliney">saadmanomarsiddiue@opticoresolutionsltd.com</td>
-      <td width="16%" style="padding-left: 10px;"><strong>Marriage Day:</strong></td>
-      <td width="18%" class="underliney">01-01-2020</td>
+        <td width="18%"><strong>E-mail:</strong></td>
+        <td width="48%" class="underliney">saadmanomarsiddiue@opticoresolutionsltd.com</td>
+        <td width="16%" style="padding-left: 10px;"><strong>Marriage Day:</strong></td>
+        <td width="18%" class="underliney">01-01-2020</td>
     </tr>
-  </table>
+</table>
 
-  <!-- Project Name + Category (your original, kept as reference) -->
-  <table class="field-table" style="margin-top: 10px;">
+<!-- Project Name + Category (your original, kept as reference) -->
+<table class="field-table" style="margin-top: 10px;">
     <tr>
-      <td width="18%"><strong>Project Name:</strong></td>
-      <td width="42%" class="underliney">Alliance Dil Mohammad Tower</td>
-      <td width="10%" style="padding-left: 10px;"><strong>Category:</strong></td>
-      <td width="30%" class="underliney">?????????</td>
+        <td width="18%"><strong>Project Name:</strong></td>
+        <td width="42%" class="underliney">Alliance Dil Mohammad Tower</td>
+        <td width="10%" style="padding-left: 10px;"><strong>Category:</strong></td>
+        <td width="30%" class="underliney">?????????</td>
     </tr>
-  </table>
+</table>
 
-  <!-- Location + Number of Ownership + Size – ~40 / 40 / 20 split -->
-  <table class="field-table" style="margin-top: 10px;">
+<!-- Location + Number of Ownership + Size – ~40 / 40 / 20 split -->
+<table class="field-table" style="margin-top: 10px;">
     <tr>
-      <td width="18%"><strong>Location:</strong></td>
-      <td width="30%" class="underliney">Marine Drive, Cox's Bazar</td>
-      <td width="23%" style="padding-left: 10px;"><strong>Number of Ownership:</strong></td>
-      <td width="10%" class="underliney">69</td>
-      <td width="5%" style="padding-left: 10px;"><strong>Size:</strong></td>
-      <td width="34%" class="underliney">14000 Sqft.</td>
+        <td width="10%"><strong>Location:</strong></td>
+        <td width="30%" class="underliney">Marine Drive, Cox's Bazar</td>
+        <td width="31%" style="padding-left: 10px;"><strong>Number of Ownership:</strong></td>
+        <td width="10%" class="underliney">69</td>
+        <td width="5%" style="padding-left: 10px;"><strong>Size:</strong></td>
+        <td width="34%" class="underliney">14000 Sqft.</td>
     </tr>
-  </table>
+</table>
 
-  <table class="price-table">
+<table class="price-table">
     <tr>
-      <td width="40%"><strong>01. Price For Ownership</strong></td>
-      <td width="40%" class="underliney"></td>
-      <td width="5%" class="text-center">=</td>
-      <td width="15%" class="underliney text-right">999,99,99,999৳</td>
-    </tr>
-    <tr>
-      <td><strong>02. Special Discount</strong></td>
-      <td class="underliney"></td>
-      <td class="text-center">=</td>
-      <td class="underliney text-right">999,99,99,999৳</td>
+        <td width="40%"><strong>01. Price For Ownership</strong></td>
+        <td width="40%" class="underliney"></td>
+        <td width="5%" class="text-center">=</td>
+        <td width="15%" class="underliney text-right">999,99,99,999৳</td>
     </tr>
     <tr>
-      <td><strong>03. Agreed Price</strong></td>
-      <td class="underliney"></td>
-      <td class="text-center">=</td>
-      <td class="underliney text-right">999,99,99,999৳</td>
+        <td><strong>02. Special Discount</strong></td>
+        <td class="underliney"></td>
+        <td class="text-center">=</td>
+        <td class="underliney text-right">999,99,99,999৳</td>
+    </tr>
+    <tr>
+        <td><strong>03. Agreed Price</strong></td>
+        <td class="underliney"></td>
+        <td class="text-center">=</td>
+        <td class="underliney text-right">999,99,99,999৳</td>
     </tr>
     <tr class="total-row" style="border-top: 2px solid #2F2E7A;">
-      <td colspan="2" class="text-right" style="padding-right: 10px;">Agreed Price Total</td>
-      <td class="text-center">=</td>
-      <td class="text-right" style="background-color: #2f2e7a2e;">999,99,99,999৳</td>
+        <td colspan="2" class="text-right" style="padding-right: 10px;">Agreed Price Total</td>
+        <td class="text-center">=</td>
+        <td class="text-right" style="background-color: #2f2e7a2e;">999,99,99,999৳</td>
     </tr>
-  </table>
+</table>
 
-  <p style="margin-top: 10px;">
+<p style="margin-top: 10px;">
     <strong>In Words Tk: (</strong> <span class="underliney">Nine hundred ninety nine crore ninety nine lakh ninety nine
       thousand nine hundred ninety nine only</span>
     <strong>)</strong>
-  </p>
+</p>
 
-  <div style="margin-top: 15px;">
+<div>
     <p><strong>Mode of Payment (Cash/Cheque/Pay Order/D.D):</strong></p>
-    <div style="margin-bottom: 5px;">
-      <span style="display:inline-block; width: 120px;"><strong>Booking Money</strong></span> =
-      <span class="underliney" style="display:inline-block; width: 150px; text-align:center;">999,99,99,999</span> Tk
-      <strong>(Date:</strong> <span class="underliney">01/01/2025</span>)
-    </div>
-    <div>
-      <span style="display:inline-block; width: 120px;"><strong>Down Payment</strong></span> =
-      <span class="underliney" style="display:inline-block; width: 150px; text-align:center;">999,99,99,999</span> Tk
-      <strong>(Date:</strong> <span class="underliney">01/01/2025</span>)
-    </div>
-  </div>
 
-  <table class="field-table" style="margin-top: 10px;">
-  <tr>
-    <td width="18%"><strong>Rest amount By</strong></td>
-    <td width="10%" class="underliney">69</td>
-    
-    <td width="18%" style="padding-left: 10px;"><strong>Installments Tk</strong></td>
-    <td width="25%" class="underliney">69,69,690</td>
-    
-    <td width="9%" style="padding-left: 10px;"><strong>(From</strong></td>
-    <td width="35%" class="underliney">01/01/2016</td>
-    <td style="width: 5%;"><strong>)</strong></td>
-  </tr>
+    <!-- Booking Money row -->
+    <table style="width:100%; margin-bottom: 8px; border-collapse:collapse;">
+        <tr>
+            <!-- Money part (50%) -->
+            <td style="width:50%; vertical-align:bottom;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:30%; white-space:nowrap;">
+                            <strong>Booking Money</strong>
+                        </td>
+                        <td style="width:70%;">
+                            = <span class="underliney" style="display:inline-block; width:80%; text-align:center;">999,99,99,999</span> Tk
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+            <!-- Date part (50%) -->
+            <td style="width:50%; vertical-align:bottom; padding-left:12px;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:30%; white-space:nowrap;">
+                            <strong>(Date:</strong>
+                        </td>
+                        <td style="width:70%;">
+                            <span class="underliney" style="display:inline-block; width:80%; text-align:center;">01/01/2025</span>)
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Down Payment row -->
+    <table style="width:100%; border-collapse:collapse;">
+        <tr>
+            <!-- Money part (50%) -->
+            <td style="width:50%; vertical-align:bottom;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:30%; white-space:nowrap;">
+                            <strong>Down Payment</strong>
+                        </td>
+                        <td style="width:70%;">
+                            = <span class="underliney" style="display:inline-block; width:80%; text-align:center;">999,99,99,999</span> Tk
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+            <!-- Date part (50%) -->
+            <td style="width:50%; vertical-align:bottom; padding-left:12px;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:30%; white-space:nowrap;">
+                            <strong>(Date:</strong>
+                        </td>
+                        <td style="width:70%;">
+                            <span class="underliney" style="display:inline-block; width:80%; text-align:center;">01/01/2025</span>)
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<table class="field-table" style="margin-top: 10px;">
+    <tr>
+        <td width="18%"><strong>Rest amount By</strong></td>
+        <td width="8%" class="underliney">69</td>
+
+        <td width="20%" style="padding-left: 10px;"><strong>Installments Tk</strong></td>
+        <td width="20%" class="underliney">969,69,69,690</td>
+
+        <td width="9%" style="padding-left: 10px;"><strong>(From</strong></td>
+        <td width="35%" class="underliney">01/01/2016</td>
+        <td><strong>)</strong></td>
+    </tr>
 </table>
 
 <p style="margin-top: 10px;"><strong>Instruction of mode of payment (if any):</strong></p>
+<!-- Nominee names row -->
+<table class="field-table" style="margin-top: 10px;">
+  <tr>
+    <td width="12%"><strong>Nominee 1.</strong></td>
+    <td width="38%" class="underliney">Mr. Muhammad Saadman</td>
+    <td width="5%" style="padding-left: 5px;"><strong>2.</strong></td>
+    <td width="45%" class="underliney">Mr. Muhammad Saadman</td>
+  </tr>
+</table>
 
-  <table class="field-table" style="margin-top: 15px;">
-    <tr>
-      <td width="12%"><strong>Nominee 1.</strong></td>
-      <td width="38%" class="underliney">Mr. Muhammad Saadman</td>
-      <td width="5%" style="padding-left: 5px;"><strong>2.</strong></td>
-      <td width="45%" class="underliney">Mr. Muhammad Saadman</td>
-    </tr>
-    <tr>
-      <td width="5%"><strong>Phone:</strong></td>
-      <td width="15%" class="underliney">+8801712345678</td>
-      <td width="5%" style="padding-left: 5px;"><strong>Address:</strong></td>
-      <td width="75%" class="underliney">1179, Alliance Dil Mohammad Tower, Beside Baba Huzur Mosque, East Monipur, Kazipara, Dhaka-2000</td>
-    </tr>
-  </table>
+<!-- Phone + Address row – different column structure -->
+<table class="field-table" style="margin-top: 4px;">
+  <tr>
+    <td width="5%"><strong>Phone:</strong></td>
+    <td width="15%" class="underliney">+8801712345678</td>
+    <td width="5%" style="padding-left: 12px;"><strong>Address:</strong></td>
+    <td width="75%" class="underliney">
+      1179, Alliance Dil Mohammad Tower, Beside Baba Huzur Mosque, East Monipur, Kazipara, Dhaka-2000
+    </td>
+  </tr>
+</table>
 
-  <div class="note-box">
-    <strong>Note:</strong> Booking/Down payment/Installments should be paid according to the schedule. Otherwise, the
-    Company has the absolute right to cancel this sale/deed.
-  </div>
+<div class="note-box">
+    <strong>Note:</strong> Booking/Down payment/Installments should be paid according to the schedule. Otherwise, the Company has the absolute right to cancel this sale/deed.
+</div>
 
-  <table class="footer-table">
+<table class="footer-table">
     <tr>
-      <td width="15%">Applicant</td>
-      <td style="border-top: 0;"></td>
-      <td width="15%">Sales Officer</td>
-      <td style="border-top: 0;"></td>
-      <td width="15%">Accounts</td>
-      <td style="border-top: 0;"></td>
-      <td width="15%">AGM</td>
-      <td style="border-top: 0;"></td>
-      <td width="15%">M.D/Chairman</td>
+        <td width="15%">Applicant</td>
+        <td style="border-top: 0;"></td>
+        <td width="15%">Sales Officer</td>
+        <td style="border-top: 0;"></td>
+        <td width="15%">Accounts</td>
+        <td style="border-top: 0;"></td>
+        <td width="15%">AGM</td>
+        <td style="border-top: 0;"></td>
+        <td width="15%">M.D/Chairman</td>
     </tr>
-  </table>
+</table>
 
 </body>
 
