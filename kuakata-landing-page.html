@@ -11,10 +11,10 @@
 
 <style>
   :root {
-    --gold: #C9A84C;
-    --gold-light: #E8C97A;
-    --gold-pale: #F5E6C0;
-    --deep-navy: #0A0F1E;
+    --gold: #28ace2;
+    --gold-light: #4fc3f0;
+    --gold-pale: #cceeff;
+    --deep-navy: #0a0f1e;
     --ocean-dark: #060D1A;
     --ocean-mid: #0D2137;
     --cream: #F7F1E8;
@@ -44,7 +44,7 @@
   }
   .cursor-ring {
     position: fixed; width: 36px; height: 36px;
-    border: 1px solid rgba(201,168,76,0.5);
+    border: 1px solid rgba(40,172,226,0.5);
     border-radius: 50%; pointer-events: none;
     z-index: 99998; transform: translate(-50%, -50%);
     transition: all 0.15s ease;
@@ -58,7 +58,7 @@
   .lang-orb {
     width: 60px; height: 28px;
     background: rgba(10,15,30,0.8);
-    border: 1px solid rgba(201,168,76,0.4);
+    border: 1px solid rgba(40,172,226,0.4);
     border-radius: 20px; position: relative;
     cursor: pointer; backdrop-filter: blur(12px);
     transition: border-color 0.3s;
@@ -78,21 +78,21 @@
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
     border-radius: 50%; top: 50%; transform: translateY(-50%);
     left: 4px; transition: left 0.4s cubic-bezier(0.68,-0.55,0.27,1.55);
-    box-shadow: 0 0 8px rgba(201,168,76,0.5);
+    box-shadow: 0 0 8px rgba(40,172,226,0.5);
   }
   .lang-orb.bn .lang-ball { left: calc(100% - 24px); }
 
   /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0;
-    z-index: 9990; padding: 24px 48px;
+    z-index: 9990; padding: 8px 16px;
     display: flex; align-items: center; justify-content: space-between;
     transition: background 0.5s, backdrop-filter 0.5s;
   }
   nav.scrolled {
     background: rgba(6,13,26,0.92);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(201,168,76,0.15);
+    border-bottom: 1px solid rgba(40,172,226,0.15);
   }
   .nav-logo {
     font-family: 'Cinzel', serif;
@@ -133,7 +133,7 @@
     position: absolute; inset: 0;
     background:
       radial-gradient(ellipse 80% 50% at 50% 100%, rgba(13,33,55,0.9) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 40% at 20% 60%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 20% 60%, rgba(40,172,226,0.06) 0%, transparent 60%),
       radial-gradient(ellipse 60% 40% at 80% 60%, rgba(13,33,55,0.8) 0%, transparent 60%),
       url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=90') center/cover no-repeat;
     animation: heroParallax 20s ease-in-out infinite alternate;
@@ -190,22 +190,22 @@
     background: linear-gradient(135deg, var(--gold-light), var(--gold));
     opacity: 0; transition: opacity 0.3s;
   }
-  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.4); }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(40,172,226,0.4); }
   .btn-gold:hover::before { opacity: 1; }
   .btn-gold span { position: relative; z-index: 1; }
   .btn-outline {
     font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em;
     text-transform: uppercase; color: var(--gold);
     background: transparent;
-    border: 1px solid rgba(201,168,76,0.5);
+    border: 1px solid rgba(40,172,226,0.5);
     padding: 18px 44px; cursor: pointer;
     text-decoration: none; display: inline-block;
     transition: all 0.3s; backdrop-filter: blur(8px);
   }
   .btn-outline:hover {
-    background: rgba(201,168,76,0.1);
+    background: rgba(40,172,226,0.1);
     border-color: var(--gold);
-    box-shadow: 0 0 30px rgba(201,168,76,0.2);
+    box-shadow: 0 0 30px rgba(40,172,226,0.2);
   }
   .scroll-indicator {
     position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
@@ -223,7 +223,7 @@
   }
   .scroll-text {
     font-family: 'Cinzel', serif; font-size: 9px;
-    letter-spacing: 0.3em; color: rgba(201,168,76,0.6);
+    letter-spacing: 0.3em; color: rgba(40,172,226,0.6);
     writing-mode: vertical-rl; text-orientation: mixed;
   }
 
@@ -335,7 +335,7 @@
     width: 100%; aspect-ratio: 3/4;
     object-fit: cover;
     position: relative; z-index: 2;
-    border: 1px solid rgba(201,168,76,0.2);
+    border: 1px solid rgba(40,172,226,0.2);
   }
   .story-img-accent {
     position: absolute; width: 55%; aspect-ratio: 1;
@@ -346,7 +346,7 @@
   }
   .story-gold-frame {
     position: absolute; top: -16px; right: -16px; bottom: -16px; left: -16px;
-    border: 1px solid rgba(201,168,76,0.15);
+    border: 1px solid rgba(40,172,226,0.15);
     z-index: 1; pointer-events: none;
   }
 
@@ -400,7 +400,7 @@
   .gallery-item:hover .gallery-item-label { opacity: 1; transform: translateY(0); }
   .gallery-gold-border {
     position: absolute; inset: 8px;
-    border: 1px solid rgba(201,168,76,0.3);
+    border: 1px solid rgba(40,172,226,0.3);
     pointer-events: none; z-index: 3;
     opacity: 0; transition: opacity 0.4s;
   }
@@ -414,7 +414,7 @@
   .benefits-bg {
     position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(40,172,226,0.04) 0%, transparent 60%),
       url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&q=70') center/cover;
     opacity: 0.08;
   }
@@ -425,8 +425,8 @@
   .benefits-header { text-align: center; margin-bottom: 80px; }
   .benefits-tag {
     display: inline-block;
-    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
-    border: 1px solid rgba(201,168,76,0.3);
+    background: linear-gradient(135deg, rgba(40,172,226,0.15), rgba(40,172,226,0.05));
+    border: 1px solid rgba(40,172,226,0.3);
     padding: 8px 24px; margin-bottom: 24px;
     font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.4em;
     color: var(--gold); text-transform: uppercase;
@@ -436,7 +436,7 @@
   }
   .benefit-card {
     background: rgba(13,33,55,0.4);
-    border: 1px solid rgba(201,168,76,0.1);
+    border: 1px solid rgba(40,172,226,0.1);
     padding: 44px 36px;
     position: relative; overflow: hidden;
     transition: border-color 0.4s, background 0.4s;
@@ -449,13 +449,13 @@
     opacity: 0; transition: opacity 0.4s;
   }
   .benefit-card:hover {
-    border-color: rgba(201,168,76,0.3);
+    border-color: rgba(40,172,226,0.3);
     background: rgba(13,33,55,0.7);
   }
   .benefit-card:hover::before { opacity: 1; }
   .benefit-num {
     font-family: 'Cinzel', serif; font-size: 11px;
-    letter-spacing: 0.3em; color: rgba(201,168,76,0.4);
+    letter-spacing: 0.3em; color: rgba(40,172,226,0.4);
     margin-bottom: 16px;
   }
   .benefit-icon {
@@ -480,7 +480,7 @@
   }
   .benefit-card-shine {
     position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(circle at 0% 0%, rgba(201,168,76,0.05) 0%, transparent 60%);
+    background: radial-gradient(circle at 0% 0%, rgba(40,172,226,0.05) 0%, transparent 60%);
     opacity: 0; transition: opacity 0.4s;
   }
   .benefit-card:hover .benefit-card-shine { opacity: 1; }
@@ -507,19 +507,19 @@
     aspect-ratio: 1; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 12px;
     background: rgba(13,33,55,0.3);
-    border: 1px solid rgba(201,168,76,0.08);
+    border: 1px solid rgba(40,172,226,0.08);
     padding: 24px 16px; text-align: center;
     transition: all 0.4s; position: relative; overflow: hidden;
     cursor: default;
   }
   .amenity-item::after {
     content: ''; position: absolute; inset: 0;
-    background: radial-gradient(circle at center, rgba(201,168,76,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(40,172,226,0.08) 0%, transparent 70%);
     opacity: 0; transition: opacity 0.4s;
   }
   .amenity-item:hover {
     background: rgba(13,33,55,0.8);
-    border-color: rgba(201,168,76,0.3);
+    border-color: rgba(40,172,226,0.3);
     transform: scale(1.03);
     z-index: 1;
   }
@@ -531,11 +531,11 @@
   .amenity-item:hover .amenity-icon { transform: scale(1.2); }
   .amenity-name {
     font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.15em;
-    color: rgba(201,168,76,0.7); text-transform: uppercase; line-height: 1.3;
+    color: rgba(40,172,226,0.7); text-transform: uppercase; line-height: 1.3;
   }
   .amenity-name-bn {
     font-family: 'Tiro Bangla', serif; font-size: 11px;
-    color: rgba(201,168,76,0.7); line-height: 1.4;
+    color: rgba(40,172,226,0.7); line-height: 1.4;
   }
 
   /* SECTION: PRIVILEGE */
@@ -545,7 +545,7 @@
   .privilege-bg {
     position: absolute; inset: 0;
     background:
-      linear-gradient(135deg, rgba(201,168,76,0.03) 0%, transparent 50%),
+      linear-gradient(135deg, rgba(40,172,226,0.03) 0%, transparent 50%),
       url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=70') center/cover;
     opacity: 0.08;
   }
@@ -556,10 +556,10 @@
   }
   .privilege-card-wrap { perspective: 1000px; }
   .privilege-card {
-    background: linear-gradient(135deg, #C9A84C 0%, #E8C97A 30%, #F5E6C0 50%, #E8C97A 70%, #C9A84C 100%);
+    background: linear-gradient(135deg, #28ace2 0%, #4fc3f0 30%, #cceeff 50%, #4fc3f0 70%, #28ace2 100%);
     border-radius: 16px; padding: 48px 44px;
     position: relative; overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(201,168,76,0.2);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(40,172,226,0.2);
     transform-style: preserve-3d;
     transition: transform 0.6s;
     min-height: 320px;
@@ -615,7 +615,7 @@
   }
   .privilege-right { }
   .privilege-highlight {
-    background: rgba(201,168,76,0.06);
+    background: rgba(40,172,226,0.06);
     border-left: 2px solid var(--gold);
     padding: 24px 28px; margin: 28px 0;
     font-family: 'Cormorant Garamond', serif; font-size: 22px;
@@ -676,7 +676,7 @@
   .invest-price {
     font-family: 'Cinzel', serif; font-size: 64px;
     color: var(--gold); line-height: 1;
-    text-shadow: 0 0 40px rgba(201,168,76,0.4);
+    text-shadow: 0 0 40px rgba(40,172,226,0.4);
   }
   .invest-price-unit {
     font-family: 'Cormorant Garamond', serif; font-size: 20px;
@@ -700,8 +700,8 @@
   .brand-header { text-align: center; margin-bottom: 64px; }
   .brand-iso {
     display: inline-flex; align-items: center; gap: 12px;
-    background: rgba(201,168,76,0.06);
-    border: 1px solid rgba(201,168,76,0.2);
+    background: rgba(40,172,226,0.06);
+    border: 1px solid rgba(40,172,226,0.2);
     padding: 10px 24px; margin-bottom: 32px;
     font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em;
     color: var(--gold);
@@ -711,14 +711,14 @@
   }
   .brand-card {
     background: rgba(13,33,55,0.3);
-    border: 1px solid rgba(201,168,76,0.08);
+    border: 1px solid rgba(40,172,226,0.08);
     padding: 36px 32px; text-align: center;
     transition: all 0.4s;
     display: flex; flex-direction: column; align-items: center; gap: 12px;
   }
   .brand-card:hover {
     background: rgba(13,33,55,0.7);
-    border-color: rgba(201,168,76,0.25);
+    border-color: rgba(40,172,226,0.25);
   }
   .brand-card-icon { font-size: 36px; }
   .brand-card-name {
@@ -732,8 +732,8 @@
 
   /* CONTACT STRIP */
   #contact {
-    background: rgba(201,168,76,0.06);
-    border-top: 1px solid rgba(201,168,76,0.2);
+    background: rgba(40,172,226,0.06);
+    border-top: 1px solid rgba(40,172,226,0.2);
     padding: 60px 48px;
     min-height: auto; scroll-snap-align: none;
   }
@@ -797,7 +797,7 @@
   /* HORIZONTAL GOLD LINE DECORATION */
   .gold-line-deco {
     width: 100%; height: 1px;
-    background: linear-gradient(to right, transparent, rgba(201,168,76,0.4) 30%, rgba(201,168,76,0.4) 70%, transparent);
+    background: linear-gradient(to right, transparent, rgba(40,172,226,0.4) 30%, rgba(40,172,226,0.4) 70%, transparent);
     margin: 60px 0;
   }
 
@@ -805,7 +805,7 @@
   .sunrise-glow {
     position: absolute; bottom: 0; left: 0; right: 0;
     height: 200px;
-    background: linear-gradient(to top, rgba(201,168,76,0.08), transparent);
+    background: linear-gradient(to top, rgba(40,172,226,0.08), transparent);
     pointer-events: none;
   }
 
@@ -842,14 +842,16 @@
 
 <!-- NAVIGATION -->
 <nav id="mainNav">
-  <a href="#" class="nav-logo">HOTEL <span>JANA</span></a>
+  <a href="#" class="nav-logo">
+    <img src="jana.png" alt="jana logo" style="width: 48px; height: auto; filter: drop-shadow(0 0 2px rgba(40,172,226,0.8)); padding: 4px;">
+  </a>
   <div class="nav-links">
     <a href="#story">Our Vision</a>
     <a href="#gallery">Gallery</a>
     <a href="#benefits">Ownership</a>
     <a href="#amenities">Amenities</a>
     <a href="#privilege">Privileges</a>
-    <a href="form.html" style="color:var(--gold); border: 1px solid rgba(201,168,76,0.4); padding: 10px 24px;">Reserve a Share</a>
+    <a href="form.html" style="color:var(--gold); border: 1px solid rgba(40,172,226,0.4); padding: 10px 24px;">Reserve a Share</a>
   </div>
   <!-- LANGUAGE SWITCH -->
   <div class="lang-switch">
@@ -1405,14 +1407,14 @@ document.querySelectorAll('a, button, .gallery-item, .benefit-card, .amenity-ite
     cursor.style.height = '16px';
     cursorRing.style.width = '52px';
     cursorRing.style.height = '52px';
-    cursorRing.style.borderColor = 'rgba(201,168,76,0.8)';
+    cursorRing.style.borderColor = 'rgba(40,172,226,0.8)';
   });
   el.addEventListener('mouseleave', () => {
     cursor.style.width = '8px';
     cursor.style.height = '8px';
     cursorRing.style.width = '36px';
     cursorRing.style.height = '36px';
-    cursorRing.style.borderColor = 'rgba(201,168,76,0.5)';
+    cursorRing.style.borderColor = 'rgba(40,172,226,0.5)';
   });
 });
 
