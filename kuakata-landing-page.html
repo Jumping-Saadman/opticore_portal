@@ -53,7 +53,6 @@
 
   /* LANG SWITCH */
   .lang-switch {
-    position: fixed; top: 28px; right: 32px;
     z-index: 9999; display: flex; align-items: center; gap: 0;
   }
   .lang-orb {
@@ -840,14 +839,7 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- LANGUAGE SWITCH -->
-<div class="lang-switch">
-  <div class="lang-orb" id="langToggle" onclick="toggleLang()">
-    <span class="lang-label">EN</span>
-    <div class="lang-ball"></div>
-    <span class="lang-label">বাং</span>
-  </div>
-</div>
+
 
 <!-- NAVIGATION -->
 <nav id="mainNav">
@@ -859,6 +851,14 @@
     <a href="#amenities">Amenities</a>
     <a href="#privilege">Privileges</a>
     <a href="form.html" style="color:var(--gold); border: 1px solid rgba(201,168,76,0.4); padding: 10px 24px;">Reserve a Share</a>
+  </div>
+  <!-- LANGUAGE SWITCH -->
+  <div class="lang-switch">
+    <div class="lang-orb" id="langToggle" onclick="toggleLang()">
+      <span class="lang-label">EN</span>
+      <div class="lang-ball"></div>
+      <span class="lang-label">বাং</span>
+    </div>
   </div>
 </nav>
 
