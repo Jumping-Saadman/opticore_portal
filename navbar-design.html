@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Navbar – Tailwind</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          bebas: ['"Bebas Neue"', 'sans-serif'],
+          dm: ['"DM Sans"', 'sans-serif'],
+        },
+        colors: {
+          accent:  '#6c63ff',
+          accent2: '#ff6584',
+          surface: '#0d0d14',
+          muted:   '#6868a0',
+        },
+        letterSpacing: {
+          widest2: '3px',
+          widest3: '6px',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  /* ── Only things Tailwind cannot express ── */
+
+  /* Keyframe animations */
+  @keyframes navIn {
+    0%   { opacity: 0; transform: translateY(-40px) rotateX(-20deg); }
+    100% { opacity: 1; transform: translateY(0)     rotateX(0deg); }
+  }
+  @keyframes shimmer {
+    0%, 100% { opacity: 0.4; transform: scaleX(0.6); }
+    50%       { opacity: 1;   transform: scaleX(1); }
+  }
+  @keyframes logoSpin {
+    0%, 100% { transform: rotateY(0deg)   rotateX(0deg); }
+    25%       { transform: rotateY(15deg)  rotateX(5deg); }
+    75%       { transform: rotateY(-15deg) rotateX(-5deg); }
+  }
+  @keyframes logoGlow {
+    from { filter: drop-shadow(0 0 10px rgba(108,99,255,0.3)); }
+    to   { filter: drop-shadow(0 0 25px rgba(108,99,255,0.7)); }
+  }
+  @keyframes linkIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { transform: translateX(-50%) scale(1);   opacity: 1; }
+    50%       { transform: translateX(-50%) scale(1.4); opacity: 0.7; }
+  }
+  @keyframes heroIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    50%       { transform: translate(30px, 30px); }
+  }
+
+  /* Animation utility classes */
+  .anim-navIn   { animation: navIn   0.9s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-logoSpin{ animation: logoSpin 8s  ease-in-out infinite; }
+  .anim-logoGlow{ animation: logoGlow 3s  ease-in-out infinite alternate; }
+  .anim-linkIn  { animation: linkIn  0.6s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-heroIn-1{ animation: heroIn  1s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-heroIn-2{ animation: heroIn  1s 0.3s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-heroIn-3{ animation: heroIn  1s 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-orb     { animation: orbFloat 10s ease-in-out infinite; }
+  .anim-orb-2   { animation: orbFloat 10s ease-in-out infinite; animation-delay: -5s; }
+  .anim-pulse   { animation: pulse-dot 2s ease-in-out infinite; }
+  .anim-shimmer { animation: shimmer 3s ease-in-out infinite; }
+
+  /* Stagger delays for nav links */
+  .delay-100 { animation-delay: 0.10s; }
+  .delay-180 { animation-delay: 0.18s; }
+  .delay-260 { animation-delay: 0.26s; }
+  .delay-340 { animation-delay: 0.34s; }
+  .delay-420 { animation-delay: 0.42s; }
+  .delay-500 { animation-delay: 0.50s; }
+
+  /* preserve-3d / perspective – not in Tailwind base */
+  .preserve-3d    { transform-style: preserve-3d; }
+  .perspective-nav{ perspective: 1200px; }
+
+  /* Complex multi-stop gradient backgrounds */
+  .nav-bg {
+    background: linear-gradient(135deg, rgba(20,18,40,0.92) 0%, rgba(12,10,28,0.95) 100%);
+  }
+  .nav-shadow {
+    box-shadow:
+      0 0 0 1px rgba(108,99,255,0.08),
+      0 8px 32px rgba(0,0,0,0.6),
+      0 2px 0 rgba(255,255,255,0.04) inset,
+      0 -1px 0 rgba(108,99,255,0.3) inset;
+  }
+
+  /* ::before overlay gradient on nav */
+  #navbar::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg,
+      rgba(108,99,255,0.07) 0%, transparent 50%, rgba(255,101,132,0.04) 100%);
+    pointer-events: none;
+  }
+
+  /* ::after shimmer line on nav */
+  #navbar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent,
+      rgba(108,99,255,0.8) 30%,
+      rgba(255,255,255,0.9) 50%,
+      rgba(255,101,132,0.8) 70%,
+      transparent);
+    border-radius: 2px;
+  }
+  #navbar::after { animation: shimmer 3s ease-in-out infinite; }
+
+  /* Gradient text */
+  .logo-grad {
+    background: linear-gradient(135deg, #fff 0%, #6c63ff 60%, #ff6584 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-grad {
+    background: linear-gradient(135deg, #fff 0%, rgba(108,99,255,0.9) 50%, #ff6584 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Nav link hover pill (::before pseudo-element) */
+  .nav-link {
+    display: block;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #6868a0;
+    text-decoration: none;
+    border-radius: 10px;
+    position: relative;
+    transition: color 0.3s;
+    transform-style: preserve-3d;
+  }
+  .nav-link::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(255,101,132,0.08));
+    border: 1px solid rgba(108,99,255,0.3);
+    opacity: 0;
+    transform: translateZ(-4px) scaleX(0.8) scaleY(0.8);
+    transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 4px 16px rgba(108,99,255,0.25), 0 1px 0 rgba(255,255,255,0.08) inset;
+  }
+  .nav-link:hover { color: #e8e8f0; }
+  .nav-link:hover::before {
+    opacity: 1;
+    transform: translateZ(0) scaleX(1) scaleY(1);
+  }
+  .nav-link:hover .label { transform: translateY(-1px); }
+
+  /* Active nav link */
+  li.active .nav-link { color: #fff; }
+  li.active .nav-link::before {
+    opacity: 1;
+    transform: translateZ(0) scaleX(1) scaleY(1);
+    background: linear-gradient(135deg, rgba(108,99,255,0.3), rgba(255,101,132,0.15));
+    border-color: rgba(108,99,255,0.6);
+    box-shadow:
+      0 4px 20px rgba(108,99,255,0.35),
+      0 0 0 1px rgba(108,99,255,0.2),
+      0 1px 0 rgba(255,255,255,0.1) inset;
+  }
+  li.active .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 4px; left: 50%;
+    transform: translateX(-50%);
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #6c63ff;
+    box-shadow: 0 0 8px #6c63ff;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  /* Primary button shimmer sweep */
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -60%;
+    width: 40%; height: 200%;
+    background: rgba(255,255,255,0.15);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+  }
+  .btn-primary:hover::after { left: 130%; }
+
+  /* Primary button shadow states */
+  .btn-primary-shadow {
+    box-shadow:
+      0 4px 16px rgba(108,99,255,0.4),
+      0 1px 0 rgba(255,255,255,0.2) inset,
+      0 -2px 0 rgba(0,0,0,0.3) inset;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+      0 8px 28px rgba(108,99,255,0.55),
+      0 1px 0 rgba(255,255,255,0.2) inset,
+      0 -2px 0 rgba(0,0,0,0.3) inset;
+  }
+  .btn-primary:active { transform: translateY(0) scale(0.98); }
+
+  /* Hero background pseudo-element grid */
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(108,99,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,99,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  }
+</style>
+</head>
+
+<body class="font-dm bg-[#050508] text-[#e8e8f0] min-h-screen overflow-x-hidden">
+
+  <!-- NAVBAR WRAPPER -->
+  <div id="nav-wrapper"
+       class="fixed top-0 left-0 right-0 z-[1000] px-8 py-4 perspective-nav">
+
+    <nav id="navbar"
+         class="nav-bg nav-shadow anim-navIn preserve-3d
+                flex items-center justify-between
+                h-[72px] px-7
+                border border-[rgba(108,99,255,0.25)] rounded-[20px]
+                relative backdrop-blur-xl
+                transition-[box-shadow] duration-300">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-[10px] no-underline relative z-10">
+        <div class="w-[38px] h-[38px] relative preserve-3d anim-logoSpin">
+          <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"
+               class="w-[38px] h-[38px]" style="filter:drop-shadow(0 0 12px rgba(108,99,255,0.8))">
+            <polygon points="19,2 36,32 2,32" fill="none" stroke="url(#g1)" stroke-width="2.5" stroke-linejoin="round"/>
+            <polygon points="19,10 30,28 8,28" fill="url(#g2)" opacity="0.35"/>
+            <circle cx="19" cy="20" r="3.5" fill="url(#g1)"/>
+            <defs>
+              <linearGradient id="g1" x1="2" y1="2" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#6c63ff"/>
+                <stop offset="100%" stop-color="#ff6584"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="8" y1="10" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#6c63ff"/>
+                <stop offset="100%" stop-color="#ff6584"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="logo-grad anim-logoGlow font-bebas text-[28px] tracking-[3px]">PRISMA</span>
+      </a>
+
+      <!-- Nav Links -->
+      <ul class="hidden md:flex items-center gap-1 list-none">
+        <li class="relative anim-linkIn delay-100 active">
+          <a href="#" class="nav-link"><span class="label relative z-10 block transition-transform duration-300">Home</span></a>
+        </li>
+        <li class="relative anim-linkIn delay-180">
+          <a href="#" class="nav-link"><span class="label relative z-10 block transition-transform duration-300">Features</span></a>
+        </li>
+        <li class="relative anim-linkIn delay-260">
+          <a href="#" class="nav-link"><span class="label relative z-10 block transition-transform duration-300">Pricing</span></a>
+        </li>
+        <li class="relative anim-linkIn delay-340">
+          <a href="#" class="nav-link"><span class="label relative z-10 block transition-transform duration-300">Docs</span></a>
+        </li>
+        <li class="relative anim-linkIn delay-420">
+          <a href="#" class="nav-link"><span class="label relative z-10 block transition-transform duration-300">Blog</span></a>
+        </li>
+      </ul>
+
+      <!-- CTA -->
+      <div class="flex items-center gap-[14px] anim-linkIn delay-500">
+        <button class="hidden md:block font-dm text-[13px] font-medium text-muted bg-transparent border-none cursor-pointer px-[14px] py-2 rounded-lg transition-colors duration-300 tracking-[0.3px] hover:text-[#e8e8f0]">
+          Sign in
+        </button>
+        <button class="btn-primary btn-primary-shadow font-dm text-[13px] font-medium tracking-[0.5px] text-white
+                       bg-gradient-to-br from-accent to-[#9b59b6]
+                       cursor-pointer px-[22px] py-[10px] rounded-xl
+                       relative overflow-hidden
+                       transition-[transform,box-shadow] duration-300">
+          Get Started →
+        </button>
+        <!-- Hamburger (mobile) -->
+        <div class="flex md:hidden flex-col gap-[5px] cursor-pointer p-2">
+          <span class="block w-[22px] h-[2px] bg-muted rounded-sm transition-all duration-300"></span>
+          <span class="block w-[22px] h-[2px] bg-muted rounded-sm transition-all duration-300"></span>
+          <span class="block w-[22px] h-[2px] bg-muted rounded-sm transition-all duration-300"></span>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+
+<script>
+  // 3D tilt on mouse move
+  const nav     = document.getElementById('navbar');
+  const wrapper = document.getElementById('nav-wrapper');
+
+  wrapper.addEventListener('mousemove', (e) => {
+    const rect = nav.getBoundingClientRect();
+    const cx = rect.left + rect.width  / 2;
+    const cy = rect.top  + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width  / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    const rotX = dy * -3;
+    const rotY = dx *  4;
+    nav.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(2px)`;
+    nav.style.boxShadow = `
+      ${-rotY * 3}px ${rotX * 3 + 8}px 32px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(108,99,255,0.08),
+      ${-rotY * 2}px ${rotX * 2 + 2}px 0 rgba(255,255,255,0.04) inset,
+      0 -1px 0 rgba(108,99,255,0.3) inset
+    `;
+  });
+
+  wrapper.addEventListener('mouseleave', () => {
+    nav.style.transform  = '';
+    nav.style.boxShadow  = '';
+    nav.style.transition = 'transform 0.6s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.6s ease';
+    setTimeout(() => { nav.style.transition = ''; }, 600);
+  });
+
+  // Active link click
+  document.querySelectorAll('.nav-links-ul li').forEach(li => {
+    li.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links-ul li').forEach(x => x.classList.remove('active'));
+      li.classList.add('active');
+    });
+  });
+  // Also works for inline ul
+  document.querySelectorAll('ul li').forEach(li => {
+    li.addEventListener('click', () => {
+      li.closest('ul').querySelectorAll('li').forEach(x => x.classList.remove('active'));
+      li.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
