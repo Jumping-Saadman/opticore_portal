@@ -57,7 +57,7 @@
   }
   .lang-orb {
     width: 60px; height: 28px;
-    background: rgba(10,15,30,0.8);
+    background: rgba(73, 73, 73, 0.8);
     border: 1px solid rgba(40,172,226,0.4);
     border-radius: 20px; position: relative;
     cursor: pointer; backdrop-filter: blur(12px);
@@ -68,19 +68,24 @@
   .lang-orb:hover { border-color: var(--gold); }
   .lang-orb .lang-label {
     font-family: 'Cinzel', serif;
-    font-size: 8px; letter-spacing: 0.05em;
-    color: var(--gold); font-weight: 600;
+    font-size: 12px; letter-spacing: 0.05em;
+    color: white; font-weight: 300;
     line-height: 1; z-index: 1; position: relative;
-    padding: 0 2px;
+    padding: 0 4px;
   }
+
+  /* .lang-label { padding: 0 4px; } */
+
   .lang-orb .lang-ball {
-    position: absolute; width: 20px; height: 20px;
+    position: absolute; width: 28px; height: 18px;
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    border-radius: 50%; top: 50%; transform: translateY(-50%);
+    border-radius: 999px; top: 50%; transform: translateY(-50%);
     left: 4px; transition: left 0.4s cubic-bezier(0.68,-0.55,0.27,1.55);
     box-shadow: 0 0 8px rgba(40,172,226,0.5);
   }
-  .lang-orb.bn .lang-ball { left: calc(100% - 24px); }
+
+
+  .lang-orb.bn .lang-ball { left: calc(100% - 31px); }
 
   /* NAV */
   nav {
@@ -103,8 +108,8 @@
   .nav-logo span { color: var(--cream); font-weight: 400; }
   .nav-links { display: flex; gap: 36px; align-items: center; }
   .nav-links a {
-    font-family: 'Cinzel', serif; font-size: 10px;
-    letter-spacing: 0.2em; color: rgba(232,220,200,0.7);
+    font-family: 'Cinzel', serif; font-size: 12px;
+    letter-spacing: 0.2em; color: rgb(255, 255, 255);
     text-decoration: none; text-transform: uppercase;
     transition: color 0.3s; position: relative;
   }
@@ -115,6 +120,8 @@
   }
   .nav-links a:hover { color: var(--gold); }
   .nav-links a:hover::after { width: 100%; }
+
+  /* .nav-button:hover { background-color: black; } */
 
   /* SECTIONS */
   section {
@@ -152,16 +159,18 @@
   }
   .hero-content { position: relative; z-index: 2; padding: 0 24px; }
   .hero-eyebrow {
-    font-family: 'Cinzel', serif; font-size: 11px;
-    letter-spacing: 0.5em; color: var(--gold);
+    font-family: 'Cinzel', serif; font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5em; color: rgb(0, 0, 0);
     text-transform: uppercase; margin-bottom: 24px;
     opacity: 0; animation: fadeUp 1.2s 0.5s forwards;
+    text-shadow: 0 1px 8px rgba(255, 255, 255, 0.6);
   }
   .hero-title {
     font-family: 'Cinzel', serif;
     font-size: clamp(52px, 10vw, 120px);
     font-weight: 400; line-height: 1;
-    color: var(--cream); letter-spacing: 0.05em;
+    color: white; letter-spacing: 0.05em;
     margin-bottom: 8px;
     opacity: 0; animation: fadeUp 1.2s 0.8s forwards;
   }
@@ -171,14 +180,15 @@
     font-style: italic; font-weight: 300;
     color: rgba(232,220,200,0.75); margin-bottom: 48px; letter-spacing: 0.05em;
     opacity: 0; animation: fadeUp 1.2s 1.1s forwards;
+    text-shadow: 0 1px 12px rgba(0,0,0,0.7);
   }
   .hero-cta {
     opacity: 0; animation: fadeUp 1.2s 1.4s forwards;
     display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
   }
   .btn-gold {
-    font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em;
-    text-transform: uppercase; color: var(--deep-navy);
+    font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--deep-navy); font-weight: bold;
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
     border: none; padding: 18px 44px; cursor: pointer;
     text-decoration: none; display: inline-block;
@@ -194,8 +204,8 @@
   .btn-gold:hover::before { opacity: 1; }
   .btn-gold span { position: relative; z-index: 1; }
   .btn-outline {
-    font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em;
-    text-transform: uppercase; color: var(--gold);
+    font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold); font-weight: bold;
     background: transparent;
     border: 1px solid rgba(40,172,226,0.5);
     padding: 18px 44px; cursor: pointer;
@@ -208,7 +218,7 @@
     box-shadow: 0 0 30px rgba(40,172,226,0.2);
   }
   .scroll-indicator {
-    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    position: absolute; bottom: 40px; left: 49%; transform: translateX(-50%);
     z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px;
     opacity: 0; animation: fadeIn 1s 2.5s forwards;
   }
@@ -336,6 +346,7 @@
     object-fit: cover;
     position: relative; z-index: 2;
     border: 1px solid rgba(40,172,226,0.2);
+    border-radius: 16px;
   }
   .story-img-accent {
     position: absolute; width: 55%; aspect-ratio: 1;
@@ -343,10 +354,11 @@
     object-fit: cover; z-index: 3;
     border: 3px solid var(--ocean-dark);
     box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    border-radius: 16px;
   }
   .story-gold-frame {
     position: absolute; top: -16px; right: -16px; bottom: -16px; left: -16px;
-    border: 1px solid rgba(40,172,226,0.15);
+    border: 4px solid rgba(40,172,226,0.15); border-radius: 16px;
     z-index: 1; pointer-events: none;
   }
 
@@ -366,6 +378,7 @@
     grid-template-rows: auto auto;
     gap: 3px;
     height: 80vh;
+    border-radius: 16px; overflow: hidden;
   }
   .gallery-item {
     overflow: hidden; position: relative;
@@ -392,17 +405,18 @@
   .gallery-item:hover .gallery-item-overlay { opacity: 1; }
   .gallery-item-label {
     position: absolute; bottom: 20px; left: 20px;
-    font-family: 'Cinzel', serif; font-size: 11px;
-    letter-spacing: 0.2em; color: var(--gold);
+    font-family: 'Cinzel', serif; font-size: 18px;
+    letter-spacing: 0.2em; color: white;
     opacity: 0; transition: opacity 0.4s, transform 0.4s;
     transform: translateY(10px);
   }
   .gallery-item:hover .gallery-item-label { opacity: 1; transform: translateY(0); }
   .gallery-gold-border {
     position: absolute; inset: 8px;
-    border: 1px solid rgba(40,172,226,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     pointer-events: none; z-index: 3;
     opacity: 0; transition: opacity 0.4s;
+    border-radius: 16px;
   }
   .gallery-item:hover .gallery-gold-border { opacity: 1; }
 
@@ -843,7 +857,7 @@
 <!-- NAVIGATION -->
 <nav id="mainNav">
   <a href="#" class="nav-logo">
-    <img src="jana.png" alt="jana logo" style="width: 48px; height: auto; filter: drop-shadow(0 0 2px rgba(40,172,226,0.8)); padding: 4px;">
+    <img src="jana.png" alt="jana logo" style="width: 48px; height: auto; padding: 4px;">
   </a>
   <div class="nav-links">
     <a href="#story">Our Vision</a>
@@ -851,7 +865,7 @@
     <a href="#benefits">Ownership</a>
     <a href="#amenities">Amenities</a>
     <a href="#privilege">Privileges</a>
-    <a href="form.html" style="color:var(--gold); border: 1px solid rgba(40,172,226,0.4); padding: 10px 24px;">Reserve a Share</a>
+    <a class="nav-button" href="form.html" style="color:var(--gold); border: 1px solid rgb(40,172,226); background-color: #F7F1E8; padding: 10px 20px; border-radius: 6px;">Reserve a Share</a>
   </div>
   <!-- LANGUAGE SWITCH -->
   <div class="lang-switch">
